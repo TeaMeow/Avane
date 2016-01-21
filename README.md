@@ -136,7 +136,7 @@ $content = $avane->rawFetch(模板內容, 變數陣列);
 在亞凡芽裡要輸出一個變數是十分簡單地，透過 `{ 變數名稱 }` 即可。
 
 ```html
-<span>你好！我是 {name} 喔！</span>
+<span>你好！我是 { name } 喔！</span>
 ```
 
 &nbsp; 
@@ -158,7 +158,7 @@ $content = $avane->rawFetch(模板內容, 變數陣列);
 下列方法將會自動替 content 變數套用 nl2br 函式，更多修飾詞請參考稍後的更多說明。
 
 ```html
-<div> {content | nl2br} </div>
+<div> { content | nl2br } </div>
 ```
 
 &nbsp; 
@@ -167,7 +167,17 @@ nl2br, lower, upper, escape, unescape, strlen, truncate
 
 &nbsp; 
 
-## 條件式
+### 運算子
+
+一個變數可以透過像是 `{ i++ }` 來達到在模板中加減乘除的作用。
+
+目前支援的有：
+
+i++, i--
+
+&nbsp; 
+
+## 條件式：if, elseif, else, endif
 
 透過 `{% if %}`, `{% elseif %}`, `{% else %}`, `{% endif %}` 來進行條件式的判斷。
 
@@ -186,6 +196,56 @@ nl2br, lower, upper, escape, unescape, strlen, truncate
 同時，亞凡芽也支援條件式的縮寫，像是：`{條件: True ? False}`。
 
 ```php
-<span>{isLoggedIn ? }</span>
+<span> { isLoggedIn : '已經登入'  ? '尚未登入' } </span>
 ```
-### 
+
+&nbsp; 
+
+**別忘記！**你也可以在其中混入 PHP 變數，只要變數前有金錢符號的都算是 PHP 變數喔！
+
+```php
+<span> { author == $Author : '是同一個作者'  ? '非相同作者' } </span>
+```
+
+&nbsp; 
+
+## 迴圈：for, foreach, while, do while
+
+&nbsp; 
+
+### for
+
+透過 `{% for 索引 in 陣列 %}` 來進行基本 for 迴圈的運用。
+
+```php
+<ul>
+  {% for i in users %}
+    <li> { users.i } </li>
+  {% endfor % }
+</ul>
+```
+
+&nbsp; 
+
+### foreach
+
+```php
+<ul>
+  {% foreach i in users %}
+    <li> { users.i } </li>
+  {% endforeach % }
+</ul>
+```
+
+&nbsp; 
+
+### while
+
+```php
+<ul>
+  {% while i < 10 %}
+    <li> { i } </li>
+    {i++}
+  {% endwhile % }
+</ul>
+```
