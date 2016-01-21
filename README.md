@@ -146,3 +146,46 @@ $content = $avane->rawFetch(模板內容, 變數陣列);
 ```html
 <span>為什麼我會知道？不是因為我叫 Trivago，而是因為我是 {$name}。</span>
 ```
+
+&nbsp; 
+
+### 修飾詞
+
+修飾詞是對於一個變數的修飾，在其他程式可能稱為「過濾器」，實際上就是對一個變數的內容進行更動
+
+例如 `nl2br` 會將 `\n` 轉換成 `<br>`，而 `nl2br` 就是修飾詞。
+
+下列方法將會自動替 content 變數套用 nl2br 函式，更多修飾詞請參考稍後的更多說明。
+
+```html
+<div> {content | nl2br} </div>
+```
+
+&nbsp; 
+
+nl2br, lower, upper, escape, unescape, strlen, truncate
+
+&nbsp; 
+
+## 條件式
+
+透過 `{% if %}`, `{% elseif %}`, `{% else %}`, `{% endif %}` 來進行條件式的判斷。
+
+```php
+{% if author == 'Caris' %}
+  <span>我是 Caris 喔！</span>
+{% elseif author == 'Iknore' %}
+  <span>其實我是 Iknore！</span>
+{% else %}
+  <span>或者我誰都不是。</span>
+{% endif %}
+```
+
+&nbsp; 
+
+同時，亞凡芽也支援條件式的縮寫，像是：`{條件: True ? False}`。
+
+```php
+<span>{isLoggedIn ? }</span>
+```
+### 
