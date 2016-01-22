@@ -193,10 +193,10 @@ i++, i--
 
 &nbsp; 
 
-同時，亞凡芽也支援條件式的縮寫，像是：`{條件: True ? False}`。
+同時，亞凡芽也支援條件式的縮寫，像是：`{條件 ? True : False}`。
 
 ```php
-<span> { isLoggedIn : '已經登入'  ? '尚未登入' } </span>
+<span> { isLoggedIn ? '已經登入' : '尚未登入' } </span>
 ```
 
 &nbsp; 
@@ -204,7 +204,7 @@ i++, i--
 **別忘記！**你也可以在其中混入 PHP 變數，只要變數前有金錢符號的都算是 PHP 變數喔！
 
 ```php
-<span> { author == $Author : '是同一個作者'  ? '非相同作者' } </span>
+<span> { author == $Author ? '是同一個作者' : '非相同作者' } </span>
 ```
 
 &nbsp; 
