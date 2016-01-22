@@ -249,3 +249,5 @@ i++, i--
   {% endwhile % }
 </ul>
 ```
+
+http://nitschinger.at/Writing-a-simple-lexer-in-PHP/
