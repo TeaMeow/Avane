@@ -251,3 +251,13 @@ i++, i--
 ```
 
 http://nitschinger.at/Writing-a-simple-lexer-in-PHP/
+
+# 詞語分析器與解譯器
+
+亞凡芽裡有詞語分析器和解析器，這些是只有進階工程師需要知道的，因此**一般讀者可略過此部分**。
+
+## ::AvaneLexer - 詞語分析器
+## ::AvaneParser - 解譯器
+### ::AvaneAnalyzer - 分析器
+#### ::AvaneValidator - 模狀器
+#### ::AvaneCombiner - 組合器
