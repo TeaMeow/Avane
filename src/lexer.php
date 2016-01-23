@@ -6,6 +6,9 @@ class AvaneLexer extends Avane
     protected static $sortedTokens  = ['useful' => [[]], 'trash' => [[]]];
     protected static $openAndCloseTags = [['open' => 'T_HELPER_OPEN_TAG', 'close' => 'T_HELPER_CLOSE_TAG'],
                                           ['open' => 'T_OPEN_TAG', 'close' => 'T_CLOSE_TAG']];
+    protected static $sortFormat    = ['tokens' => [], 'length' => 0, 'position' => 0, 'line' => 0, 'match' => ''];
+    
+    
     protected static $tokens = 
     [
         '/^[a-zA-Z](\.)[a-zA-Z]/' => 'T_CHILD',
@@ -116,32 +119,47 @@ class AvaneLexer extends Avane
     protected static function surrounder()
     {
         $isUseful = false;
-
+  
+        
         foreach(static::$openAndCloseTags as $pair)
         {
-            foreach(static::$scannedTokens as $key => $token)
+            foreach(static::$scannedAll as $key => $single)
             {
+                $token = $single['token'];
+                $line  = $single['line'];
+                $match = $single['match'];
                 
                 if($token == $pair['open'])
+                {
                     $isUseful = true;
-                    
+                }
+                
+                
                 $category = $isUseful ? 'useful' : 'trash';
                 $array    = &static::$sortedTokens[$category];
                 
+                if($token == $pair['open'])
+                    array_push($array, static::$sortFormat);
+                    
+                    
+                if($isUseful)
+                {
+                    $currentPosition = &$array[count($array) - 1];
+           
+                    array_push($currentPosition['tokens'], $token);
+                    
+                    $currentPosition['line']    = $line;
+                    $currentPosition['length'] += mb_strlen($token, 'UTF-8');
+                    $currentPosition['match']  .= $match;
+                }
                 
-                array_push($array[count($array) - 1], $token);
-                
-    
                 if($token == $pair['close'])
                 {
                     $isUseful = false;
-                    array_push($array, []);
                 }
             }
         }
         
-        
-        array_pop(static::$sortedTokens['useful']);
         
         var_dump(static::$sortedTokens);
     }
