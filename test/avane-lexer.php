@@ -17,11 +17,11 @@ $input =
             </div>
         </a>
 {% elseif c + d == kk %}
-{ asdasd }
+{ asdasd | nl2br }
 '];
 
 AvaneLexer::run($input);
 
 
-var_dump(microtime(true) - $frist)
+var_dump(microtime(true) - $first)
 ?>
