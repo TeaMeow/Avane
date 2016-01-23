@@ -1,0 +1,74 @@
+/^\s(if)\s/
+    T_IF
+
+/^\s(endif)\s/
+    T_ENDIF
+    
+/^\s(else)\s/
+    T_ELSE
+
+/^\s(elseif)\s/
+    T_ELSEIF
+    
+/^\s(for)\s/
+    T_FOR
+
+/^\s(endif)\s/
+    T_FOREACH
+    
+/^\s(foreach)\s/
+    T_FOREACH
+
+/^\s(endforeach)\s/
+    T_ENDFOREACH
+    
+/^\s(while)\s/
+    T_WHILE
+
+/^\s(endwhile)\s/
+    T_ENDWHILE
+
+/^\s(endif)\s/
+    T_ENDIF
+
+\w(\.)\w
+    T_CHILD
+
+/^(==)/
+    T_IS_EQUAL
+
+/^(!=)/
+    T_NOT_EQUAL
+    
+/^(\+)/
+    T_PLUS
+
+/^(\-)/
+    T_MINUS
+
+/^({%)/
+    T_HELPER_OPEN_TAG
+
+/^(%})/
+    T_HELPER_CLOSE_TAG
+    
+/^({)/
+    T_OPEN_TAG
+
+/^(})/
+    T_CLOSE_TAG
+
+/^(:)/
+    T_SEPARATOR
+
+/^(|)/
+    T_BETWEEN
+   
+/^(?)/
+    T_SECONDARY_SEPARATOR
+
+/^(\w+)/
+    T_IDENTIFIER
+
+^(\$\w+)/
+    T_PHP_IDENTIFIER
