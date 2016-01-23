@@ -3,11 +3,12 @@ class AvaneLexer extends Avane
 {
     protected static $scannedAll    = [];
     protected static $scannedTokens = [];
-    protected static $sortedTokens  = ['useful' => [[]], 'trash' => [[]]];
+    protected static $sortedTokens  = ['useful' => [], 'trash' => [[]]];
+    protected static $cleanedTokens = [];
     protected static $openAndCloseTags = [['open' => 'T_HELPER_OPEN_TAG', 'close' => 'T_HELPER_CLOSE_TAG'],
                                           ['open' => 'T_OPEN_TAG', 'close' => 'T_CLOSE_TAG']];
     protected static $sortFormat    = ['tokens' => [], 'length' => 0, 'position' => 0, 'line' => 0, 'match' => ''];
-    
+    protected static $spaceToken = 'T_WHITESPACE';
     
     protected static $tokens = 
     [
@@ -128,6 +129,7 @@ class AvaneLexer extends Avane
                 $token = $single['token'];
                 $line  = $single['line'];
                 $match = $single['match'];
+                $position = $single['position'];
                 
                 if($token == $pair['open'])
                 {
@@ -146,11 +148,12 @@ class AvaneLexer extends Avane
                 {
                     $currentPosition = &$array[count($array) - 1];
            
-                    array_push($currentPosition['tokens'], $token);
+                    array_push($currentPosition['tokens'], $single);
                     
-                    $currentPosition['line']    = $line;
-                    $currentPosition['length'] += mb_strlen($token, 'UTF-8');
-                    $currentPosition['match']  .= $match;
+                    $currentPosition['line']     = $line;
+                    $currentPosition['length']  += mb_strlen($match, 'UTF-8');
+                    $currentPosition['match']   .= $match;
+                    $currentPosition['position'] = $token == $pair['open'] ? $position : $currentPosition['position'];
                 }
                 
                 if($token == $pair['close'])
@@ -161,7 +164,42 @@ class AvaneLexer extends Avane
         }
         
         
-        var_dump(static::$sortedTokens);
+        static::parse();
+        
+    }
+    
+    protected static function stripSpaces()
+    {
+        $sortedTokens = static::$sortedTokens['useful'];
+        
+        foreach($sortedTokens as $groupKey => $group)
+        {
+            foreach($group['tokens'] as $tokenKey => $token)
+            {
+                if($token['token'] != static::$spaceToken)
+                    continue;
+
+                unset($sortedTokens[$groupKey]['tokens'][$tokenKey]);
+               
+            }
+            
+            //reindex tokens
+             $sortedTokens[$groupKey]['tokens'] = array_values($sortedTokens[$groupKey]['tokens']);
+            
+        }
+        
+        static::$sortedTokens = $sortedTokens;
+
+    }
+    
+    protected static function parse()
+    {
+        static::stripSpaces();
+        
+        
+        
+        
+        //var_dump(static::$sortedTokens);
     }
 
 
