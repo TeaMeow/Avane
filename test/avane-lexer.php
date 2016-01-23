@@ -2,7 +2,10 @@
 ini_set('xdebug.var_display_max_depth', '10'); 
 
 include '../src/avane.php';
+include '../src/parser/variable.php';
+include '../src/parser.php';
 include '../src/lexer.php';
+
 
 $first = microtime(true);
 $avane = new Avane();
