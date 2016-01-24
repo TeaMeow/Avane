@@ -210,7 +210,7 @@ class AvaneLexer extends Avane
     {
         static::stripSpaces();
         
-        exit(var_dump(static::$sortedTokens));
+        //exit(var_dump(static::$sortedTokens));
         foreach(static::$sortedTokens as $single)
         {
             AvaneParser::parse($single);
