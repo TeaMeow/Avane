@@ -22,6 +22,10 @@ class AvaneVariableAnalyzer extends Avane
 	{
 	    switch($tokenGroup['type'])
 	    {
+	        case 'T_VARIABLE':
+	            self::T_VARIABLE($tokenGroup);
+	            break;
+	            
 	        case 'T_VARIABLE_DIRECTIVE':
 	            self::T_VARIABLE_DIRECTIVE($tokenGroup);
 	            break;
@@ -35,14 +39,15 @@ class AvaneVariableAnalyzer extends Avane
 	{
 	    //T_OPEN_TAG T_IDENTIFIER T_BETWEEN T_IDENTIFIER T_CLOSE_TAG
 	    
-	    $variableName  = AvaneParser::firstToken($tokenGroup['tokens'], 'T_IDENTIFIER');
-	    $directiveName = AvaneParser::nthToken($tokenGroup['tokens'], 2, 'T_IDENTIFIER');
+	    $variableName  = AvaneParser::firstToken($tokenGroup['tokens'], 'T_IDENTIFIER')['match'];
+	    $directiveName = AvaneParser::nthToken($tokenGroup['tokens'], 2, 'T_IDENTIFIER')['match'];
 	    
 	    
-	    //<?= $this->
+	    //<?= $this->Get(variable, directive); 
 	    
 	    exit(var_dump(['T_VARIABLE_DIRECTIVE' => ['variable' => $variableName,
-	                                              'directive' => $directiveName]]));
+	                                              'directive' => $directiveName,
+	                                              'phpOutput' => '<?= $this->get(\''. $variableName . '\', \'' . $directiveName .'\'); ?>']]));
 	}
 };
 
