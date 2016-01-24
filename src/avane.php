@@ -44,6 +44,16 @@ class Avane
         
     }
     
+    function get()
+    {
+        
+    }
+    
+    function set()
+    {
+        
+    }
+    
     
 }
 ?>
