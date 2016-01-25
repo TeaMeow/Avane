@@ -22,7 +22,49 @@ class AvaneConditionAnalyzer extends Avane
 	
 	static function parse($tokenGroup)
 	{
-	    exit(var_dump($tokenGroup));
+	    switch($tokenGroup['type'])
+	    {
+	        case 'T_CONDITION_IF':
+	            return self::T_CONDITION_IF($tokenGroup);
+	            break;
+	            
+	        case 'T_CONDITION_ELSEIF':
+	            return self::T_CONDITION_ELSEIF($tokenGroup);
+	            break;
+	        
+	        case 'T_CONDITION_ELSE':
+	        	return self::T_CONDITION_ELSE($tokenGroup);
+	        	break;
+	    }
+	}
+	
+	static function T_CONDITION_IF($tokenGroup)
+	{
+		preg_match('/^{% if (.*?) %}/', $tokenGroup['match'], $matches);
+		
+		$calculation = $matches ? $matches[1] : false;
+		
+		$tokenGroup['phpOutput'] = '<?php if(' . $calculation . '): ?>';
+		
+		
+		return $tokenGroup;
+	}
+	
+	static function T_CONDITION_ELSEIF($tokenGroup)
+	{
+		preg_match('/^{% elseif (.*?) %}/', $tokenGroup['match'], $matches);
+		
+		$calculation = $matches ? $matches[1] : false;
+		
+		$tokenGroup['phpOutput'] = '<?php elseif(' . $calculation . '): ?>';
+		
+		
+		return $tokenGroup;
+	}
+	
+	static function T_CONDITION_ELSE($tokenGroup)
+	{
+		
 	}
 };
 
