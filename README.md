@@ -27,7 +27,6 @@
 5. 支援隨機 CSS 樣式名稱編譯。 
 
 
-
 &nbsp; 
 
 # 索引
@@ -45,6 +44,8 @@
   * 傳入模板原始碼取得編譯後的內容
 
 4. 模板標籤
+
+5. 保留字
 
 &nbsp; 
 
@@ -250,6 +251,10 @@ i++, i--
 </ul>
 ```
 
+## 保留字
+
+在 Avane 中有幾個保留字，是設計於特殊用途的。
+
 http://nitschinger.at/Writing-a-simple-lexer-in-PHP/
 
 # 詞語分析器與解譯器
@@ -261,3 +266,4 @@ http://nitschinger.at/Writing-a-simple-lexer-in-PHP/
 ### ::AvaneAnalyzer - 分析器
 #### ::AvaneValidator - 模狀器
 #### ::AvaneCombiner - 組合器
+
