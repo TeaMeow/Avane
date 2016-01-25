@@ -3,14 +3,18 @@
 
 class AvaneVariableAnalyzer extends Avane
 {
-    protected static $validTypes = ['T_OPEN_TAG T_IDENTIFIER T_CLOSE_TAG'                        => 'T_VARIABLE',
-                                    'T_OPEN_TAG T_IDENTIFIER T_BETWEEN T_IDENTIFIER T_CLOSE_TAG' => 'T_VARIABLE_DIRECTIVE'];
+    protected static $validTypes = ['T_OPEN_TAG T_IDENTIFIER T_CLOSE_TAG'                            => 'T_TAG_VARIABLE',
+                                    'T_OPEN_TAG T_IDENTIFIER T_BETWEEN T_IDENTIFIER T_CLOSE_TAG'     => 'T_TAG_DIRECTIVE_VARIABLE',
+                                    'T_OPEN_TAG T_PHP_IDENTIFIER T_CLOSE_TAG'                        => 'T_TAG_PHP_VARIABLE',
+                                    '(?<=T_OPEN_TAG)(?=.*T_DOT)(?!.*(T_QUOTE|T_DOUBLE_QUOTE)).*(?=T_CLOSE_TAG)' => 'T_TAG_CHILD_VARIABLE',
+                                    'T_OPEN_TAG .* T_SECONDARY_SEPARATOR .* T_SEPARATOR .* T_CLOSE_TAG' => 'T_TAG_SHORTHAND_CONDITION',
+                                    ];
     
 	function validate($combinedToken)
 	{
 	    foreach(self::$validTypes as $type => $tokenType)
 	    {
-	        if($type == $combinedToken)
+	        if(preg_match('/' . $type . '/', $combinedToken))
 	            return $tokenType;
 	    }
 	    
@@ -20,22 +24,11 @@ class AvaneVariableAnalyzer extends Avane
 	
 	static function parse($tokenGroup)
 	{
-	    switch($tokenGroup['type'])
-	    {
-	        case 'T_VARIABLE':
-	            return self::T_VARIABLE($tokenGroup);
-	            break;
-	            
-	        case 'T_VARIABLE_DIRECTIVE':
-	            return self::T_VARIABLE_DIRECTIVE($tokenGroup);
-	            break;
-	    }
-	   
-	   
+	    return self::$tokenGroup['type']($tokenGroup);
 	    
 	}
 	
-	static function T_VARIABLE_DIRECTIVE($tokenGroup)
+	static function T_TAG_DIRECTIVE_VARIABLE($tokenGroup)
 	{
 	    //T_OPEN_TAG T_IDENTIFIER T_BETWEEN T_IDENTIFIER T_CLOSE_TAG
 	    
@@ -46,11 +39,53 @@ class AvaneVariableAnalyzer extends Avane
 	    $tokenGroup['phpOutput'] = '<?= $this->get(\''. $variableName . '\', \'' . $directiveName .'\'); ?>';
 	    
 	    return $tokenGroup;
-	  
-	    /*return ['T_VARIABLE_DIRECTIVE' => ['variable' => $variableName,
-	                                              'directive' => $directiveName,
-	                                              'phpOutput' => '<?= $this->get(\''. $variableName . '\', \'' . $directiveName .'\'); ?>']];
-	                                              */
+	}
+	
+	static function T_TAG_VARIABLE($tokenGroup)
+	{
+		$variableName  = AvaneParser::firstToken($tokenGroup['tokens'], 'T_IDENTIFIER')['match'];
+		
+		$tokenGroup['phpOutput'] = '<?= $this->get(\''. $variableName . '\'); ?>';
+		
+		
+		return $tokenGroup;
+	}
+	
+	static function T_TAG_PHP_VARIABLE($tokenGroup)
+	{
+		$variableName  = AvaneParser::firstToken($tokenGroup['tokens'], 'T_PHP_IDENTIFIER')['match'];
+		
+		$tokenGroup['phpOutput'] = '<?= ' . $variableName . '; ?>';
+
+		return $tokenGroup;
+	}
+	
+	static function T_TAG_CHILD_VARIABLE($tokenGroup)
+	{
+		$identifiers    = AvaneParser::eachToken($tokenGroup['tokens'], 'T_IDENTIFIER');
+		$mainIdentifier = NULL;
+		$subIdentifiers = '';
+		
+
+		foreach($identifiers as $identifier)
+		{
+			if(!$mainIdentifier)
+			{
+				$mainIdentifier = $identifier['match'];
+				continue;
+			}
+			
+			$subIdentifiers .= '[\'' . $identifier['match'] . '\']';
+		}
+		
+		$tokenGroup['phpOutput'] = '<?= $this->get(\''. $mainIdentifier . '\')' . $subIdentifiers . '; ?>';
+
+		return $tokenGroup;
+	}
+	
+	static function T_TAG_SHORTHAND_CONDITION($tokenGroup)
+	{
+		return $tokenGroup;
 	}
 };
 
