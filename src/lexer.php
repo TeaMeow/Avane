@@ -3,6 +3,7 @@ class AvaneLexer extends Avane
 {
     protected static $scannedAll    = [];
     protected static $scannedTokens = [];
+    protected static $donezo        = [];
     protected static $sortedTokens  = ['useful' => [], 'trash' => [[]]];
     protected static $cleanedTokens = [];
     protected static $openAndCloseTags = [['open' => 'T_HELPER_OPEN_TAG', 'close' => 'T_HELPER_CLOSE_TAG'],
@@ -16,7 +17,9 @@ class AvaneLexer extends Avane
         '/^(==)/'                 => 'T_IS_EQUAL',
         '/^(!=)/'                 => 'T_NOT_EQUAL',
         '/^(=)/'                  => 'T_EQUAL',
+        '/^(\+\+)/'               => 'T_INCREASE',
         '/^(\+)/'                 => 'T_PLUS',
+        '/^(\-\-)/'               => 'T_DECENT',
         '/^(\-)/'                 => 'T_MINUS',
         '/^(elseif)/'             => 'T_ELSEIF',
         '/^(endif)/'              => 'T_ENDIF',
@@ -213,9 +216,10 @@ class AvaneLexer extends Avane
         //exit(var_dump(static::$sortedTokens));
         foreach(static::$sortedTokens as $single)
         {
-            AvaneParser::parse($single);
+            
+            static::$donezo[] = AvaneParser::parse($single);
         }
-       
+       exit(var_dump(self::$donezo));
         //var_dump(static::$sortedTokens);
         
         
