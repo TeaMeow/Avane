@@ -10,16 +10,23 @@ class AvaneParser extends Avane
         foreach(static::$analyzers as $analyzer)
         {
             $groupType = $analyzer::validate($combinedToken);
-            
-            if(!$groupType) break;
-            
-            $tokenGroup['type'] = $groupType;
-            
-            $analyzer::parse($tokenGroup);
 
+            if($groupType)
+            {
+                $tokenGroup['type'] = $groupType;
+                
+                $tokenGroup = $analyzer::parse($tokenGroup);
+                break;
+            }
             
         }
+        
+        return $tokenGroup;
     }
+    
+    
+    
+    
     
     
     static function firstToken($tokens, $targetToken)
@@ -44,6 +51,39 @@ class AvaneParser extends Avane
         
         return false;
     }
+    
+    
+    static function singleOperator($tokens)
+    {
+        foreach($tokens as $tokenKey => $token)
+        {
+            $last = isset($tokens[$tokenKey - 1]) ? $tokens[$tokenKey - 1] : false;
+            
+            
+            if($token['token'] == 'T_DECENT')
+                if($last)
+                    return ['T_SINGLE_OPEATOR' => ['variable'  => $last['match'], 
+                                                   'directive' => $token['match']]];
+            
+            if($token['token'] == 'T_INCREASE')
+                if($last)
+                    return ['T_SINGLE_OPEATOR' => ['variable'  => $last['match'], 
+                                                   'directive' => $token['match']]];
+                
+            
+        }
+        
+    }
+    
+    static function multipleOperator()
+    {
+        
+    }
+    
+  
+    
+    
+    
 
 }
 ?>
