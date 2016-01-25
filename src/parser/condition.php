@@ -3,9 +3,10 @@
 
 class AvaneConditionAnalyzer extends Avane
 {
-    protected static $validTypes = ['T_HELPER_OPEN_TAG T_IF .* T_HELPER_CLOSE_TAG'     => 'T_CONDITION_IF',
-                                    'T_HELPER_OPEN_TAG T_ELSEIF .* T_HELPER_CLOSE_TAG' => 'T_CONDITION_ELSEIF',
-                                    'T_HELPER_OPEN_TAG T_ELSE T_HELPER_CLOSE_TAG'      => 'T_CONDITION_ELSE'];
+    protected static $validTypes = ['T_HELPER_OPEN_TAG T_IF .* T_HELPER_CLOSE_TAG'     => 'T_TAG_IF',
+                                    'T_HELPER_OPEN_TAG T_ELSEIF .* T_HELPER_CLOSE_TAG' => 'T_TAG_ELSEIF',
+                                    'T_HELPER_OPEN_TAG T_ENDIF T_HELPER_CLOSE_TAG'     => 'T_TAG_ENDIF',
+                                    'T_HELPER_OPEN_TAG T_ELSE T_HELPER_CLOSE_TAG'      => 'T_TAG_ELSE'];
     
 	static function validate($combinedToken)
 	{
@@ -22,23 +23,11 @@ class AvaneConditionAnalyzer extends Avane
 	
 	static function parse($tokenGroup)
 	{
-	    switch($tokenGroup['type'])
-	    {
-	        case 'T_CONDITION_IF':
-	            return self::T_CONDITION_IF($tokenGroup);
-	            break;
-	            
-	        case 'T_CONDITION_ELSEIF':
-	            return self::T_CONDITION_ELSEIF($tokenGroup);
-	            break;
-	        
-	        case 'T_CONDITION_ELSE':
-	        	return self::T_CONDITION_ELSE($tokenGroup);
-	        	break;
-	    }
+		return self::$tokenGroup['type']($tokenGroup);
+		
 	}
 	
-	static function T_CONDITION_IF($tokenGroup)
+	static function T_TAG_IF($tokenGroup)
 	{
 		preg_match('/^{% if (.*?) %}/', $tokenGroup['match'], $matches);
 		
@@ -50,7 +39,7 @@ class AvaneConditionAnalyzer extends Avane
 		return $tokenGroup;
 	}
 	
-	static function T_CONDITION_ELSEIF($tokenGroup)
+	static function T_TAG_ELSEIF($tokenGroup)
 	{
 		preg_match('/^{% elseif (.*?) %}/', $tokenGroup['match'], $matches);
 		
@@ -62,9 +51,18 @@ class AvaneConditionAnalyzer extends Avane
 		return $tokenGroup;
 	}
 	
-	static function T_CONDITION_ELSE($tokenGroup)
+	static function T_TAG_ELSE($tokenGroup)
 	{
-		
+		$tokenGroup['phpOutput'] = '<?php else: ?>';
+
+		return $tokenGroup;
+	}
+	
+	static function T_TAG_ENDIF($tokenGroup)
+	{
+		$tokenGroup['phpOutput'] = '<?php endif; ?>';
+
+		return $tokenGroup;
 	}
 };
 
