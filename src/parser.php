@@ -52,6 +52,19 @@ class AvaneParser extends Avane
         return false;
     }
     
+    static function eachToken($tokens, $targetToken)
+    {
+        $allTargetToken = [];
+        
+        foreach($tokens as $token)
+        {
+            if($token['token'] == $targetToken)
+                $allTargetToken[] = $token;
+        }
+        
+        return $allTargetToken;
+    }
+    
     
     static function singleOperator($tokens)
     {
