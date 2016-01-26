@@ -29,6 +29,7 @@ class AvaneConditionAnalyzer extends Avane
 	
 	static function T_TAG_IF($tokenGroup)
 	{
+		exit(var_dump(AvaneParser::variable($tokenGroup)));
 		preg_match('/^{% if (.*?) %}/', $tokenGroup['match'], $matches);
 		
 		$calculation = $matches ? $matches[1] : false;
