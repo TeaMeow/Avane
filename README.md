@@ -256,6 +256,13 @@ i++, i--
 在 Avane 中有幾個保留字，是設計於特殊用途的。
 
 http://nitschinger.at/Writing-a-simple-lexer-in-PHP/
+http://www.cnphp.info/simple-php-template-engine.html
+http://www.cnphp.info/simple-php-template-engine-version-2.html
+https://latte.nette.org/
+http://code.tutsplus.com/tutorials/roll-your-own-templating-system-in-php--net-16596
+http://ianburris.com/tutorials/oophp-template-engine/
+http://chadminick.com/articles/simple-php-template-engine.html#sthash.miLYug6M.dpbs
+http://www.angrycoding.com/2012/03/creating-your-own-template-engine-in.html
 
 # 詞語分析器與解譯器
 
