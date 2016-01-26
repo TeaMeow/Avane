@@ -28,6 +28,15 @@ class AvaneVariableAnalyzer extends Avane
 	    
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	static function T_TAG_DIRECTIVE_VARIABLE($tokenGroup)
 	{
 	    //T_OPEN_TAG T_IDENTIFIER T_BETWEEN T_IDENTIFIER T_CLOSE_TAG
@@ -46,6 +55,7 @@ class AvaneVariableAnalyzer extends Avane
 		$variableName  = AvaneParser::firstToken($tokenGroup['tokens'], 'T_IDENTIFIER')['match'];
 		
 		$tokenGroup['phpOutput'] = '<?= $this->get(\''. $variableName . '\'); ?>';
+		
 		
 		
 		return $tokenGroup;
@@ -79,7 +89,9 @@ class AvaneVariableAnalyzer extends Avane
 		}
 		
 		$tokenGroup['phpOutput'] = '<?= $this->get(\''. $mainIdentifier . '\')' . $subIdentifiers . '; ?>';
-
+		
+		
+		
 		return $tokenGroup;
 	}
 	
