@@ -25,14 +25,75 @@ class AvaneParser extends Avane
     }
     
     
+    static function variable($tokens)
+    {
+        $allDots = [[]];
+        $cleaned = [];
+        $root = null;
+        
+        foreach($tokens['tokens'] as $tokenKey => $token)
+        {
+            
+            
+            $prev  = isset($tokens['tokens'][$tokenKey - 1]) ? $tokens['tokens'][$tokenKey - 1] : null;
+            $next  = isset($tokens['tokens'][$tokenKey + 1]) ? $tokens['tokens'][$tokenKey + 1] : null;
+            $right = isset($tokens['tokens'][$tokenKey + 2]) ? $tokens['tokens'][$tokenKey + 2] : null;
+
+            
+            $latest = count($allDots) - 1 > 0 ? count($allDots) - 1 : 0;
+            
+            if(!$root && $token['token'] == 'T_IDENTIFIER')
+            {
+                $root = $token;
+                $allDots[$latest]['G_IDENTIFIER'][] = self::simplizeToken($token);
+                continue;
+            }
+                
+            
+            
+            
+            if($token['token'] == 'T_IDENTIFIER' && $root)
+                $allDots[$latest]['G_IDENTIFIER'][] = self::simplizeToken($token);
+                
+            if(($token['token'] == 'T_IDENTIFIER' && $prev['token'] == 'T_DOT' && $next['token'] != 'T_DOT') || 
+               ($token['token'] == 'T_IDENTIFIER' && $next['token'] != 'T_DOT'))
+            {
+                echo $token['match'];
+                array_push($allDots, []);
+            }
+        }
+        
+        
+     array_pop($allDots);
+     
+exit(var_dump(json_encode($allDots)));
+
+        
+      
+        return $allDots;
+        
+    
+
+    }
     
     
+    static function simplizeToken($token)
+    {
+        return [$token['token'] => $token['match']];
+    }
     
     
     static function firstToken($tokens, $targetToken)
     {
         return self::nthToken($tokens, 1, $targetToken);
     }
+    
+    
+    static function betweenToken($tokens, $startToken, $endToken, $targetToken=null)
+    {
+        
+    }
+    
     
     static function nthToken($tokens, $nth, $targetToken)
     {
