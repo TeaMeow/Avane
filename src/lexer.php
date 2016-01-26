@@ -13,7 +13,7 @@ class AvaneLexer extends Avane
     
     protected static $tokens = 
     [
-        '/^[a-zA-Z](\.)[a-zA-Z]/' => 'T_CHILD',
+        //'/^[a-zA-Z](\.)[a-zA-Z]/' => 'T_CHILD',
         '/^(==)/'                 => 'T_IS_EQUAL',
         '/^(!=)/'                 => 'T_NOT_EQUAL',
         '/^(=)/'                  => 'T_EQUAL',
