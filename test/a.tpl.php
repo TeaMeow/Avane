@@ -14,6 +14,7 @@
                 {% /foreach %}
                 
             {% /foreach %}
+            { $trivago }
             { aaa.b.c.dd }
             { world | upper }
         </div>
@@ -21,7 +22,7 @@
     
     {% if a.b.c.d + e.f == 1 %}
         <div>
-            { cyka ? 'yes' : no }
+            { cyka ? 'yes' : no.c }
         </div>
     {% /if %}
 </body>

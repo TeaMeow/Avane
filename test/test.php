@@ -1,5 +1,6 @@
 <?php
 ini_set('xdebug.var_display_max_depth', '10'); 
+ini_set('xdebug.var_display_max_data', '1000'); 
 function e($shit)
 {
     exit(var_dump($shit));
@@ -7,8 +8,9 @@ function e($shit)
 
 include '../src/lexer.php';
 include '../src/avane.php';
+include '../src/parser/template.php';
 include '../src/directives.php';
-include '../src/parser.php';
+
 
 $avane = new Avane();
 $avane->set('hello', 'Foobar')
