@@ -3,22 +3,40 @@
 class AvaneTemplateParser
 {
     private $tplContent;
-    private $endTags = ['/{% \/if %}/'      => '<?php endif; ?>',
-                        '/{% \/for %}/'     => '<?php endfor; ?>',
-                        '/{% \/foreach %}/' => '<?php endforeach; ?>',
-                        '/{% \/while %}/'   => '<?php endwhile; ?>'];
+    private $basicTags = ['/{% else %}/'      => '<?php else: ?>',
+                          '/{% \/if %}/'      => '<?php endif; ?>',
+                          '/{% \/for %}/'     => '<?php endfor; ?>',
+                          '/{% \/foreach %}/' => '<?php endforeach; ?>',
+                          '/{% \/while %}/'   => '<?php endwhile; ?>'];
     
+    
+    
+    
+    /**
+     * Parse
+     * 
+     * Parse a tpl file.
+     * 
+     * @param  string $tplContent   The content of the template file.
+     * 
+     * @return string              The parsed content.
+     */
+     
     function parse($tplContent)
     {
         $this->tplContent = $tplContent;
-        
-        
-        $this->replaceEndTag()
-             ->replaceIf()
-             ->replaceShorthandIf()
-             ->replaceDirectiveVar()
-             ->replaceVar()
-             ->replaceForeach();
+
+        $this->replaceBasicTag()        // {% /if %}, {% else %}
+             ->replaceIf()              // {% if %}
+             ->replaceElseIf()          // {% elseif %}
+             ->replaceShorthandIf()     // { a ? b : c }
+             ->replaceEchoShorthandIf() // { a >> b : c }
+             ->replaceDirectiveVar()    // { var | upper }
+             ->replaceVar()             // { var }
+             ->replaceForeach()         // {% foreach %}
+             ->replaceWhile()           // {% while %}
+             ->replaceIncludes()        // {% include %}
+             ->replaceImport();         // {% import %}
         
         return $this->tplContent;
     }
@@ -27,14 +45,14 @@ class AvaneTemplateParser
     
     
     /**
-     * Replace End Tags
+     * Replace Basic Tags
      * 
      * @return AvaneTemplateParser
      */
     
-    function replaceEndTag()
+    function replaceBasicTag()
     {
-        foreach($this->endTags as $regEx => $replacement)
+        foreach($this->basicTags as $regEx => $replacement)
             $this->tplContent = preg_replace($regEx, $replacement, $this->tplContent);
         
         return $this;
@@ -66,6 +84,28 @@ class AvaneTemplateParser
     
     
     /**
+     * Replace Else If
+     * 
+     * @return AvaneTemplateParser
+     */
+     
+    function replaceElseIf()
+    {
+        $this->tplContent = preg_replace_callback('/{% elseif (.*?) %}/', function($matched)
+        {
+            $matched[1] = $this->analyzeVariable($matched[1]);
+
+            return "<?php if($matched[1]): ?>";
+            
+        }, $this->tplContent);
+        
+        return $this;
+    }
+    
+    
+    
+    
+    /**
      * Replace Shorthand If
      * 
      * @return AvaneTemplateParser
@@ -80,6 +120,30 @@ class AvaneTemplateParser
             $matched[3] = $this->analyzeVariable($matched[3]);
             
             return "<?= $matched[1] ? $matched[2] : $matched[3] =?>";
+            
+        }, $this->tplContent);
+        
+        return $this;
+    }
+    
+    
+    
+    
+    /**
+     * Replace Shorthand If
+     * 
+     * @return AvaneTemplateParser
+     */
+     
+    function replaceEchoShorthandIf()
+    {
+        $this->tplContent = preg_replace_callback('/{(.*?)>>(.*?)\:(.*?)}/', function($matched)
+        {
+            $matched[1] = $this->analyzeVariable($matched[1]);
+            //$matched[2] = $this->analyzeVariable($matched[2]);
+            //$matched[3] = $this->analyzeVariable($matched[3]);
+            
+            return "<?= $matched[1] ? '$matched[2]' : '$matched[3]'; =?>";
             
         }, $this->tplContent);
         
@@ -125,7 +189,7 @@ class AvaneTemplateParser
         {
             $matched[1] = $this->analyzeVariable($matched[1]);
 
-            return "<?= $matched[1]; =>";
+            return "<?= $matched[1]; =?>";
             
         }, $this->tplContent);
         
@@ -134,20 +198,6 @@ class AvaneTemplateParser
     
 
 
-
-    function analyzeVariable($matched)
-    {
-        $grouped = AvaneLexer::run([$matched]);
-        return $this->lexerToPHP($matched, $grouped);
-    }
-    
-    
-    
-    
-    
-    
-    
-    
     
     /**
      * Replace Foreach
@@ -157,16 +207,93 @@ class AvaneTemplateParser
      
     function replaceForeach()
     {
-         $this->tplContent = preg_replace_callback('/{% foreach (.*?) as (.*?) %}/', function($matched)
+        $this->tplContent = preg_replace_callback('/{% foreach (.*?) as (.*?) %}/', function($matched)
         {
             $matched[1] = $this->analyzeVariable($matched[1]);
             
-            return '<?php foreach(' . $matched[1] . ' as $' . $matched[2] . '): $this->loopUnzip($' . $matched[2] . ', \'' . $matched[2] . '\'); ?>';
+            return "<?php foreach($matched[1] as $$matched[2]): " . '$this->loopUnzip(' . "$$matched[2], '$matched[2]'); ?>";
         }, $this->tplContent);
         
         return $this;
     }
     
+    
+    
+    
+    /**
+     * Replace While
+     * 
+     * @return AvaneTemplateParser
+     */
+    
+    function replaceWhile()
+    {
+        $this->tplContent = preg_replace_callback('/{% while (.*?) %}/', function($matched)
+        {
+            $matched[1] = $this->analyzeVariable($matched[1]);
+            
+            return "<?php while($matched[1]): ?>";
+        }, $this->tplContent);
+        
+        return $this;
+    }
+    
+    
+    
+    
+    /**
+     * Replace Includes
+     * 
+     * @return AvaneTemplateParser
+     */
+     
+    function replaceIncludes()
+    {
+        $this->tplContent = preg_replace_callback('/{% includes (.*?) %}/', function($matched)
+        {
+            return "<?php includes '$matched[1]'; ?>";
+        }, $this->tplContent);
+        
+        return $this;
+    }
+    
+    
+    
+    
+    /**
+     * Replace Import
+     * 
+     * @return AvaneTemplateParser
+     */
+     
+    function replaceImport()
+    {
+        $this->tplContent = preg_replace_callback('/{% import (.*?) %}/', function($matched)
+        {
+            return '<?php $this->Output(\'' . $matched[1] . '\'); ?>';
+        }, $this->tplContent);
+        
+        return $this;
+    }
+    
+    
+    
+    
+    /**
+     * Analyze Variable
+     * 
+     * Lex the avane variables and return a result.
+     * 
+     * @param string $matched   The string which we will look in to it.
+     * 
+     * @return array
+     */
+    
+    function analyzeVariable($matched)
+    {
+        $grouped = AvaneLexer::run([$matched]);
+        return $this->lexerToPHP($matched, $grouped);
+    }
     
     
     
