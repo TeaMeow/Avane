@@ -11,8 +11,33 @@ class Avane
      
     protected $vault = [];
     
+    /**
+     * Cache Bucket
+     * 
+     * When user wants to load the same template, we have no needed to parse it again,
+     * we can store the path of the compiled template into the bucket, and require the template directly.
+     * 
+     * @var array
+     */
+    
+    protected $cacheBucket = [];
     
     
+    
+    
+    function _construct()
+    {
+        
+    }
+    
+    
+    /**
+     * Load
+     * 
+     * Load the template.
+     * 
+     * @return Avane
+     */
     
     function load($path)
     {
@@ -71,11 +96,9 @@ class Avane
      * @return Avane
      */
     
-    function get($key, $directive = null)
+    function get($key)
     {
-        $directive = $directive ? '_' . $directive : null;
-        
-        return $directive ? AvaneDirectives::$directive($this->vault[$key]) : $this->vault[$key];
+        return $this->vault[$key];
     }
     
     
