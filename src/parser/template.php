@@ -119,7 +119,7 @@ class AvaneTemplateParser
             $matched[2] = $this->analyzeVariable($matched[2]);
             $matched[3] = $this->analyzeVariable($matched[3]);
             
-            return "<?= $matched[1] ? $matched[2] : $matched[3] =?>";
+            return "<?= $matched[1] ? $matched[2] : $matched[3] ?>";
             
         }, $this->tplContent);
         
@@ -143,7 +143,7 @@ class AvaneTemplateParser
             //$matched[2] = $this->analyzeVariable($matched[2]);
             //$matched[3] = $this->analyzeVariable($matched[3]);
             
-            return "<?= $matched[1] ? '$matched[2]' : '$matched[3]'; =?>";
+            return "<?= $matched[1] ? '$matched[2]' : '$matched[3]'; ?>";
             
         }, $this->tplContent);
         
@@ -167,7 +167,7 @@ class AvaneTemplateParser
             $matched[2] = str_replace(' ', '', $matched[2]);
             $matched[2] = '_' . $matched[2];
 
-            return '<?= $this->directive' . "($matched[1], '$matched[2]'); =?>";
+            return '<?= $this->directive' . "($matched[1], '$matched[2]'); ?>";
             
         }, $this->tplContent);
         
@@ -189,7 +189,7 @@ class AvaneTemplateParser
         {
             $matched[1] = $this->analyzeVariable($matched[1]);
 
-            return "<?= $matched[1]; =?>";
+            return "<?= $matched[1]; ?>";
             
         }, $this->tplContent);
         
@@ -251,7 +251,7 @@ class AvaneTemplateParser
     {
         $this->tplContent = preg_replace_callback('/{% includes (.*?) %}/', function($matched)
         {
-            return "<?php includes '$matched[1]'; ?>";
+            return "<?php include '$matched[1]'; ?>";
         }, $this->tplContent);
         
         return $this;
