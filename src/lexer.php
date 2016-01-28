@@ -159,14 +159,6 @@ class AvaneLexer
         return $allDots;
           
     }
-    
-    protected static function collect($tokens)
-    {
-     
-    }
-    
-    
-
 }
 
 ?>
