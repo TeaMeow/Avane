@@ -26,9 +26,11 @@
 
 5. 支援隨機 CSS 樣式名稱編譯。 
 
-6. 快取桶子，讓亞凡芽更快。
+6. 布丁快取技術，讓亞凡芽在讀取同一模板時更快。
 
-7. 支援自訂主題，替換指定 CSS 檔案。
+7. 效能比原生 `require()` 更快。
+
+8. 支援自訂主題，替換指定 CSS 檔案。
 
 &nbsp; 
 
@@ -434,6 +436,7 @@ i++, i--
 ### ::AvaneAnalyzer - 分析器
 #### ::AvaneValidator - 模狀器
 #### ::AvaneCombiner - 組合器
+## ::AvaneCompiler - 編譯器
 
 &nbsp; 
 
