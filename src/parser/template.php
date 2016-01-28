@@ -297,6 +297,7 @@ class AvaneTemplateParser
     
     
     
+    
     /**
      * Lexer To PHP
      * 
