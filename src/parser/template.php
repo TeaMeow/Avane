@@ -6,8 +6,10 @@ class AvaneTemplateParser
     private $basicTags = ['/{% else %}/'      => '<?php else: ?>',
                           '/{% \/if %}/'      => '<?php endif; ?>',
                           '/{% \/for %}/'     => '<?php endfor; ?>',
-                          '/{% \/foreach %}/' => '<?php endforeach; ?>',
-                          '/{% \/while %}/'   => '<?php endwhile; ?>'];
+                          '/{% \/foreach %}/' => '<?php $this->loopEnd(); endforeach; $this->loopBack(); ?>',
+                          '/{% \/while %}/'   => '<?php endwhile; ?>',
+                          '/{% countinue %}/' => '<?php countinue; ?>',
+                          '/{% break %}/'     => '<?php break; ?>'];
     
     
     
@@ -211,7 +213,7 @@ class AvaneTemplateParser
         {
             $matched[1] = $this->analyzeVariable($matched[1]);
             
-            return "<?php foreach($matched[1] as $$matched[2]): " . '$this->loopUnzip(' . "$$matched[2], '$matched[2]'); ?>";
+            return '<?php $this->loopFront(' . "$matched[1], '$matched[2]'); foreach($matched[1] as $$matched[2]): " . '$this->loopStart(' . "$$matched[2], '$matched[2]'); ?>";
         }, $this->tplContent);
         
         return $this;
