@@ -19,18 +19,7 @@ include '../../src/directives.php';
 $avane = new Avane('templates');
 
 
-
-$startTime = microtime(true);  
-    
-    for($i = 0; $i < 10000; $i++)
-        echo $avane->fetch('a');
-    
-    $endTime = microtime(true);  
-    $elapsed = number_format($endTime - $startTime, 10);
-    
-    echo "測試時間 : $elapsed 秒 <br>";
-    
-    
+$avane->load('a');
 
 
 ?>
