@@ -53,6 +53,7 @@ class Avane
     public $pjaxHeader = 'HTTP_X_PJAX';
     
     
+    protected $loop = [];
     
     
     /**
@@ -131,7 +132,7 @@ class Avane
     function load($templateName)
     {
         /** Compile the template If the cache bucket doesn't have the template */
-        if(!$this->inBucket($templateName))
+        if(!isset($this->cacheBucket[$templateName]))
         {
             $templatePath = $this->getTemplatePath($templateName);
             
@@ -232,11 +233,49 @@ class Avane
     
     
     
-    
-    
-    function Unzip($array, $arrayName)
+    function loopFront($mainArray)
     {
-        $this->set($arrayName, $array);
+        $this->loop[] = ['index'     => 1,
+                         'index0'    => 0,
+                         'revindex'  => count($mainArray),
+                         'revindex0' => count($mainArray) - 1,
+                         'first'     => true,
+                         'last'      => count($mainArray) == 1,
+                         'length'    => count($mainArray),
+                         'even'      => false,
+                         'odd'       => true];
+        
+        return $this;
+    }
+    
+    function loopStart($array, $name)
+    {
+        
+        
+        $this->set($name, $array);
+        
+        
+    }
+    
+    function loopEnd()
+    {
+        $this->cleanSet($name);
+        
+        $latest = count($this->loop) - 1;
+
+        $this->loop[$latest]['index']      += 1;
+        $this->loop[$latest]['index0']     += 1;
+        $this->loop[$latest]['revindex']   -= 1;
+        $this->loop[$latest]['revindex0']  -= 1;
+        $this->loop[$latest]['first']       = $this->loop[$latest]['index']    == 1;
+        $this->loop[$latest]['last']        = $this->loop[$latest]['revindex'] == 1;
+        $this->loop[$latest]['even']        = $this->loop[$latest]['index'] % 2 === 0;
+        $this->loop[$latest]['odd']         = $this->loop[$latest]['index'] % 2 !== 0;
+    }
+    
+    function loopBack()
+    {
+        array_pop($this->loop);
     }
     
 
@@ -261,6 +300,12 @@ class Avane
     }
     
     
+    function cleanSet($key)
+    {
+        unset($this->vault[$key]);
+        
+        return $this;
+    }
     
     
     /**
@@ -276,7 +321,10 @@ class Avane
     
     function get($key)
     {
-        return $this->vault[$key];
+        if($key == 'loop')
+            return $this->loop[count($this->loop) - 1];
+        else
+            return $this->vault[$key];
     }
     
     
