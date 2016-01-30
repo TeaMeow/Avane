@@ -340,7 +340,8 @@ class AvaneTemplateParser
             }
             
             //$totalLen = $isMany ? $totalLen + 1 * ($totalLen - 1) 
-              $totalLen = $isMany ? $totalLen + 1 : $totalLen;
+            
+              $totalLen = $isMany ? $totalLen + (1 * $totalLen) : $totalLen;
             
             $prepared[] = ['startPos' => $single[0]['position'],
                            'length'   => $totalLen,
