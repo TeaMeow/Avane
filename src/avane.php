@@ -52,8 +52,17 @@ class Avane
     
     public $pjaxHeader = 'HTTP_X_PJAX';
     
+    /**
+     * Loop
+     * 
+     * Used to store the loop informations.
+     * 
+     * @var array
+     */
     
     protected $loop = [];
+    
+    
     
     
     /**
@@ -125,11 +134,12 @@ class Avane
      * Load and require the template.
      * 
      * @param string $templateName   The name of the template (without the extension).
+     * @param array  $variables      The variables.
      * 
      * @return Avane
      */
     
-    function load($templateName)
+    function load($templateName, $variables = null)
     {
         /** Compile the template If the cache bucket doesn't have the template */
         if(!isset($this->cacheBucket[$templateName]))
@@ -147,17 +157,70 @@ class Avane
     }
     
     
+    
+    
+    /**
+     * Set Bucket
+     * 
+     * Put the compiled result to the cache bucket.
+     * 
+     * @param string $templateName   The name of the template that we are going to store with.
+     * @param string $path           The path of the compiled template.
+     * 
+     * @return Avane
+     */
+     
     function setBucket($templateName, $path)
     {
         $this->cacheBucket[$templateName] = $path;
         
         return $this;
     }
+    
+    
+    
+    
+    /**
+     * Is PJAX
+     * 
+     * Check the header to see if there's any PJAX request header inside of it.
+     * 
+     * @return bool
+     */
 
+    function isPJAX()
+    {
+        return (array_key_exists($this->pjaxHeader, $_SERVER) && $_SERVER[$this->pjaxHeader] === 'true');
+    }
+
+    
+    
+    
+    /**
+     * Render
+     * 
+     * Use ob_* functions and get the rendered template content.
+     * 
+     * @return string
+     */
+     
+    function render($templateName)
+    {
+        
+    }
+    
+    
+    
     
     /**
      * Fetch
      * 
+     * Same as the load(), the only different is that fetch() returns the rendered content instead of output it.
+     * 
+     * @param string $templateName   The name of the template (without the extension).
+     * @param array  $variables      The variables.
+     * 
+     * @return Avane
      */
     
     function fetch($templateName, $variables = null)
@@ -175,7 +238,17 @@ class Avane
         
         return $this;
     }
+        
+        
+    function header()
+    {
+        return $this;
+    }
     
+    function footer()
+    {
+        return $this;
+    }
     
     
     
@@ -233,6 +306,23 @@ class Avane
     
     
     
+    
+    /***********************************************
+    /***********************************************
+    /****************** L O O P ********************
+    /***********************************************
+    /***********************************************
+    
+    /**
+     * Loop Front
+     * 
+     * Initialize a new loop.
+     * 
+     * @param array $mainArray   The new array.
+     *  
+     * @return Avane
+     */
+    
     function loopFront($mainArray)
     {
         $this->loop[] = ['index'     => 1,
@@ -248,15 +338,38 @@ class Avane
         return $this;
     }
     
+    
+    
+    
+    /**
+     * Loop Start
+     * 
+     * Explode this array, turn all the values to the avane variables.
+     * 
+     * @param array  $array   The array of 'this round'.
+     * @param string $name    The name of the array.
+     * 
+     * @return Avane
+     */
+     
     function loopStart($array, $name)
     {
-        
-        
         $this->set($name, $array);
         
-        
+        return $this;
     }
     
+    
+    
+    
+    /**
+     * Loop End
+     * 
+     * 'This round' is ended, now update the information of the loop, and unset those variables for this round.
+     * 
+     * @return Avane
+     */
+     
     function loopEnd()
     {
         $this->cleanSet($name);
@@ -271,15 +384,36 @@ class Avane
         $this->loop[$latest]['last']        = $this->loop[$latest]['revindex'] == 1;
         $this->loop[$latest]['even']        = $this->loop[$latest]['index'] % 2 === 0;
         $this->loop[$latest]['odd']         = $this->loop[$latest]['index'] % 2 !== 0;
+        
+        return $this;
     }
     
+    
+    
+    
+    /**
+     * Loop Back
+     * 
+     * The end of the whole loop, remove this loop from the loop array.
+     * 
+     * @return Avane
+     */
+     
     function loopBack()
     {
         array_pop($this->loop);
+        
+        return $this;
     }
     
 
     
+    
+    /***********************************************
+    /***********************************************
+    /************* V A R I A B L E S ***************
+    /***********************************************
+    /***********************************************
     
     /**
      * Set
@@ -300,6 +434,18 @@ class Avane
     }
     
     
+    
+    
+    /**
+     * Clean Set
+     * 
+     * Unset an avane variable.
+     * 
+     * @param string $key   The name of the variable.
+     * 
+     * @return Avane
+     */
+     
     function cleanSet($key)
     {
         unset($this->vault[$key]);
@@ -308,13 +454,14 @@ class Avane
     }
     
     
+    
+    
     /**
      * Get
      * 
      * Get a variable from the vault.
      * 
-     * @param string      $key         The name of the variable.
-     * @param string|null $directive   The name of the directive.
+     * @param string $key   The name of the variable.
      * 
      * @return Avane
      */
@@ -330,6 +477,17 @@ class Avane
     
     
     
+    /**
+     * Directive
+     * 
+     * Return a filtered variable.
+     * 
+     * @param string $value       The value.
+     * @param string $directive   The name of the filter.
+     * 
+     * @return string
+     */
+    
     function directive($value, $directive)
     {
         //$directive = str_replace(' ', '', $directive);
@@ -337,15 +495,6 @@ class Avane
         
         return AvaneDirectives::$directive($value);
     }
-    
-    function header()
-    {
-        return $this;
-    }
-    
-    function footer()
-    {
-        return $this;
-    }
+
 }
 ?>
