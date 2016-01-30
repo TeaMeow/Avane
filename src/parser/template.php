@@ -74,7 +74,7 @@ class AvaneTemplateParser
         $this->tplContent = preg_replace_callback('/{% if (.*?) %}/', function($matched)
         {
             $matched[1] = $this->analyzeVariable($matched[1]);
-
+            
             return "<?php if($matched[1]): ?>";
             
         }, $this->tplContent);
@@ -294,6 +294,7 @@ class AvaneTemplateParser
     function analyzeVariable($matched)
     {
         $grouped = AvaneLexer::run([$matched]);
+        
         return $this->lexerToPHP($matched, $grouped);
     }
     
@@ -321,7 +322,7 @@ class AvaneTemplateParser
             $isFirst  = true;
             $isMany   = count($single) > 1;
             $output   = '';
-
+            
             foreach($single as $each)
             {
                 $length    = mb_strlen($each['match'], 'UTF-8');
@@ -338,8 +339,8 @@ class AvaneTemplateParser
                 $isFirst = false;
             }
             
-            $totalLen = $isMany ? $totalLen + 1 * ($totalLen - 1) 
-                                : $totalLen;
+            //$totalLen = $isMany ? $totalLen + 1 * ($totalLen - 1) 
+              $totalLen = $isMany ? $totalLen + 1 : $totalLen;
             
             $prepared[] = ['startPos' => $single[0]['position'],
                            'length'   => $totalLen,
@@ -349,7 +350,8 @@ class AvaneTemplateParser
         $prepared = array_reverse($prepared);
         
         foreach($prepared as $replace)
-            $string = substr_replace($string, $replace['output'], $replace['startPos'], $replace['length']);
+            if($replace['startPos'] !== null)
+                $string = substr_replace($string, $replace['output'], $replace['startPos'], $replace['length']);
         
         return $string;
     }
