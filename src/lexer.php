@@ -101,7 +101,7 @@ class AvaneLexer
                         'position' => $offset];
             }
         }
-    
+        
         return false;
     }
     
@@ -155,7 +155,7 @@ class AvaneLexer
             }
         }
             
-           
+     
          //array_pop($allDots);
          
 
