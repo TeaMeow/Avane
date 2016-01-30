@@ -4,12 +4,17 @@
 </head>
 
 <body>
-    {% foreach ['a', 'b', 'c'] as A %}
+    {% if a.b.c + d.e.f == 3 %}
     
-        { loop.odd >> 奇數 : 偶數 }
+        { loop.odd >> 奇數 : 偶數 } 
         
         {% foreach ['d', 'e', 'f'] as B %}
         
+            {% if loop.index == 2 %}
+                幹！
+                {% break %}
+            {% /if %}
+            
             {loop.index}
             
         {% /foreach %}
