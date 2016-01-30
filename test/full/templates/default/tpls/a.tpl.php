@@ -1,13 +1,8 @@
-<html>
-<head>
-    <title>Caris</title>
-</head>
 
-<body>
-    {% if a.b.c + d.e.f == 3 %}
+    {% foreach ['a', 'b', 'c'] as A %}
     
         { loop.odd >> 奇數 : 偶數 } 
-        
+         
         {% foreach ['d', 'e', 'f'] as B %}
         
             {% if loop.index == 2 %}
@@ -22,5 +17,5 @@
         <br>
         
     {% /foreach %}
-</body>
-</html> 
+    
+    { a.b.c.d.e.f.g }

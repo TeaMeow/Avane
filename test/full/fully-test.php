@@ -1,5 +1,7 @@
-<meta charset="utf-8">
 <?php
+$startTime = microtime(true);  
+    
+    
 ini_set('xdebug.var_display_max_depth', '10'); 
 ini_set('xdebug.var_display_max_data', '5000'); 
 
@@ -15,11 +17,13 @@ include '../../src/compiler/template.php';
 include '../../src/parser/template.php';
 include '../../src/directives.php';
 
+$_SERVER['HTTP_X_PJAX'] = 'title, content, header';
 
 $avane = new Avane('templates');
 
 
-$avane->load('a');
-
+$avane->header()
+      ->load('a')
+      ->footer();
 
 ?>
