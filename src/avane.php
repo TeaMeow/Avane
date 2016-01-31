@@ -82,7 +82,27 @@ class Avane
     
     protected $contentBuffer = '';
     
+    /**
+     * Is PJAX
+     * 
+     * True when it's a PJAX request.
+     * 
+     * @var bool
+     */
+     
     protected $isPJAX = false;
+    
+    /**
+     * Total Time
+     * 
+     * Stores the time we wasted on compile, output, and fap.
+     * 
+     * @var int
+     */
+    
+    protected $totalTime = 0;
+    
+    
     
     
     /**
@@ -112,17 +132,6 @@ class Avane
      * Set Category
      * 
      * Tell us which folder you want us to load the templates from it.
-     * 
-     * templates
-     *  └── default          // 模板名稱
-     *      ├── compiled     // 編譯後的模板
-     *      ├── scripts      // 放置 JavaScript 腳本
-     *      ├── styles       // 放置 CSS 樣式表
-     *      ├── tpls         // 各式各樣的模板放在這
-     *      │
-     *      ├── footer.php   // 頁腳
-     *      ├── header.php   // 標頭
-     *      └── variable.php // 此模板的變數設置
      *
      * @param string $categoryName
      * 
@@ -231,6 +240,8 @@ class Avane
      
     function header($title = '', $variables = null)
     {
+        $this->startTime = microtime(true);
+        
         /** Set the title */
         $this->title = $title;
         
@@ -244,7 +255,7 @@ class Avane
         $this->groupSet($variables);
         
         /** Set the json header if it's a PJAX request, otherwise load the header template */
-        if($this->isPJAX())
+        if($this->isPJAX)
             header('Content-Type: application/json; charset=utf-8');
 
         /** Capture the rendered content from now on */
@@ -279,6 +290,9 @@ class Avane
              /** And stop capturing, you know what's next right? */
              ->endCapture('footer');
         
+        $this->endTime   = microtime(true);
+        $this->totalTime = $this->endTime - $this->startTime;
+        
         /** Return the rendered content if it's a PJAX request */
         if($this->isPJAX)
             echo json_encode($this->returnPJAX());
@@ -288,12 +302,9 @@ class Avane
         return $this;
     }
     
-    
-    
-    
-    
-    
-    
+
+
+
     /**
      * Get Template Path
      * 
@@ -387,6 +398,11 @@ class Avane
         
         if(in_array('footer', $types))
             $data['footer'] = $this->outputBuffer['footer'];
+            
+        if(in_array('wasted', $types))
+            $data['wasted'] = $this->totalTime;
+            
+            
         
         return $data;
     }
