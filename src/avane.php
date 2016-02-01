@@ -155,7 +155,7 @@ class Avane
         $this->categoriesPath     = rtrim($this->categoriesPath, '/') . '/';
         $this->categoryPath       = $this->categoriesPath     . $categoryName . '/';
         $this->compiledPath       = $this->categoryPath       . 'compiled/';
-        $this->scriptsPath        = $this->scriptPath         . 'scripts/';
+        $this->scriptsPath        = $this->categoryPath       . 'scripts/';
         $this->stylesPath         = $this->categoryPath       . 'styles/';
         $this->templateFolderPath = $this->categoryPath       . 'tpls/';
         $this->headerPath         = $this->templateFolderPath . 'header' . $this->templateExtension;
@@ -726,7 +726,7 @@ class Avane
      * Add
      */
     
-    function add($type, $path, $autoPath = false)
+    function import($type, $path, $autoPath = false)
     {
         $type = strtolower($type);
         
