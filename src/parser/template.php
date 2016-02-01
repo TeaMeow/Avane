@@ -275,7 +275,7 @@ class AvaneTemplateParser
     {
         $this->tplContent = preg_replace_callback('/{% import (.*?) %}/', function($matched)
         {
-            return '<?php $this->Output(\'' . $matched[1] . '\'); ?>';
+            return '<?php $this->output(\'' . $matched[1] . '\'); ?>';
         }, $this->tplContent);
         
         return $this;
