@@ -251,9 +251,12 @@ class AvaneTemplateParser
      
     function replaceIncludes()
     {
-        $this->tplContent = preg_replace_callback('/{% includes (.*?) %}/', function($matched)
+        $this->tplContent = preg_replace_callback('/{% include (.*?) %}/', function($matched)
         {
-            return "<?php include '$matched[1]'; ?>";
+            $variableName = '$this->get(\'TEMPLATE_INCLUDE_' . $matched[1] . '\')';
+            
+            return "<?php if($variableName){ include $variableName; } ?>";
+                          
         }, $this->tplContent);
         
         return $this;
