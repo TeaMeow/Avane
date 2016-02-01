@@ -23,7 +23,7 @@ $avane = new Avane('templates');
 
 
 $avane->header()
-      ->load('a')
+      ->load('a', ['ca' => ['a' => 'HELLO', 'b' => 'DDDD']])
       ->footer();
 
 ?>
