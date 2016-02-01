@@ -231,7 +231,7 @@ class Avane
     
     function fetch($templateName, $variables = null)
     {
-        $this->capture();
+        $this->capture(true);
         $this->load($templateName, $variables);
         return $this->endCapture();
     }
@@ -444,12 +444,14 @@ class Avane
      * 
      * Capture the rendered content after this function.
      * 
+     * @param bool $force   Force capture.
+     * 
      * @return Avane
      */
      
-    function capture()
+    function capture($force = false)
     {
-        if(!$this->isPJAX)
+        if(!$this->isPJAX && !$force)
             return $this;
             
         ob_start();
