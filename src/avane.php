@@ -73,14 +73,14 @@ class Avane
     protected $title = '';
     
     /**
-     * Content Buffer
+     * Output Buffer
      * 
-     * Used to stored the rendered content which without the header and the footer.
+     * Stores the rendered contents.
      * 
      * @var string
      */
     
-    protected $contentBuffer = '';
+    protected $outputBuffer = [];
     
     /**
      * Is PJAX
@@ -102,9 +102,18 @@ class Avane
     
     protected $totalTime = 0;
     
-    protected $includePrefix = 'TEMPLATE_INCLUDE_';
+    /**
+     * JS & CSS
+     * 
+     * Stores the path of the javascripts and the stylesheets.
+     * 
+     * @var array
+     */
     
+    protected $js  = [];
+    protected $css = [];
     
+
     
     
     /**
@@ -606,10 +615,10 @@ class Avane
     function set($key, $value = null)
     {
         if(is_array($key))
-            foreach($vars as $name => $value)
-                $this->vault[$name] = $value;
-            
-        $this->vault[$key] = $value;
+            foreach($key as $name => $value)
+                $this->set($name, $value);
+        else
+            $this->vault[$key] = $value;
         
         return $this;
     }
@@ -637,6 +646,8 @@ class Avane
 
         /** Parse the each tpl file and get their path, then store the path with this variable */
         $this->vault['TEMPLATE_INCLUDE_' . $name] = $data['path'];
+        
+        return $this;
     }
     
     
@@ -659,9 +670,9 @@ class Avane
         return $this;
     }
     
-    
-    
-    
+
+
+
     /**
      * Get
      * 
@@ -701,6 +712,63 @@ class Avane
         
         return AvaneDirectives::$directive($value);
     }
-
+    
+    
+    
+    
+    /***********************************************
+    /***********************************************
+    /********* L I N K S & S C R I P T S ***********
+    /***********************************************
+    /***********************************************
+    
+    /**
+     * Add
+     */
+    
+    function add($type, $path, $autoPath = false)
+    {
+        $type = strtolower($type);
+        
+        switch($type)
+        {
+            case 'js': 
+                $path       = $autoPath ? $this->scriptsPath . $path : $path;
+                $this->js[] = $path;
+                break;
+            
+            case 'css':
+                $path        = $autoPath ? $this->stylesPath . $path : $path;
+                $this->css[] = $path;
+                break;
+        }
+        
+        return $this;
+    }
+    
+    
+    
+    
+    /**
+     * Output
+     */
+    
+    function output($type)
+    {
+        $type = strtolower($type);
+        
+        switch($type)
+        {
+            case 'js':
+                foreach($this->js as $js)
+                    echo "<script src=\"$js\"></script>\n";
+                break;
+            
+            case 'css':
+                foreach($this->css as $css)
+                    echo "<link rel=\"stylesheet\" href=\"$css\">\n";
+                break;
+        }
+    }
 }
 ?>
