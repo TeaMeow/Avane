@@ -17,7 +17,7 @@ include '../../src/compiler/template.php';
 include '../../src/parser/template.php';
 include '../../src/directives.php';
 
-$_SERVER['HTTP_X_PJAX'] = 'title, content, header, wasted';
+//$_SERVER['HTTP_X_PJAX'] = 'title, content, header, wasted';
 
 $avane = new Avane('templates');
 
