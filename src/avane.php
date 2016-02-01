@@ -102,6 +102,8 @@ class Avane
     
     protected $totalTime = 0;
     
+    protected $includePrefix = 'TEMPLATE_INCLUDE_';
+    
     
     
     
@@ -171,13 +173,11 @@ class Avane
     
     function load($templateName, $variables = null)
     {
+        $this->set($variables);
+        
         /** Compile the template If the cache bucket doesn't have the template */
         if(!isset($this->cacheBucket[$templateName]))
-        {
-            $templatePath = $this->getTemplatePath($templateName);
-            
-            $this->setBucket($templateName, $this->templateCompile($templatePath));
-        }
+            $this->setBucket($templateName, $this->compile('template', $templateName));
         
         /** Require the template from the cache bucket, so we don't need to compile it to get the path again */
         require($this->cacheBucket[$templateName]['path']);
@@ -224,7 +224,7 @@ class Avane
     {
         $this->capture();
         $this->load($templateName, $variables);
-        $this->endCapture();
+        return $this->endCapture();
     }
         
     
@@ -249,10 +249,10 @@ class Avane
         $this->set('title', $title);
         
         /** Load the configs of the category */
-        @include_once($this->configPath);
+        include($this->configPath);
         
         /** Set variables **/
-        $this->groupSet($variables);
+        $this->set($variables);
         
         /** Set the json header if it's a PJAX request, otherwise load the header template */
         if($this->isPJAX)
@@ -332,6 +332,20 @@ class Avane
      * 
      * @return Avane
      */
+    
+    function compile($type, $path)
+    {
+        switch($type)
+        {
+            case 'template':
+                $path = $this->getTemplatePath($path);
+                $data = $this->templateCompile($path);
+                break;
+        }
+        
+        return $data;
+    }
+    
     
     
     
@@ -446,7 +460,7 @@ class Avane
     function endCapture($position = null)
     {
         if(!$this->isPJAX && $position)
-            return this;
+            return $this;
         
         switch($position)
         {
@@ -589,8 +603,12 @@ class Avane
      * @return Avane
      */
     
-    function set($key, $value)
+    function set($key, $value = null)
     {
+        if(is_array($key))
+            foreach($vars as $name => $value)
+                $this->vault[$name] = $value;
+            
         $this->vault[$key] = $value;
         
         return $this;
@@ -600,22 +618,25 @@ class Avane
     
     
     /**
-     * Group Set
+     * Include Set
      * 
-     * Same as the set() just changed to an array this time.
-     * 
-     * @param array $vars   The variables, key as the name, value as the value of the variable.
-     * 
-     * @return Avane
+     * Set 
      */
     
-    function groupSet($vars = null)
+    function includeSet($name, $path)
     {
-        if(!empty($vars))
-            foreach($vars as $name => $value)
-                $this->vault[$name] = $value;
-        
-        return $this;
+        if(is_array($name))
+        {
+            foreach($name as $templateName => $templatePath)
+                $this->includeSet($templateName, $templatePath);
+            
+            return $this;
+        }
+            
+        $data = $this->compile('template', $path);
+
+        /** Parse the each tpl file and get their path, then store the path with this variable */
+        $this->vault['TEMPLATE_INCLUDE_' . $name] = $data['path'];
     }
     
     
@@ -656,7 +677,7 @@ class Avane
         if($key == 'loop')
             return $this->loop[count($this->loop) - 1];
         else
-            return $this->vault[$key];
+            return isset($this->vault[$key]) ? $this->vault[$key] : null;
     }
     
     
