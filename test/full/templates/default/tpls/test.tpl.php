@@ -1,6 +1,8 @@
 <html>
     <head></head>
     <body>
-        <div></div>
+        <div>
+            {% import aaaa %}
+        </div>
     </body>
 </html>

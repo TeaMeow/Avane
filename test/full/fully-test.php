@@ -17,22 +17,9 @@ include '../../src/compiler/template.php';
 include '../../src/parser/template.php';
 include '../../src/directives.php';
 
-include '../../vendor/autoload.php';
-//$_SERVER['HTTP_X_PJAX'] = 'title, content, header, wasted';
-use PHPHtmlParser\Dom;
 $avane = new Avane('templates');
 
 
-$A = $avane->fetch('test');
-
-$dom = new Dom;
-$dom->load('<div class="all"><p>Hey bro, <a>asdasd</a> <a class="donzo" href="google.com">click here</a><br /> :)</p></div>');
-$a   = $dom->find('a');
-
-foreach($a as $single)
-{
-    echo $single->getAttribute('class');
-}
-
-e(count($a));
+$avane->header()
+      ->load('test');
 ?>
