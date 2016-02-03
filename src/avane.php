@@ -103,15 +103,14 @@ class Avane
     protected $totalTime = 0;
     
     /**
-     * JS & CSS
+     * Imports
      * 
      * Stores the path of the javascripts and the stylesheets.
      * 
      * @var array
      */
     
-    protected $js  = [];
-    protected $css = [];
+    protected $imports = [];
     
 
     
@@ -728,23 +727,27 @@ class Avane
      * Add
      */
     
-    function import($type, $path, $autoPath = false)
+    function import($group, $path, $inFolder = false)
     {
-        $type = strtolower($type);
+        $hasGroup = isset($this->imports[$group]);
+        $pathType = pathinfo($path)['extension'];
         
-        switch($type)
+        switch($pathType)
         {
             case 'js': 
-                $path       = $autoPath ? $this->scriptsPath . $path : $path;
-                $this->js[] = $path;
+                $path  = $inFolder ? $this->scriptsPath . $path : $path;
                 break;
             
             case 'css':
-                $path        = $autoPath ? $this->stylesPath . $path : $path;
-                $this->css[] = $path;
+                $path  = $inFolder ? $this->stylesPath  . $path : $path;
                 break;
         }
         
+        if(!$hasGroup)
+            $this->imports[$group] = [];
+        
+        $this->imports[$group][$path] = $pathType;
+
         return $this;
     }
     
@@ -755,22 +758,28 @@ class Avane
      * Output
      */
     
-    function output($type)
+    function output($group)
     {
-        $type = strtolower($type);
+        if(!isset($this->imports[$group]))
+            return false;
         
-        switch($type)
+        foreach($this->imports[$group] as $path => $type)
         {
-            case 'js':
-                foreach($this->js as $js)
-                    echo "<script src=\"$js\"></script>\n";
-                break;
+            $type = strtolower($type);
             
-            case 'css':
-                foreach($this->css as $css)
-                    echo "<link rel=\"stylesheet\" href=\"$css\">\n";
-                break;
+            switch($type)
+            {
+                case 'js':
+                    echo "<script src=\"$path\"></script>\n";
+                    break;
+                
+                case 'css':
+                    echo "<link rel=\"stylesheet\" href=\"$path\">\n";
+                    break;
+            }
         }
+        
+        
     }
 }
 ?>
