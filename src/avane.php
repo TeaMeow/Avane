@@ -724,7 +724,15 @@ class Avane
     /***********************************************
     
     /**
-     * Add
+     * Import
+     * 
+     * Import the stylesheets or the scripts.
+     * 
+     * @param string $group      The group name of the file.
+     * @param string $path       The path of the file.
+     * @param bool   $inFolder   Set true if the file is in the template folder.
+     * 
+     * @return Avane
      */
     
     function import($group, $path, $inFolder = false)
@@ -756,6 +764,12 @@ class Avane
     
     /**
      * Output
+     * 
+     * Output all the files which are within the specify group.
+     * 
+     * @param string $group   The group name.
+     * 
+     * @return Avane
      */
     
     function output($group)
@@ -779,7 +793,7 @@ class Avane
             }
         }
         
-        
+        return $this;
     }
 }
 ?>
