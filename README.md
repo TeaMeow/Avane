@@ -38,7 +38,7 @@
 
 我們將教學從 README.md 中切割出來了，
 
-你可以[在 Gitbook 上閱讀詳細的亞凡芽教學](https://yamiodymel.gitbooks.io/avane/content/)，
+**你可以[在 Gitbook 上閱讀詳細的亞凡芽教學](https://yamiodymel.gitbooks.io/avane/content/)**，
 
 甚至是下載成 PDF 檔在任何時候都可以觀看。
 
