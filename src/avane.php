@@ -187,6 +187,9 @@ class Avane
     {
         $this->set($variables);
         
+        /** Load the configs of the category */
+        @include($this->configPath);
+        
         /** Compile the template If the cache bucket doesn't have the template */
         if(!isset($this->cacheBucket[$templateName]))
             $this->setBucket($templateName, $this->compile('template', $templateName));
@@ -261,7 +264,7 @@ class Avane
         $this->set('title', $title);
         
         /** Load the configs of the category */
-        include($this->configPath);
+        @include($this->configPath);
         
         /** Set variables **/
         $this->set($variables);
