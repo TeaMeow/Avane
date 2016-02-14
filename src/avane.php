@@ -119,9 +119,13 @@ class Avane
      * CONSTRUCT
      */
      
-    function __construct($thisOne = null)
+    function __construct($thisOne = null, $configs = [])
     {
-            
+        if(!empty($configs))
+        {
+            $this->configs($configs);
+        }
+        
         if($thisOne && !is_string($thisOne)) 
         {
             foreach (get_object_vars($thisOne) as $key => $value)
@@ -377,6 +381,41 @@ class Avane
         
         return ['path'    => $info['path'],
                 'content' => $info['content']];
+    }
+    
+    
+    
+    
+    /**
+     * Configs
+     * 
+     * Set the settings here.
+     * 
+     * @param array $configs   The settings.
+     * 
+     * @return Avane
+     */
+    
+    function configs($configs)
+    {
+        foreach($configs as $name => $value)
+        {
+            switch($name)
+            {
+                case 'pjaxHeader':
+                    $this->pjaxHeader = $value;
+                    break;
+                
+                case 'forceCompile':
+                    break;
+                
+                case 'templatePath':
+                    $this->categoriesPath = $value;
+                    break;
+            }
+        }
+        
+        return $this;
     }
     
     
