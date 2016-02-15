@@ -55,6 +55,7 @@ class AvaneLexer
         '/^(\#)/'                 => 'T_SHARP',
         '/^(\.)/'                 => 'T_DOT',
         '/^([\pL])/u'             => 'T_STRING',
+        '/^(\%)/'                 => 'T_PERCENTAGE'
     ];
     
     
