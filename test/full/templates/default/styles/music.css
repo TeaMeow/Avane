@@ -1,2 +1,4 @@
 a {
-  display: block; }
+  display: block;
+  position: absolute;
+  z-index: 3; }
