@@ -6,7 +6,7 @@ class AvaneSassCompiler extends Avane
         if($thisOne) parent::__construct($thisOne);
         
         $this->sassListPath     = $this->compiledPath . 'sass.json';
-        $this->modifiedTimePath = $this->compiledPath . 'sass_modified_time.txt';
+        $this->fileTrackingPath = $this->compiledPath . 'sass_file_tracking.txt';
     }
     
     
@@ -14,7 +14,8 @@ class AvaneSassCompiler extends Avane
     
     function compile()
     {
-        if(!$this->checkTime())
+        
+        if(!$this->checkTime() || $this->hasNew())
         {
             foreach($this->sass as $name => $path)
             {
@@ -26,35 +27,57 @@ class AvaneSassCompiler extends Avane
     }
     
     
-    function checkTime()
+    function hasNew()
     {
-        if(!file_exists($this->modifiedTimePath))
+        foreach($this->sass as $name => $path)
         {
-            file_put_contents($this->modifiedTimePath, filemtime($this->sassPath));
-        
-            return false;
+            if(!file_exists($this->stylesPath . $name))
+                return true;
         }
-        
-        return file_get_contents($this->modifiedTimePath) == filemtime($this->sassPath);
     }
     
     
-    function listAndSave()
+    
+    function checkTime()
     {
-        $list      = [];
+        $listResult = $this->listResult();
+
+        if(!file_exists($this->fileTrackingPath))
+        {
+            file_put_contents($this->fileTrackingPath, $listResult);
+            return false;   
+        }
+        if(file_get_contents($this->fileTrackingPath) == $listResult)
+        {
+            return true;
+        }
+        else
+        {
+            file_put_contents($this->fileTrackingPath, $listResult);
+            
+            return false;   
+        }
+    }
+    
+    
+    function listResult()
+    {
+        $list      = '';
         $directory = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->sassPath));
         
         foreach ($directory as $info)
         {
             $filename = $info->getFilename();
+            
+            if($filename == '.' || $filename == '..')
+                continue;
+            
             $fileMD5  = md5_file($info->getRealPath());
             
-            $list[]   = $FileMD5;
+            $list    .= $fileMD5;
         }
-
-        /** Remove unnecessary */
-        unset($list['.']);
-        unset($list['..']);
+        
+        return $list;
     }
     
     
