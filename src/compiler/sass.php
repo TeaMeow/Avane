@@ -16,7 +16,7 @@ class AvaneSassCompiler extends Avane
     {
         if(!$this->checkTime())
         {
-            
+            exec('sass ' . $this->SCSSPath . $this->TemplateName . '.scss' . ' --load-path ' . $this->SCSSPath . ' 2>&1', $Output, $Code);
         }
         
         return $this;
