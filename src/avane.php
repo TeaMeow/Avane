@@ -140,7 +140,7 @@ class Avane
       * @var string
       */
      
-     protected $sassc = './bin/sassc';
+     protected $sassc = 'sassc';
 
     
     
@@ -304,7 +304,7 @@ class Avane
         if($this->isPJAX)
             header('Content-Type: application/json; charset=utf-8');
         else
-            if($this->ignoreSass)
+            if(!$this->ignoreSass)
                 $this->compile('sass');
 
         /** Capture the rendered content from now on */
@@ -821,7 +821,9 @@ class Avane
         /** Don't ignore the compilation of sass once we setted a sass to compile */
         $this->ignoreSass = false;
         
+        $this->sass[$styleName] = $path;
         
+        return $this;
     }
     
     
