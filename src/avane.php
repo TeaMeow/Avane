@@ -112,7 +112,37 @@ class Avane
     
     protected $imports = [];
     
+    /**
+     * Ignore Sass
+     * 
+     * Ignore the compilation of the sass files when true.
+     * 
+     * @var bool
+     */
+     
+     protected $ignoreSass = true;
+     
+     /**
+      * Sass
+      * 
+      * Stores the sass paths to compile later.
+      * 
+      * @var array
+      */
+     
+     protected $sass = [];
+     
+     /**
+      * Sassc Path
+      * 
+      * The path of the sassc.
+      * 
+      * @var string
+      */
+     
+     protected $sassc = './bin/sassc';
 
+    
     
     
     /**
@@ -160,6 +190,7 @@ class Avane
         $this->compiledPath       = $this->categoryPath       . 'compiled/';
         $this->scriptsPath        = $this->categoryPath       . 'scripts/';
         $this->stylesPath         = $this->categoryPath       . 'styles/';
+        $this->sassPath           = $this->categoryPath       . 'sass/';
         $this->templateFolderPath = $this->categoryPath       . 'tpls/';
         $this->headerPath         = $this->templateFolderPath . 'header' . $this->templateExtension;
         $this->footerPath         = $this->templateFolderPath . 'footer' . $this->templateExtension;
@@ -272,6 +303,9 @@ class Avane
         /** Set the json header if it's a PJAX request, otherwise load the header template */
         if($this->isPJAX)
             header('Content-Type: application/json; charset=utf-8');
+        else
+            if($this->ignoreSass)
+                $this->compile('sass');
 
         /** Capture the rendered content from now on */
         $this->capture()
@@ -343,18 +377,22 @@ class Avane
      * 
      * Compile anything like: a template, styles, scripts.
      * 
-     * @param string $compileType   The type of the thing which we are going to compile with.
-     * 
+     * @param string      $type   The type of the thing which we are going to compile with.
+     * @param string|null $path   The path of the file.
+     *
      * @return Avane
      */
     
-    function compile($type, $path)
+    function compile($type, $path = null)
     {
         switch($type)
         {
             case 'template':
                 $path = $this->getTemplatePath($path);
                 $data = $this->templateCompile($path);
+                break;
+            case 'sass':
+                $this->sassCompile();
                 break;
         }
         
@@ -414,6 +452,10 @@ class Avane
                 
                 case 'templatePath':
                     $this->categoriesPath = $value;
+                    break;
+                
+                case 'ignoreSass':
+                    $this->ignoreSass = $value;
                     break;
             }
         }
@@ -754,6 +796,49 @@ class Avane
         //$directive = '_' . $directive;
         
         return AvaneDirectives::$directive($value);
+    }
+
+
+
+
+    /***********************************************
+    /***********************************************
+    /******************* S A S S *******************
+    /***********************************************
+    /***********************************************    
+    
+    /**
+     * SASS Set
+     * 
+     * Set a sass file and Avane will compile it.
+     * 
+     * @param string $styleName   The filename after we compile it.
+     * @param string $path        The path to the sass file.
+     */
+    
+    function sassSet($styleName, $path)
+    {
+        /** Don't ignore the compilation of sass once we setted a sass to compile */
+        $this->ignoreSass = false;
+        
+        
+    }
+    
+    
+    
+    
+    /**
+     * Sass Compile
+     */
+    
+    function sassCompile()
+    {
+        if(!isset($this->sassCompiler))
+            $this->sassCompiler = new AvaneSassCompiler($this);
+       
+        $this->sassCompiler->compile();
+        
+        return $this;
     }
     
     
