@@ -30,7 +30,7 @@ class AvaneSassCompiler extends Avane
     {
         if(!file_exists($this->modifiedTimePath))
         {
-            file_put_contents(filemtime($this->sassPath), $this->modifiedTimePath);
+            file_put_contents($this->modifiedTimePath, filemtime($this->sassPath));
         
             return false;
         }
