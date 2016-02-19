@@ -77,8 +77,8 @@ class AvaneAvTagCompiler extends Avane
         {
             foreach($nameList as $name)
             {
-                $js .= "window.\${$group}_$name = $('[av-group=\"$group\"] *:not([av-group]) [av-name=\"$name\"], [av-group='$group'] > [av-name='$name']'); \n";
-                $js .= "window.{$group}_$name = \"[av-group=\"$group\"] *:not([av-group]) [av-name=\"$name\"], [av-group='$group'] > [av-name='$name']\"; \n";
+                $js .= "window.\${$group}_$name = $('[av-group=\"$group\"] *:not([av-group]) [av-name=\"$name\"], [av-group=\"$group\"] > [av-name=\"$name\"]'); \n";
+                $js .= "window.{$group}_$name = \"[av-group='$group'] *:not([av-group]) [av-name='$name'], [av-group='$group'] > [av-name='$name']\"; \n";
             }
         }
 
