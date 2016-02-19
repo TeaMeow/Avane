@@ -191,8 +191,8 @@ class Avane
         $this->categoryPath       = $this->categoriesPath     . $categoryName . '/';
         $this->compiledPath       = $this->categoryPath       . 'compiled/';
         $this->avNamesPath        = $this->categoryPath       . 'compiled/av_names.json';
-        $this->avScriptPath       = $this->categoryPath       . 'compiled/av_js.js';
         $this->scriptsPath        = $this->categoryPath       . 'scripts/';
+        $this->avScriptPath       = $this->scriptsPath        . 'avane-tags.js';
         $this->stylesPath         = $this->categoryPath       . 'styles/';
         $this->sassPath           = $this->categoryPath       . 'sass/';
         $this->templateFolderPath = $this->categoryPath       . 'tpls/';
