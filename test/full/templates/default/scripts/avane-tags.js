@@ -16,3 +16,5 @@ var $homepage_functionCon = $('[av-group="homepage"] [av-name="functionCon"]');
 var homepage_functionCon = "[av-group='homepage'] [av-name='functionCon']" 
 var $davai_test3 = $('[av-group="davai"] [av-name="test3"]'); 
 var davai_test3 = "[av-group='davai'] [av-name='test3']" 
+var $_popular = $('[av-group=""] [av-name="popular"]'); 
+var _popular = "[av-group=''] [av-name='popular']" 

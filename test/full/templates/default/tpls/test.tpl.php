@@ -1,10 +1,10 @@
 <html>
     <head></head>
-    <body av-group="homepage">
-        <div av-name="test">
-            <div av-name="test2" av-group="davai">
-                123
-                <span av-name="test3"></span>
+    <body av-scope="homepage">
+        <div av-name="menu" av-group="homepage"></div>
+        <div av-name="functionCon" av-group=>
+            <div av-scope="test">
+                <div av-name="popular"></div>
             </div>
         </div>
     </body>
