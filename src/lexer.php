@@ -6,8 +6,8 @@ class AvaneLexer
                                           ['open' => 'T_OPEN_TAG', 'close' => 'T_CLOSE_TAG']];
     protected static $sortFormat       = ['tokens' => [], 'length' => 0, 'position' => 0, 'line' => 0, 'match' => '', 'combinedToken' => ''];
     protected static $spaceToken       = 'T_WHITESPACE';
-    
-    protected static $tokens = 
+
+    protected static $tokens =
     [
         //'/^[a-zA-Z](\.)[a-zA-Z]/' => 'T_CHILD',
         '/^(==)/'                 => 'T_IS_EQUAL',
@@ -38,6 +38,8 @@ class AvaneLexer
         '/^(\])/'                 => 'T_ARRAY_CLOSE_TAG',
         '/^(,)/'                  => 'T_COMMA',
         '/^(:)/'                  => 'T_SEPARATOR',
+        '/^(;)/'                  => 'T_LINE_END',
+        '/^(\$)/'                 => 'T_DOLLARSIGN',
         '/^(\|)/'                 => 'T_BETWEEN',
         '/^(\?)/'                 => 'T_SECONDARY_SEPARATOR',
         '/^([+-]?(?=\d*[.eE])(?=\.?\d)\d*\.?\d*(?:[eE][+-]?\d+)?)/' => 'T_DNUMBER',
@@ -57,41 +59,41 @@ class AvaneLexer
         '/^([\pL])/u'             => 'T_STRING',
         '/^(\%)/'                 => 'T_PERCENTAGE'
     ];
-    
-    
-    
-    
+
+
+
+
     public static function run($source)
     {
         $tokens = [];
-    
+
         foreach($source as $number => $line)
-        {            
+        {
             $offset = 0;
-            
+
             while($offset < strlen($line))
             {
                 $result = static::scan($line, $number, $offset);
-                
-                if($result === false) 
+
+                if($result === false)
                 {
                     throw new Exception("Unable to parse line " . ($line + 1) . ", offset: ". substr($line, $offset) .".");
                 }
-                
+
                 $tokens[] = $result;
                 $offset  += strlen($result['match']);
             }
         }
-        
+
         return static::group($tokens);
     }
-    
-    
 
-    protected static function scan($line, $number, $offset) 
+
+
+    protected static function scan($line, $number, $offset)
     {
         $string = substr($line, $offset);
-    
+
         foreach(static::$tokens as $pattern => $name)
         {
             if(preg_match($pattern, $string, $matches))
@@ -102,41 +104,41 @@ class AvaneLexer
                         'position' => $offset];
             }
         }
-        
+
         return false;
     }
-    
-    
+
+
     protected static function group($tokens)
     {
-        
+
         $allDots = [[]];
         $cleaned = [];
         $root = null;
         $isInQuote = false;
-        
+
         foreach($tokens as $tokenKey => $token)
         {
             if($isInQuote)
                 if($token['token'] == 'T_QUOTE')
                     $isInQuote = false;
-                    
-                    
+
+
             if(!$isInQuote)
                 if($token['token'] == 'T_QUOTE')
                     $isInQuote = true;
-            
-            
+
+
             if($isInQuote)
                 continue;
-                
+
             $prev  = isset($tokens[$tokenKey - 1]) ? $tokens[$tokenKey - 1] : null;
             $next  = isset($tokens[$tokenKey + 1]) ? $tokens[$tokenKey + 1] : null;
             $right = isset($tokens[$tokenKey + 2]) ? $tokens[$tokenKey + 2] : null;
 
-            
+
             $latest = count($allDots) - 1 > 0 ? count($allDots) - 1 : 0;
-            
+
             if(!$root && $token['token'] == 'T_IDENTIFIER')
             {
                 $root = $token;
@@ -144,24 +146,24 @@ class AvaneLexer
                 continue;
             }
 
-            
+
             if($token['token'] == 'T_IDENTIFIER' && $root)
                 $allDots[$latest][] = $token;
-                
-            if(($token['token'] == 'T_IDENTIFIER' && $prev['token'] == 'T_DOT' && $next['token'] != 'T_DOT') || 
+
+            if(($token['token'] == 'T_IDENTIFIER' && $prev['token'] == 'T_DOT' && $next['token'] != 'T_DOT') ||
                ($token['token'] == 'T_IDENTIFIER' && $next['token'] != 'T_DOT'))
             {
-              
+
                 array_push($allDots, []);
             }
         }
-            
-     
+
+
          //array_pop($allDots);
-         
+
 
         return $allDots;
-          
+
     }
 }
 
