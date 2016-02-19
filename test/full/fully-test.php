@@ -14,6 +14,7 @@ include '../../src/lexer.php';
 
 include '../../src/avane.php';
 include '../../src/compiler/sass.php';
+include '../../src/compiler/avane-tag.php';
 include '../../src/compiler/template.php';
 include '../../src/parser/template.php';
 include '../../src/directives.php';
