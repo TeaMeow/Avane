@@ -141,6 +141,8 @@ class Avane
       */
      
      protected $sassc = 'sassc';
+     
+     protected $forceCompile = false;
 
     
     
@@ -188,6 +190,8 @@ class Avane
         $this->categoriesPath     = rtrim($this->categoriesPath, '/') . '/';
         $this->categoryPath       = $this->categoriesPath     . $categoryName . '/';
         $this->compiledPath       = $this->categoryPath       . 'compiled/';
+        $this->avNamesPath        = $this->categoryPath       . 'compiled/av_names.json';
+        $this->avScriptPath       = $this->categoryPath       . 'compiled/av_js.js';
         $this->scriptsPath        = $this->categoryPath       . 'scripts/';
         $this->stylesPath         = $this->categoryPath       . 'styles/';
         $this->sassPath           = $this->categoryPath       . 'sass/';
@@ -448,6 +452,7 @@ class Avane
                     break;
                 
                 case 'forceCompile':
+                    $this->forceCompile = $value;
                     break;
                 
                 case 'templatePath':
