@@ -23,7 +23,7 @@ class AvaneSassCompiler extends Avane
                 file_put_contents($this->compiledPath . $contentMD5 . '.sass', AvaneAvTagCompiler::outputCss($content));
 
 
-                exec($this->sassc . ' ' . $this->compiledPath . $contentMD5 . '.sass' . ' > ' . $this->stylesPath . $name . '.css 2>&1', $Output, $Code);
+                exec($this->sassc . ' -t "compressed" ' . $this->compiledPath . $contentMD5 . '.sass' . ' > ' . $this->stylesPath . $name . '.css 2>&1', $Output, $Code);
             }
         }
 
