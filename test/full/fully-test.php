@@ -9,7 +9,7 @@ function e($shit)
 {
     exit(var_dump($shit));
 }
-
+include '../../simple-html-dom.php';
 include '../../src/lexer.php';
 
 include '../../src/avane.php';
@@ -18,7 +18,7 @@ include '../../src/compiler/template.php';
 include '../../src/parser/template.php';
 include '../../src/directives.php';
 
-$avane = new Avane('templates');
+$avane = new Avane('templates', ['forceCompile' => true]);
 
 
 $avane->header()
