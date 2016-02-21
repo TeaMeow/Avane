@@ -120,30 +120,30 @@ class Avane
      * @var bool
      */
 
-     protected $ignoreSass = true;
+    protected $ignoreSass = true;
 
-     /**
-      * Sass
-      *
-      * Stores the sass paths to compile later.
-      *
-      * @var array
-      */
+    /**
+     * Sass
+     *
+     * Stores the sass paths to compile later.
+     *
+     * @var array
+     */
+     
+    protected $sass = [];
 
-     protected $sass = [];
-
-     /**
-      * Sassc Path
-      *
-      * The path of the sassc.
-      *
-      * @var string
-      */
-
-     protected $sassc = 'sassc';
-
-     protected $forceCompile = false;
-
+    /**
+     * Sassc Path
+     *
+     * The path of the sassc.
+     *
+     * @var string
+     */
+    protected $sassc = 'sassc';
+    
+    protected $forceCompile = false;
+    
+    protected $avaneTagsSwitch = false;
 
 
 
@@ -461,6 +461,10 @@ class Avane
 
                 case 'ignoreSass':
                     $this->ignoreSass = $value;
+                    break;
+                
+                case 'avaneTags':
+                    $this->avaneTagsSwitch = $value;
                     break;
             }
         }
