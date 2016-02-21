@@ -19,7 +19,7 @@ include '../../src/compiler/template.php';
 include '../../src/parser/template.php';
 include '../../src/directives.php';
 
-$avane = new Avane('templates', ['forceCompile' => true]);
+$avane = new Avane('templates', ['forceCompile' => true, 'avaneTags' => true]);
 
 
 $avane->header()

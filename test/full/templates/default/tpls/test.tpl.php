@@ -1,8 +1,7 @@
 <html>
     <head></head>
-    <body av-scope="homepage">
-        <div av-name="menu" av-group="homepage"></div>
-        <div av-name="functionCon" av-group=>
+    <body av-group="homepage">
+        <div av-name="functionCon" av-group="aa">
             <div av-scope="test">
                 <div av-name="popular"></div>
             </div>

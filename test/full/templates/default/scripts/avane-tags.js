@@ -1,20 +1,7 @@
-var $homepage_test = $('[av-group="homepage"] [av-name="test"]'); 
-var homepage_test = "[av-group='homepage'] [av-name='test']" 
-var $homepage_test2 = $('[av-group="homepage"] [av-name="test2"]'); 
-var homepage_test2 = "[av-group='homepage'] [av-name='test2']" 
-var $homepage_test3 = $('[av-group="homepage"] [av-name="test3"]'); 
-var homepage_test3 = "[av-group='homepage'] [av-name='test3']" 
-var $homepage_mainCon = $('[av-group="homepage"] [av-name="mainCon"]'); 
-var homepage_mainCon = "[av-group='homepage'] [av-name='mainCon']" 
-var $homepage_registerCon = $('[av-group="homepage"] [av-name="registerCon"]'); 
-var homepage_registerCon = "[av-group='homepage'] [av-name='registerCon']" 
-var $homepage_termCon = $('[av-group="homepage"] [av-name="termCon"]'); 
-var homepage_termCon = "[av-group='homepage'] [av-name='termCon']" 
-var $homepage_infoCon = $('[av-group="homepage"] [av-name="infoCon"]'); 
-var homepage_infoCon = "[av-group='homepage'] [av-name='infoCon']" 
-var $homepage_functionCon = $('[av-group="homepage"] [av-name="functionCon"]'); 
-var homepage_functionCon = "[av-group='homepage'] [av-name='functionCon']" 
-var $davai_test3 = $('[av-group="davai"] [av-name="test3"]'); 
-var davai_test3 = "[av-group='davai'] [av-name='test3']" 
-var $_popular = $('[av-group=""] [av-name="popular"]'); 
-var _popular = "[av-group=''] [av-name='popular']" 
+$(document).ready(function(){window.$homepage_functionCon = $('[av-group="homepage"] *:not([av-group]) [av-name="functionCon"], [av-group="homepage"] > [av-name="functionCon"]'); 
+window.homepage_functionCon = "[av-group='homepage'] *:not([av-group]) [av-name='functionCon'], [av-group='homepage'] > [av-name='functionCon']"; 
+window.$homepage_popular = $('[av-group="homepage"] *:not([av-group]) [av-name="popular"], [av-group="homepage"] > [av-name="popular"]'); 
+window.homepage_popular = "[av-group='homepage'] *:not([av-group]) [av-name='popular'], [av-group='homepage'] > [av-name='popular']"; 
+window.$aa_popular = $('[av-group="aa"] *:not([av-group]) [av-name="popular"], [av-group="aa"] > [av-name="popular"]'); 
+window.aa_popular = "[av-group='aa'] *:not([av-group]) [av-name='popular'], [av-group='aa'] > [av-name='popular']"; 
+});
