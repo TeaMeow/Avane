@@ -10,7 +10,15 @@ class AvaneSassCompiler extends Avane
     }
 
 
-
+    
+    
+    /**
+     * Compile
+     * 
+     * Compile the sass to css.
+     * 
+     * @return AvaneSassCompiler
+     */
 
     function compile()
     {
@@ -18,19 +26,24 @@ class AvaneSassCompiler extends Avane
         {
             foreach($this->sass as $name => $path)
             {
-                $content = file_get_contents($this->sassPath . $path);
-                $contentMD5 = md5($content);
-                file_put_contents($this->compiledPath . $contentMD5 . '.sass', AvaneAvTagCompiler::outputCss($content));
-
-
-                exec($this->sassc . ' -t "compressed" ' . $this->compiledPath . $contentMD5 . '.sass' . ' > ' . $this->stylesPath . $name . '.css 2>&1', $Output, $Code);
+                exec($this->sassc . ' -t "compressed" ' . $this->sassPath . $path . ' > ' . $this->stylesPath . $name . '.css 2>&1', $Output, $Code);
             }
         }
 
         return $this;
     }
 
-
+    
+    
+    
+    /**
+     * Has New
+     * 
+     * Returns true when there's a sass file hasn't compiled.
+     * 
+     * @return bool
+     */
+     
     function hasNew()
     {
         foreach($this->sass as $name => $path)
@@ -38,23 +51,37 @@ class AvaneSassCompiler extends Avane
             if(!file_exists($this->stylesPath . $name))
                 return true;
         }
+        
+        return false;
     }
 
-
+    
+    
+    
+    /**
+     * Check Time
+     * 
+     * Returns true when the MD5 list file is same as now.
+     * 
+     * @return bool
+     */
 
     function checkTime()
     {
         $listResult = $this->listResult();
 
+        /** Creates a MD5 list file when there's no MD5 list file exists */
         if(!file_exists($this->fileTrackingPath))
         {
             file_put_contents($this->fileTrackingPath, $listResult);
             return false;
         }
+        /** Returns true when the MD5 list file is same as now */
         if(file_get_contents($this->fileTrackingPath) == $listResult)
         {
             return true;
         }
+        /** Otherwise just updated the MD5 list */
         else
         {
             file_put_contents($this->fileTrackingPath, $listResult);
@@ -63,6 +90,16 @@ class AvaneSassCompiler extends Avane
         }
     }
 
+    
+    
+    
+    /**
+     * List Result
+     * 
+     * Collect all the sass files and convert them into a MD5 string.
+     * 
+     * @return string
+     */
 
     function listResult()
     {
@@ -83,16 +120,5 @@ class AvaneSassCompiler extends Avane
 
         return $list;
     }
-
-
-
-
-
-
-    function hasListed()
-    {
-        return file_exists($this->sassListPath);
-    }
-
 }
 ?>
