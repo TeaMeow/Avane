@@ -129,7 +129,7 @@ class Avane
      *
      * @var array
      */
-     
+
     protected $sass = [];
 
     /**
@@ -140,11 +140,11 @@ class Avane
      * @var string
      */
     protected $sassc = 'sassc';
-    
-    protected $forceCompile = false;
-    
-    protected $avaneTagsSwitch = false;
 
+    protected $forceCompile = false;
+
+    protected $avaneTagsSwitch = false;
+    protected $forceRubySass = false;
 
 
     /**
@@ -462,10 +462,13 @@ class Avane
                 case 'ignoreSass':
                     $this->ignoreSass = $value;
                     break;
-                
+
                 case 'avaneTags':
                     $this->avaneTagsSwitch = $value;
                     break;
+
+                case 'forceRubySass':
+                    $this->forceRubySass = $value;
             }
         }
 
