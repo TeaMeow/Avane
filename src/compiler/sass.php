@@ -38,7 +38,6 @@ class AvaneSassCompiler extends Avane
                 else
                 {
                     exec($this->sassc . ' -t "compressed" ' . $this->sassPath . $path . ' > ' . $this->stylesPath . $name . '.css', $output, $code);
-
                 }
             }
         }
