@@ -389,6 +389,8 @@ class Avane
 
     function compile($type, $path = null)
     {
+        $data = null;
+
         switch($type)
         {
             case 'template':
