@@ -26,21 +26,72 @@ class AvaneSassCompiler extends Avane
         {
             foreach($this->sass as $name => $path)
             {
+                $sassPath = $this->sassPath . $path;
+                $cssPath  = $this->stylesPath . $name . '.css';
+
                 if($this->forceRubySass)
-                {
-                    exec('sass ' . $this->sassPath . $path . ' --load-path ' . $this->sassPath . ' 2>&1', $output, $code);
-
-                    /** Convert the output to the string */
-                    $output = implode("\n", $output);
-
-                    file_put_contents($this->stylesPath . $name . '.css', $output);
-                }
+                    $this->sassCompile('sass ' . $sassPath . ' --load-path ' . $this->sassPath . ' 2>&1', $cssPath);
                 else
-                {
-                    exec($this->sassc . ' -t "compressed" ' . $this->sassPath . $path . ' > ' . $this->stylesPath . $name . '.css', $output, $code);
-                }
+                    $this->sasscCompile($this->sassc . ' -t "compressed" ' . $sassPath . ' > ' . $cssPath, $cssPath);
             }
         }
+
+        return $this;
+    }
+
+
+
+
+    /**
+     * Sass Compile
+     *
+     * Compile a sass by the ruby sass.
+     *
+     * @param string $command      The command to execute.
+     * @param string $outputPath   The path of the css.
+     *
+     * @return AvaneSassCompiler
+     */
+
+    function sassCompile($command, $outputPath)
+    {
+        exec($command, $output, $code);
+
+        /** Convert the output to the string */
+        $output = implode("\n", $output);
+
+        file_put_contents($outputPath, $output);
+
+        return $this;
+    }
+
+
+
+
+    /**
+     * SassC Compile
+     *
+     * Compile a sass by the sassC.
+     *
+     * @param string $command      The command to execute.
+     * @param string $outputPath   The path of the css.
+     *
+     * @return AvaneSassCompiler
+     */
+
+    function sasscCompile($command, $outputPath)
+    {
+        /** Execute the sassC command with proc_open to catch the STDERR */
+        $proc   = proc_open($command, [2 => ['pipe','w']], $pipes);
+        $stderr = stream_get_contents($pipes[2]);
+
+        /** Close the pipes and the proc */
+        fclose($pipes[2]);
+        proc_close($proc);
+
+        /** Output the error message to the css file if needed */
+        if($stderr != '')
+            file_put_contents($outputPath, $stderr);
 
         return $this;
     }
@@ -60,7 +111,7 @@ class AvaneSassCompiler extends Avane
     {
         foreach($this->sass as $name => $path)
         {
-            if(!file_exists($this->stylesPath . $name))
+            if(!file_exists($this->stylesPath . $name . '.css'))
                 return true;
         }
 
