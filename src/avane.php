@@ -132,6 +132,8 @@ class Avane
 
     protected $sass = [];
 
+    protected $sassTracker = [];
+
     /**
      * Sassc Path
      *
@@ -828,6 +830,8 @@ class Avane
      *
      * @param string $styleName   The filename after we compile it.
      * @param string $path        The path to the sass file.
+     *
+     * @return Avane
      */
 
     function sassSet($styleName, $path)
@@ -845,6 +849,10 @@ class Avane
 
     /**
      * Sass Compile
+     *
+     * Compile the sass files.
+     *
+     * @return Avane
      */
 
     function sassCompile()
@@ -856,6 +864,29 @@ class Avane
 
         return $this;
     }
+
+
+
+
+    /**
+     * Sass Tracker Set
+     *
+     * Add a path for Avane to track the file changes.
+     *
+     * @param string $folder   The path of the folder which we wanted to track with.
+     *
+     * @return Avane
+     */
+
+    function sassTrackerSet($folder)
+    {
+        $this->ignoreSass = false;
+
+        array_push($this->sassTracker, $folder);
+
+        return $this;
+    }
+
 
 
 
