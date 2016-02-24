@@ -131,26 +131,50 @@ class AvaneSassCompiler extends Avane
 
     function checkTime()
     {
-        $listResult = $this->listResult();
+        $scannedResult = md5($this->scan());
 
         /** Creates a MD5 list file when there's no MD5 list file exists */
         if(!file_exists($this->fileTrackingPath))
         {
-            file_put_contents($this->fileTrackingPath, $listResult);
+            file_put_contents($this->fileTrackingPath, $scannedResult);
             return false;
         }
         /** Returns true when the MD5 list file is same as now */
-        if(file_get_contents($this->fileTrackingPath) == $listResult)
+        if(file_get_contents($this->fileTrackingPath) == $scannedResult)
         {
             return true;
         }
         /** Otherwise just updated the MD5 list */
         else
         {
-            file_put_contents($this->fileTrackingPath, $listResult);
+            file_put_contents($this->fileTrackingPath, $scannedResult);
 
             return false;
         }
+    }
+
+
+
+
+    /**
+     * Scan
+     *
+     * Scan all the sass folders.
+     *
+     * @return string
+     */
+
+    function scan()
+    {
+        $list = '';
+
+        $list .= $this->listResult($this->sassPath);
+
+        if($this->sassTracker)
+            foreach($this->sassTracker as $path)
+                $list .= $this->listResult($path);
+
+        return $list;
     }
 
 
@@ -161,13 +185,15 @@ class AvaneSassCompiler extends Avane
      *
      * Collect all the sass files and convert them into a MD5 string.
      *
+     * @param string $folder   The path of the folder to scan with.
+     *
      * @return string
      */
 
-    function listResult()
+    function listResult($folder)
     {
         $list      = '';
-        $directory = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->sassPath));
+        $directory = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder));
 
         foreach ($directory as $info)
         {
