@@ -208,10 +208,10 @@ class Avane
         $this->stylesPath         = $this->categoryPath       . 'styles/';
         $this->sassPath           = $this->categoryPath       . 'sass/';
         $this->templateFolderPath = $this->categoryPath       . 'tpls/';
+        $this->templateExtension  = '.tpl.php';
         $this->headerPath         = $this->templateFolderPath . 'header' . $this->templateExtension;
         $this->footerPath         = $this->templateFolderPath . 'footer' . $this->templateExtension;
         $this->configPath         = $this->categoryPath       . 'config.php';
-        $this->templateExtension  = '.tpl.php';
 
         return $this;
     }
