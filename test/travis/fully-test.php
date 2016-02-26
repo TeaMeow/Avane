@@ -1,7 +1,7 @@
 <?php
 $startTime = microtime(true);
 
-
+error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED);
 ini_set('xdebug.var_display_max_depth', '10');
 ini_set('xdebug.var_display_max_data', '5000');
 
