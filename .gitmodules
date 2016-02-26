@@ -1,6 +1,6 @@
 [submodule "sassc"]
-	path = sassc
+	path = tools/sassc
 	url = https://github.com/sass/sassc.git
 [submodule "libsass"]
-	path = libsass
+	path = tools/libsass
 	url = https://github.com/sass/libsass.git
