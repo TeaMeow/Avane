@@ -7,24 +7,24 @@
 
 &nbsp;
 
-# Avane
+# Avane [![Build Status](https://travis-ci.org/TeaMeow/Avane.svg?branch=master)](https://travis-ci.org/TeaMeow/Avane)
 亞凡芽是基於 PHP 的一套模板引擎，其功能支援隨機 CSS 樣式名稱，
 
 同時整合 JS 檔案。
 
-&nbsp; 
+&nbsp;
 
 # 特色
 
 1. 支援 PJAX（換網頁不重整）
 
-2. 減少撰寫 PHP 程式的次數。 
+2. 減少撰寫 PHP 程式的次數。
 
-3. 支援多個模板。 
+3. 支援多個模板。
 
 4. 支援整合 JS 和 CSS 檔案。
 
-5. 支援隨機 CSS 樣式名稱編譯。 
+5. 支援隨機 CSS 樣式名稱編譯。
 
 6. 布丁快取技術，讓亞凡芽在讀取同一模板時更快。
 
@@ -32,7 +32,7 @@
 
 8. 支援自訂主題，替換指定 CSS 檔案。
 
-&nbsp; 
+&nbsp;
 
 # 教學
 
@@ -42,7 +42,7 @@
 
 甚至是下載成 PDF 檔在任何時候都可以觀看。
 
-&nbsp; 
+&nbsp;
 
 # 範例
 

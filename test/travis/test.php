@@ -1,9 +1,5 @@
 <?php
-$startTime = microtime(true);
-
 error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED);
-ini_set('xdebug.var_display_max_depth', '10');
-ini_set('xdebug.var_display_max_data', '5000');
 
 function e($shit)
 {
@@ -12,7 +8,6 @@ function e($shit)
 
 include 'simple-html-dom.php';
 include 'src/lexer.php';
-
 include 'src/avane.php';
 include 'src/compiler/sass.php';
 include 'src/compiler/avane-tag.php';
@@ -22,12 +17,19 @@ include 'src/directives.php';
 
 class Test extends PHPUnit_Framework_TestCase
 {
-    function testA()
+    function __construct()
     {
-        $avane = new \Avane\Avane(__DIR__ . '/templates', ['forceCompile' => true, 'avaneTags' => true]);
+        $this->avane = new \Avane\Avane(__DIR__ . '/templates', ['forceCompile' => true, 'avaneTags' => true]);
+    }
 
+    function testFetch()
+    {
+        $this->avane->fetch('test');
+    }
 
-        $avane->fetch('test');
+    function testLoad()
+    {
+        $this->avane->load('test');
     }
 }
 
