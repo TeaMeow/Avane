@@ -22,6 +22,5 @@ include 'src/directives.php';
 $avane = new \Avane\Avane(__DIR__ . '/templates', ['forceCompile' => true, 'avaneTags' => true]);
 
 
-$avane->header()
-      ->fetch('test');
+$avane->fetch('test');
 ?>
