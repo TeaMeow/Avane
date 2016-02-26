@@ -22,7 +22,7 @@ include 'src/directives.php';
 
 class Test extends PHPUnit_Framework_TestCase
 {
-    function A()
+    function testA()
     {
         $avane = new \Avane\Avane(__DIR__ . '/templates', ['forceCompile' => true, 'avaneTags' => true]);
 
