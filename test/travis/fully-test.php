@@ -23,5 +23,5 @@ $avane = new \Avane\Avane(__DIR__ . '/templates', ['forceCompile' => true, 'avan
 
 
 $avane->header()
-      ->load('test');
+      ->fetch('test');
 ?>
