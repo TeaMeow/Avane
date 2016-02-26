@@ -20,7 +20,7 @@ class AvaneSassCompiler extends Avane
      * @return AvaneSassCompiler
      */
 
-    function compile()
+    protected function compile()
     {
         if(!$this->checkTime() || $this->hasNew())
         {
@@ -53,7 +53,7 @@ class AvaneSassCompiler extends Avane
      * @return AvaneSassCompiler
      */
 
-    function sassCompile($command, $outputPath)
+    protected function sassCompile($command, $outputPath)
     {
         exec($command, $output, $code);
 
