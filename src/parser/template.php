@@ -9,6 +9,7 @@ class AvaneTemplateParser
                           '/{% \/foreach %}/' => '<?php $this->loopEnd(); endforeach; $this->loopBack(); ?>',
                           '/{% \/repeat %}/'  => '<?php $this->loopEnd(); endfor; $this->loopBack(); ?>',
                           '/{% \/while %}/'   => '<?php endwhile; ?>',
+                          /*'/{% \/block %}/'   => '<?php $this->blockEnd(); ?>',*/
                           '/{% countinue %}/' => '<?php countinue; ?>',
                           '/{% break %}/'     => '<?php break; ?>'];
 
@@ -40,7 +41,11 @@ class AvaneTemplateParser
              ->replaceRepeat()          // {% repeat %}
              ->replaceWhile()           // {% while %}
              ->replaceIncludes()        // {% include %}
-             ->replaceImport();         // {% import %}
+             ->replaceImport()          // {% import %}
+             ->replaceExtends()         // {% extends %}
+             ->replaceBlock()           // {% block %}
+             ->replaceYield()           // {% yield %}
+             ->replaceNope();           // {% nope %}
 
         return $this->tplContent;
     }
@@ -302,6 +307,104 @@ class AvaneTemplateParser
         $this->tplContent = preg_replace_callback('/{% import (.*?) %}/', function($matched)
         {
             return '<?php $this->output(\'' . $matched[1] . '\'); ?>';
+        }, $this->tplContent);
+
+        return $this;
+    }
+
+
+
+
+    /**
+     * Replace Extends
+     *
+     * @return AvaneTemplateParser
+     */
+
+    function replaceExtends()
+    {
+        $this->tplContent = preg_replace_callback('/{% extends (.*?) %}/', function($matched)
+        {
+            $variableName = '$this->get(\'TEMPLATE_INCLUDE_' . $matched[1] . '\')';
+
+            return "<?php if($variableName){" . 'array_push($this->blockStatus, true);' . "include $variableName;" . 'array_pop($this->blockStatus); } ?>';
+
+        }, $this->tplContent);
+
+        return $this;
+    }
+
+
+
+
+    /**
+     * Replace Block
+     *
+     * @return AvaneTemplateParser
+     */
+
+    function replaceBlock()
+    {
+        $this->tplContent = preg_replace_callback('/{% block (.*?) %}(.*?){% \/block %}/s', function($matched)
+        {
+            $block        = explode(' ', $matched[1]);
+            $blockName    = $block[0];
+            $echoType     = isset($block[1]) && !empty($block[1]) ? $block[1] : false;
+            $blockContent = $matched[2];
+
+            $content  = '';
+            $content .= '<?php ob_start(); ?>';
+            $content .= $blockContent;
+            $content .= '<?php $AVANE_BLOCK_CONTENT = ob_get_contents(); ob_end_clean(); ?>';
+            $content .= '<?php $this->blockHandler(\''.$blockName.'\', $AVANE_BLOCK_CONTENT, \''.$echoType.'\'); ?>';
+
+            return $content;
+
+        }, $this->tplContent);
+
+        return $this;
+    }
+
+
+
+
+    /**
+     * Replace Yield
+     *
+     * @return AvaneTemplateParser
+     */
+
+    function replaceYield()
+    {
+        $this->tplContent = preg_replace_callback('/{% yield (.*?) %}/', function($matched)
+        {
+            $block        = explode(' ', $matched[1]);
+            $blockName    = $block[0];
+            $echoType     = isset($block[1]) && !empty($block[1]) ? $block[1] : false;
+            $blockContent = $matched[2];
+
+            return '<?php $this->blockHandler(\''.$blockName.'\', \'\', \''.$echoType.'\'); ?>';
+
+        }, $this->tplContent);
+
+        return $this;
+    }
+
+
+
+
+    /**
+     * Replace Block
+     *
+     * @return AvaneTemplateParser
+     */
+
+    function replaceNope()
+    {
+        $this->tplContent = preg_replace_callback('/{% nope %}(.*?){% \/nope %}/s', function($matched)
+        {
+            return '';
+
         }, $this->tplContent);
 
         return $this;

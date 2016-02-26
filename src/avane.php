@@ -55,12 +55,22 @@ class Avane
     /**
      * Loop
      *
-     * Used to store the loop informations.
+     * Stores the loop informations.
      *
      * @var array
      */
 
     protected $loop = [];
+
+    /**
+     * Blocks
+     *
+     * Stores the block informations.
+     */
+
+    protected $blocks = [];
+
+    protected $blockStatus = [];
 
     /**
      * Title
@@ -693,6 +703,63 @@ class Avane
         return $this;
     }
 
+
+
+
+    /***********************************************
+    /***********************************************
+    /***************** B L O C K *******************
+    /***********************************************
+    /***********************************************
+
+    /**
+     *
+     */
+
+    function blockStart()
+    {
+
+    }
+
+    function blockEnd()
+    {
+
+    }
+
+    function blockHandler($blockName, $blockContent, $echoType = false)
+    {
+        if($echoType != 'prepend' && $echoType != 'append')
+            $echoType = false;
+
+        if(isset($this->blocks[$blockName]))
+        {
+            switch($this->blocks[$blockName]['echoType'])
+            {
+                case 'prepend':
+                    echo $blockContent . $this->blocks[$blockName]['content'];
+                    break;
+
+                case 'append':
+                    echo $this->blocks[$blockName]['content'] . $blockContent;
+                    break;
+
+                default:
+                    echo $this->blocks[$blockName]['content'];
+                    break;
+            }
+        }
+        else
+        {
+            $this->blocks[$blockName] = ['echoType' => $echoType,
+                                         'content'  => $blockContent];
+
+            if(end($this->blockStatus) === true)
+                echo $blockContent;
+
+        }
+
+        return $this;
+    }
 
 
 
