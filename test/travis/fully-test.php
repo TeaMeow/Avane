@@ -9,6 +9,7 @@ function e($shit)
 {
     exit(var_dump($shit));
 }
+
 include 'simple-html-dom.php';
 include 'src/lexer.php';
 
@@ -19,8 +20,15 @@ include 'src/compiler/template.php';
 include 'src/parser/template.php';
 include 'src/directives.php';
 
-$avane = new \Avane\Avane(__DIR__ . '/templates', ['forceCompile' => true, 'avaneTags' => true]);
+class Test extends PHPUnit_Framework_TestCase
+{
+    function A()
+    {
+        $avane = new \Avane\Avane(__DIR__ . '/templates', ['forceCompile' => true, 'avaneTags' => true]);
 
 
-$avane->fetch('test');
+        $avane->fetch('test');
+    }
+}
+
 ?>
