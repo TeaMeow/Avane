@@ -215,7 +215,7 @@ class Avane
         $this->footerPath         = $this->templateFolderPath . 'footer' . $this->templateExtension;
         $this->configPath         = $this->categoryPath       . 'config.php';
 
-        if(is_dir($this->compiledPath))
+        if(!is_dir($this->compiledPath))
             mkdir($this->compiledPath, 0755, true);
 
         return $this;
