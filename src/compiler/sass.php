@@ -1,5 +1,7 @@
 <?php
-class AvaneSassCompiler extends Avane
+namespace Avane\Compiler;
+
+class Sass extends \Avane\Avane
 {
     function __construct($thisOne)
     {
@@ -20,7 +22,7 @@ class AvaneSassCompiler extends Avane
      * @return AvaneSassCompiler
      */
 
-    protected function compile()
+    function compile()
     {
         if(!$this->checkTime() || $this->hasNew())
         {
@@ -53,7 +55,7 @@ class AvaneSassCompiler extends Avane
      * @return AvaneSassCompiler
      */
 
-    protected function sassCompile($command, $outputPath)
+    function sassCompile($command, $outputPath)
     {
         exec($command, $output, $code);
 
@@ -193,7 +195,7 @@ class AvaneSassCompiler extends Avane
     function listResult($folder)
     {
         $list      = '';
-        $directory = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder));
+        $directory = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($folder));
 
         foreach ($directory as $info)
         {

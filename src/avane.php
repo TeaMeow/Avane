@@ -1,4 +1,6 @@
 <?php
+namespace Avane;
+
 class Avane
 {
     /**
@@ -434,7 +436,7 @@ class Avane
     function templateCompile($templatePath, $raw = false)
     {
         if(!isset($this->templateCompiler))
-            $this->templateCompiler = new AvaneTemplateCompiler($this);
+            $this->templateCompiler = new Compiler\Template($this);
 
         $info = $this->templateCompiler->compile($templatePath, $raw);
 
@@ -925,7 +927,7 @@ class Avane
     function sassCompile()
     {
         if(!isset($this->sassCompiler))
-            $this->sassCompiler = new AvaneSassCompiler($this);
+            $this->sassCompiler = new Compiler\Sass($this);
 
         $this->sassCompiler->compile();
 

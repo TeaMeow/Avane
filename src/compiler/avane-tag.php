@@ -1,5 +1,7 @@
 <?php
-class AvaneAvTagCompiler extends Avane
+namespace Avane\Compiler;
+
+class AvaneTag extends \Avane\Avane
 {
     protected $avaneNames;
     protected $content;

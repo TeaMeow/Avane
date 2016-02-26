@@ -1,9 +1,9 @@
 <?php
-$startTime = microtime(true);  
-    
-    
-ini_set('xdebug.var_display_max_depth', '10'); 
-ini_set('xdebug.var_display_max_data', '5000'); 
+$startTime = microtime(true);
+
+
+ini_set('xdebug.var_display_max_depth', '10');
+ini_set('xdebug.var_display_max_data', '5000');
 
 function e($shit)
 {
@@ -19,7 +19,7 @@ include '../../src/compiler/template.php';
 include '../../src/parser/template.php';
 include '../../src/directives.php';
 
-$avane = new Avane('templates', ['forceCompile' => true, 'avaneTags' => true]);
+$avane = new \Avane\Avane('templates', ['forceCompile' => true, 'avaneTags' => true]);
 
 
 $avane->header()

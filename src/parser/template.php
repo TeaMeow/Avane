@@ -1,6 +1,7 @@
 <?php
+namespace Avane\Parser;
 
-class AvaneTemplateParser
+class Template
 {
     private $tplContent;
     private $basicTags = ['/{% else %}/'      => '<?php else: ?>',

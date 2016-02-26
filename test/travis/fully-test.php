@@ -9,17 +9,17 @@ function e($shit)
 {
     exit(var_dump($shit));
 }
-include 'simple-html-dom.php';
-include 'src/lexer.php';
+include '../../simple-html-dom.php';
+include '../../src/lexer.php';
 
-include 'src/avane.php';
-include 'src/compiler/sass.php';
-include 'src/compiler/avane-tag.php';
-include 'src/compiler/template.php';
-include 'src/parser/template.php';
-include 'src/directives.php';
+include '../../src/avane.php';
+include '../../src/compiler/sass.php';
+include '../../src/compiler/avane-tag.php';
+include '../../src/compiler/template.php';
+include '../../src/parser/template.php';
+include '../../src/directives.php';
 
-$avane = new Avane('templates', ['forceCompile' => true, 'avaneTags' => true]);
+$avane = new \Avane\Avane('templates', ['forceCompile' => true, 'avaneTags' => true]);
 
 
 $avane->header()

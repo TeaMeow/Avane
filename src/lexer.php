@@ -1,5 +1,7 @@
 <?php
-class AvaneLexer
+namespace Avane;
+
+class Lexer
 {
     protected static $grouped          = [];
     protected static $openAndCloseTags = [['open' => 'T_HELPER_OPEN_TAG', 'close' => 'T_HELPER_CLOSE_TAG'],
