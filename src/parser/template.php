@@ -426,7 +426,7 @@ class Template
 
     function analyzeVariable($matched)
     {
-        $grouped = AvaneLexer::run([$matched]);
+        $grouped = \Avane\Lexer::run([$matched]);
 
         return $this->lexerToPHP($matched, $grouped);
     }
