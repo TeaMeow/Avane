@@ -235,12 +235,15 @@ class Avane
      * @return Avane
      */
 
-    function load($templateName, $variables = null)
+    function load($templateName, $variables = null, $sass = false)
     {
         $this->set($variables);
 
         /** Load the configs of the category */
         @include($this->configPath);
+
+        if($sass)
+            $this->compile('sass');
 
         /** Compile the template If the cache bucket doesn't have the template */
         if(!isset($this->cacheBucket[$templateName]))
@@ -294,6 +297,21 @@ class Avane
         return $this->endCapture();
     }
 
+
+
+
+    /**
+     * Single
+     *
+     * Just ike header() + load().
+     *
+     * @param
+     */
+
+    function single($templateName, $variables = null)
+    {
+        $this->load($templateName, $variables, $this->ignoreSass);
+    }
 
 
 
