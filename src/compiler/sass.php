@@ -1,7 +1,7 @@
 <?php
 namespace Avane\Compiler;
 
-class Sass extends \Avane\Avane
+class Sass
 {
     function __construct($thisOne)
     {
