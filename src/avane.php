@@ -159,6 +159,7 @@ class Avane
 
     protected $avaneTagsSwitch = false;
     protected $forceRubySass = false;
+    protected $avaneTagJsPrefix = '$';
 
 
     /**
@@ -506,6 +507,10 @@ class Avane
 
                 case 'forceRubySass':
                     $this->forceRubySass = $value;
+
+                case 'avaneTagJsPrefix':
+                    $this->avaneTagJsPrefix = $value;
+                    break;
             }
         }
 

@@ -1,7 +1,7 @@
 <?php
 namespace Avane\Compiler;
 
-class AvaneTag
+class AvaneTag extends \Avane\Avane
 {
     protected $avaneNames;
     protected $content;
@@ -116,13 +116,14 @@ class AvaneTag
 
     function outputJs()
     {
-        $js = '$(document).ready(function(){';
+        $prefix = $this->avaneTagJsPrefix;
+        $js     = $prefix . '(document).ready(function(){';
 
         foreach($this->avaneNames as $group => $nameList)
         {
             foreach($nameList as $name)
             {
-                $js .= "window.\${$group}_$name = $('[av-group=\"$group\"] *:not([av-group]) [av-name=\"$name\"], [av-group=\"$group\"] > [av-name=\"$name\"]'); \n";
+                $js .= "window.{$prefix}_{$group}_$name = $prefix('[av-group=\"$group\"] *:not([av-group]) [av-name=\"$name\"], [av-group=\"$group\"] > [av-name=\"$name\"]'); \n";
                 $js .= "window.{$group}_$name = \"[av-group='$group'] *:not([av-group]) [av-name='$name'], [av-group='$group'] > [av-name='$name']\"; \n";
             }
         }
