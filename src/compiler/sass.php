@@ -34,7 +34,7 @@ class Sass extends \Avane\Avane
                 if($this->forceRubySass)
                     $this->execSass('sass ' . $sassPath . ' --load-path ' . $this->sassPath . ' 2>&1', $cssPath);
                 else
-                    $this->execSass($this->sassc . ' -t "compressed" ' . $sassPath . ' > ' . $cssPath, $cssPath);
+                    $this->sasscCompile($this->sassc . ' -t "compressed" ' . $sassPath . ' > ' . $cssPath, $cssPath);
             }
         }
 
