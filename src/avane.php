@@ -244,11 +244,11 @@ class Avane
         @include($this->configPath);
 
         if($sass)
-            $this->compile('sass');
+            $this->startCompile('sass');
 
         /** Compile the template If the cache bucket doesn't have the template */
         if(!isset($this->cacheBucket[$templateName]))
-            $this->setBucket($templateName, $this->compile('template', $templateName));
+            $this->setBucket($templateName, $this->startCompile('template', $templateName));
 
         /** Require the template from the cache bucket, so we don't need to compile it to get the path again */
         require($this->cacheBucket[$templateName]['path']);
@@ -345,7 +345,7 @@ class Avane
             header('Content-Type: application/json; charset=utf-8');
         else
             if(!$this->ignoreSass)
-                $this->compile('sass');
+                $this->startCompile('sass');
 
         /** Capture the rendered content from now on */
         $this->capture()
@@ -413,7 +413,7 @@ class Avane
 
 
     /**
-     * Compile
+     * Start sCompile
      *
      * Compile anything like: a template, styles, scripts.
      *
@@ -423,7 +423,7 @@ class Avane
      * @return Avane
      */
 
-    function compile($type, $path = null)
+    function startCompile($type, $path = null)
     {
         $data = null;
 
@@ -838,7 +838,7 @@ class Avane
             return $this;
         }
 
-        $data = $this->compile('template', $path);
+        $data = $this->startCompile('template', $path);
 
         /** Parse the each tpl file and get their path, then store the path with this variable */
         $this->vault['TEMPLATE_INCLUDE_' . $name] = $data['path'];

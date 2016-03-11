@@ -1,6 +1,5 @@
 <?php
 $path = __DIR__ . '/';
-
 include $path . 'library/simple-html-dom.php';
 include $path . 'lexer.php';
 include $path . 'avane.php';

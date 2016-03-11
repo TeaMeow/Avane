@@ -32,9 +32,9 @@ class Sass extends \Avane\Avane
                 $cssPath  = $this->stylesPath . $name . '.css';
 
                 if($this->forceRubySass)
-                    $this->sassCompile('sass ' . $sassPath . ' --load-path ' . $this->sassPath . ' 2>&1', $cssPath);
+                    $this->execSass('sass ' . $sassPath . ' --load-path ' . $this->sassPath . ' 2>&1', $cssPath);
                 else
-                    $this->sasscCompile($this->sassc . ' -t "compressed" ' . $sassPath . ' > ' . $cssPath, $cssPath);
+                    $this->execSass($this->sassc . ' -t "compressed" ' . $sassPath . ' > ' . $cssPath, $cssPath);
             }
         }
 
@@ -45,7 +45,7 @@ class Sass extends \Avane\Avane
 
 
     /**
-     * Sass Compile
+     * Exec Sass
      *
      * Compile a sass by the ruby sass.
      *
@@ -55,7 +55,7 @@ class Sass extends \Avane\Avane
      * @return AvaneSassCompiler
      */
 
-    function sassCompile($command, $outputPath)
+    function execSass($command, $outputPath)
     {
         exec($command, $output, $code);
 
