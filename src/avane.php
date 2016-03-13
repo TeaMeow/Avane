@@ -134,6 +134,8 @@ class Avane
 
     protected $ignoreSass = true;
 
+    protected $ignoreCoffee = true;
+
     /**
      * Sass
      *
@@ -145,6 +147,10 @@ class Avane
     protected $sass = [];
 
     protected $sassTracker = [];
+
+    protected $coffee = [];
+
+    protected $coffeeTracker = [];
 
     /**
      * Sassc Path
@@ -209,6 +215,7 @@ class Avane
         $this->scriptsPath        = $this->categoryPath       . 'scripts/';
         $this->avScriptPath       = $this->scriptsPath        . 'avane-tags.js';
         $this->stylesPath         = $this->categoryPath       . 'styles/';
+        $this->coffeePath         = $this->categoryPath       . 'coffee/';
         $this->sassPath           = $this->categoryPath       . 'sass/';
         $this->templateFolderPath = $this->categoryPath       . 'tpls/';
         $this->templateExtension  = '.tpl.php';
@@ -232,19 +239,27 @@ class Avane
      *
      * @param string $templateName   The name of the template (without the extension).
      * @param array  $variables      The variables.
+     * @param bool   $fullyLoad      When true we check the sass and coffeescript.
      *
      * @return Avane
      */
 
-    function load($templateName, $variables = null, $sass = false)
+    function load($templateName, $variables = null, $fullyLoad = false)
     {
         $this->set($variables);
 
         /** Load the configs of the category */
         @include($this->configPath);
 
-        if($sass)
-            $this->startCompile('sass');
+        if($fullyLoad)
+        {
+            if(!$this->ignoreSass)
+                $this->startCompile('sass');
+
+            if(!$this->ignoreCoffee)
+                $this->startCompile('coffee');
+        }
+
 
         /** Compile the template If the cache bucket doesn't have the template */
         if(!isset($this->cacheBucket[$templateName]))
@@ -311,7 +326,7 @@ class Avane
 
     function single($templateName, $variables = null)
     {
-        $this->load($templateName, $variables, $this->ignoreSass);
+        $this->load($templateName, $variables, true);
     }
 
 
@@ -342,10 +357,17 @@ class Avane
 
         /** Set the json header if it's a PJAX request, otherwise load the header template */
         if($this->isPJAX)
+        {
             header('Content-Type: application/json; charset=utf-8');
+        }
         else
+        {
             if(!$this->ignoreSass)
                 $this->startCompile('sass');
+
+            if(!$this->ignoreCoffee)
+                $this->startCompile('coffee');
+        }
 
         /** Capture the rendered content from now on */
         $this->capture()
@@ -413,7 +435,7 @@ class Avane
 
 
     /**
-     * Start sCompile
+     * Start Compile
      *
      * Compile anything like: a template, styles, scripts.
      *
@@ -435,6 +457,9 @@ class Avane
                 break;
             case 'sass':
                 $this->sassCompile();
+                break;
+            case 'coffee':
+                $this->coffeeCompile();
                 break;
         }
 
@@ -499,6 +524,10 @@ class Avane
 
                 case 'ignoreSass':
                     $this->ignoreSass = $value;
+                    break;
+
+                case 'ignoreCoffee':
+                    $this->ignoreCoffee = $value;
                     break;
 
                 case 'avaneTags':
@@ -982,6 +1011,139 @@ class Avane
         return $this;
     }
 
+
+
+
+    /***********************************************
+    /***********************************************
+    /************* J A V A S C R I P T *************
+    /***********************************************
+    /***********************************************
+
+    /**
+     * Combine JS
+     *
+     * Combine the javascripts into single javascript file.
+     *
+     * @param string $scriptName   The single javascript output name.
+     * @param string $paths        An array which includes many javascript paths.
+     *
+     * @return Avane
+     */
+
+    function combineJs($scriptName, $paths)
+    {
+        //$this->javascriptCollection[$scriptName] = $paths;
+
+        $javascriptListPath = $this->compiledPath . 'javascript.json';
+        $outputPath         = $this->scriptsPath . $scriptName . '.js';
+        $date               = date('Y-m-d H:i:s');
+
+        $outputHeader  = '';
+        $outputHeader .= "/*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
+        $outputHeader .= "$date\n";
+        $outputHeader .= "\n";
+
+
+
+        $outputContent = '';
+
+
+
+        foreach($paths as $path)
+        {
+            $outputHeader .= "- $path.js\n";
+
+
+            $outputContent .= "\n";
+            $outputContent .= "/*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
+            $outputContent .= "$path.js\n";
+            $outputContent .= "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */\n";
+            $outputContent .= file_get_contents($this->scriptsPath . $path . '.js');
+        }
+
+        $outputHeader .= "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */\n";
+
+
+        file_put_contents($outputPath, $outputHeader . $outputContent);
+
+
+
+        return $this;
+    }
+
+
+
+
+    /***********************************************
+    /***********************************************
+    /*********** C O F F E E S C R I P T ***********
+    /***********************************************
+    /***********************************************
+
+    /**
+     * Coffee Set
+     *
+     * Set a coffeescript file and Avane will compile it.
+     *
+     * @param string $scriptName   The filename after we compile it.
+     * @param string $path         The path to the coffeescript file.
+     *
+     * @return Avane
+     */
+
+    function coffeeSet($scriptName, $path)
+    {
+        /** Don't ignore the compilation of coffeescript once we setted a coffeescript to compile */
+        $this->ignoreCoffee = false;
+
+        $this->coffee[$scriptName] = $path;
+
+        return $this;
+    }
+
+
+
+
+    /**
+     * Coffee Compile
+     *
+     * Compile the coffeescript files.
+     *
+     * @return Avane
+     */
+
+    function coffeeCompile()
+    {
+        if(!isset($this->coffeeCompiler))
+            $this->coffeeCompiler = new Compiler\Coffee($this);
+
+        $this->coffeeCompiler->compile();
+
+        return $this;
+    }
+
+
+
+
+    /**
+     * Coffee Tracker Set
+     *
+     * Add a path for Avane to track the file changes.
+     *
+     * @param string $folder   The path of the folder which we wanted to track with.
+     *
+     * @return Avane
+     */
+
+    function coffeeTrackerSet($folder)
+    {
+        $this->ignoreCoffee = false;
+
+        array_push($this->coffeeTracker, $folder);
+
+        return $this;
+    }
 
 
 
