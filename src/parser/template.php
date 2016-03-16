@@ -382,7 +382,7 @@ class Template
             $block        = explode(' ', $matched[1]);
             $blockName    = $block[0];
             $echoType     = isset($block[1]) && !empty($block[1]) ? $block[1] : false;
-            $blockContent = $matched[2];
+            //$blockContent = $matched[2];
 
             return '<?php $this->blockHandler(\''.$blockName.'\', \'\', \''.$echoType.'\'); ?>';
 
@@ -456,25 +456,33 @@ class Template
             $isMany   = count($single) > 1;
             $output   = '';
 
+            if(empty($single))
+                continue;
+
             foreach($single as $each)
             {
                 $length    = mb_strlen($each['match'], 'UTF-8');
                 $totalLen += $length;
 
-                $replace  .= $each['match'];
+                //$output  .= $each['match'];
 
 
                 if($isFirst)
+                {
                     $output .= '$this->get(\'' . $each['match'] . '\')';
+                }
                 else
+                {
                     $output .= '[\'' . $each['match'] . '\']';
+                    $totalLen++;
+                }
 
                 $isFirst = false;
             }
 
             //$totalLen = $isMany ? $totalLen + 1 * ($totalLen - 1)
 
-              $totalLen = $isMany ? $totalLen + (1 * $totalLen) : $totalLen;
+              //$totalLen = $isMany ? $totalLen + (1 * $totalLen) : $totalLen;
 
             $prepared[] = ['startPos' => $single[0]['position'],
                            'length'   => $totalLen,
@@ -484,8 +492,11 @@ class Template
         $prepared = array_reverse($prepared);
 
         foreach($prepared as $replace)
+
             if($replace['startPos'] !== null)
+                //echo(var_dump($string . '|' . $replace['output'] . '|' . $replace['startPos'] . '|'.  $replace['length'] ));
                 $string = substr_replace($string, $replace['output'], $replace['startPos'], $replace['length']);
+
 
         return $string;
     }
