@@ -726,7 +726,7 @@ class Avane
 
     function loopEnd()
     {
-        $this->cleanSet($name);
+        //$this->cleanSet($name);
 
         $latest = count($this->loop) - 1;
 
