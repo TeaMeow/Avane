@@ -3,106 +3,59 @@ namespace Avane;
 
 class Lexer
 {
-    protected static $grouped          = [];
-    protected static $openAndCloseTags = [['open' => 'T_HELPER_OPEN_TAG', 'close' => 'T_HELPER_CLOSE_TAG'],
-                                          ['open' => 'T_OPEN_TAG', 'close' => 'T_CLOSE_TAG']];
-    protected static $sortFormat       = ['tokens' => [], 'length' => 0, 'position' => 0, 'line' => 0, 'match' => '', 'combinedToken' => ''];
-    protected static $spaceToken       = 'T_WHITESPACE';
-
     protected static $tokens =
     [
-        //'/^[a-zA-Z](\.)[a-zA-Z]/' => 'T_CHILD',
-        '/^(==)/'                 => 'T_IS_EQUAL',
-        '/^(!=)/'                 => 'T_NOT_EQUAL',
-        '/^(=)/'                  => 'T_EQUAL',
-        '/^(\+\+)/'               => 'T_INCREASE',
-        '/^(\+)/'                 => 'T_PLUS',
-        '/^(\-\-)/'               => 'T_DECENT',
-        '/^(\-)/'                 => 'T_MINUS',
-        '/^(elseif)/'             => 'T_ELSEIF',
-        '/^(endif)/'              => 'T_ENDIF',
-        '/^(if)/'                 => 'T_IF',
-        '/^(null)/i'              => 'T_NULL',
-        '/^(true)/i'              => 'T_TRUE',
-        '/^(false)/i'             => 'T_FALSE',
-        '/^(\s+)/'                => "T_WHITESPACE",
-        '/^(else)/'               => 'T_ELSE',
-        '/^(endforeach)/'         => 'T_ENDFOREACH',
-        '/^(foreach)/'            => 'T_FOREACH',
-        '/^(for)/'                => 'T_FOR',
-        '/^(endwhile)/'           => 'T_ENDWHILE',
-        '/^(while)/'              => 'T_WHILE',
-        '/^({%)/'                 => 'T_HELPER_OPEN_TAG',
-        '/^(%})/'                 => 'T_HELPER_CLOSE_TAG',
-        '/^({)/'                  => 'T_OPEN_TAG',
-        '/^(})/'                  => 'T_CLOSE_TAG',
-        '/^(\[)/'                 => 'T_ARRAY_OPEN_TAG',
-        '/^(\])/'                 => 'T_ARRAY_CLOSE_TAG',
-        '/^(,)/'                  => 'T_COMMA',
-        '/^(:)/'                  => 'T_SEPARATOR',
-        '/^(;)/'                  => 'T_LINE_END',
-        '/^(\$)/'                 => 'T_DOLLARSIGN',
-        '/^(\|)/'                 => 'T_BETWEEN',
-        '/^(\?)/'                 => 'T_SECONDARY_SEPARATOR',
         '/^([+-]?(?=\d*[.eE])(?=\.?\d)\d*\.?\d*(?:[eE][+-]?\d+)?)/' => 'T_DNUMBER',
         '/^(\d+)/'                => 'T_LNUMBER',
         '/^(\w+)/'                => 'T_IDENTIFIER',
         '/^(\$\w+)/'              => 'T_PHP_IDENTIFIER',
-        '/^(\>)/'                 => 'T_GREATHER',
-        '/^(\<)/'                 => 'T_LESSER',
-        '/^(\()/'                 => 'T_OPEN_PARENTHESES',
-        '/^(\))/'                 => 'T_CLOSE_PARENTHESES',
         '/^(\")/'                 => 'T_DOUBLE_QUOTE',
         '/^(\')/'                 => 'T_QUOTE',
-        '/^(\\\)/'                => 'T_BACKSLASH',
-        '/^(\/)/'                 => 'T_SLASH',
-        '/^(\#)/'                 => 'T_SHARP',
         '/^(\.)/'                 => 'T_DOT',
-        '/^([\pL])/u'             => 'T_STRING',
-        '/^(\%)/'                 => 'T_PERCENTAGE'
+        '/^([\pL])/u'             => 'T_STRING'
     ];
 
 
-
-
-    public static function run($source)
+    static function run($source)
     {
+        
         $tokens = [];
+        $offset = 0;
+        $length = mb_strlen($source, 'UTF-8');
 
-        foreach($source as $number => $line)
+
+        while($offset < $length)
         {
-            $offset = 0;
+            $result = self::scan($source, $offset);
 
-            while($offset < strlen($line))
+            if($result === false)
             {
-                $result = static::scan($line, $number, $offset);
-
-                if($result === false)
-                {
-                    throw new Exception("Unable to parse line " . ($line + 1) . ", offset: ". substr($line, $offset) .".");
-                }
-
-                $tokens[] = $result;
-                $offset  += strlen($result['match']);
+                $offset++;
+                continue;
             }
+
+            $tokens[] = $result;
+            $offset  += strlen($result['match']);
         }
 
-        return static::group($tokens);
+
+
+        return self::group($tokens);
     }
 
 
 
-    protected static function scan($line, $number, $offset)
-    {
-        $string = substr($line, $offset);
 
-        foreach(static::$tokens as $pattern => $name)
+    static function scan($source, $offset)
+    {
+        $string = substr($source, $offset);
+
+        foreach(self::$tokens as $pattern => $name)
         {
             if(preg_match($pattern, $string, $matches))
             {
                 return ['match'    => $matches[1],
                         'token'    => $name,
-                        'line'     => $number + 1,
                         'position' => $offset];
             }
         }
@@ -111,16 +64,19 @@ class Lexer
     }
 
 
+
+
     protected static function group($tokens)
     {
 
-        $allDots = [[]];
-        $cleaned = [];
-        $root = null;
+        $allDots   = [[]];
+        $cleaned   = [];
+        $root      = null;
         $isInQuote = false;
 
         foreach($tokens as $tokenKey => $token)
         {
+
             if($isInQuote)
                 if($token['token'] == 'T_QUOTE')
                     $isInQuote = false;
@@ -159,6 +115,7 @@ class Lexer
                 array_push($allDots, []);
             }
         }
+
 
 
          //array_pop($allDots);
