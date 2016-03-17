@@ -1,6 +1,8 @@
 <?php
 namespace Avane\Compiler;
 
+
+
 class AvaneTag extends \Avane\Avane
 {
     protected $avaneNames;
@@ -28,6 +30,7 @@ class AvaneTag extends \Avane\Avane
 
     function compile($htmlContent)
     {
+
         if(!$htmlContent)
             return false;
 
@@ -51,17 +54,31 @@ class AvaneTag extends \Avane\Avane
 
     function collect()
     {
-        $content = str_get_html($this->content);
+
+        \phpQuery::newDocumentHTML($this->content);
+
+        //exit(var_dump(count(pq("*[av-group]"))));
+
+
+
+        //$content = str_get_html($this->content);
+        $avGroups = pq("*[av-group]");
 
         /** Search for all the av-groups */
-        foreach($content->find('*[av-group]') as $element)
+        foreach($avGroups as $element)
         {
-            $group = $element->attr['av-group'];
+            $thisOne = pq($element);
+
+
+            $group = $thisOne->attr('av-group');
+
+            $avNames = $thisOne->find('*[av-name]');
 
             /** Push all the elements which are under this group to the list */
-            foreach($element->find('*[av-name]') as $child)
+            foreach($avNames as $child)
             {
-                $this->pushGroup($group, $child->attr['av-name']);
+                $thisOne = pq($child);
+                $this->pushGroup($group, $thisOne->attr('av-name'));
             }
         }
 
