@@ -5,14 +5,16 @@ class Template
 {
     private $tplContent;
     private $basicTags = ['/{% else %}/'      => '<?php else: ?>',
-                          '/{% \/if %}/'      => '<?php endif; ?>',
-                          '/{% \/for %}/'     => '<?php endfor; ?>',
-                          '/{% \/foreach %}/' => '<?php $this->loopEnd(); endforeach; $this->loopBack(); ?>',
-                          '/{% \/repeat %}/'  => '<?php $this->loopEnd(); endfor; $this->loopBack(); ?>',
-                          '/{% \/while %}/'   => '<?php endwhile; ?>',
+
                           /*'/{% \/block %}/'   => '<?php $this->blockEnd(); ?>',*/
                           '/{% countinue %}/' => '<?php countinue; ?>',
                           '/{% break %}/'     => '<?php break; ?>'];
+
+    private $endTags = ['/if'      => '<?php endif; ?>',
+                        '/for'     => '<?php endfor; ?>',
+                        '/foreach' => '<?php $this->loopEnd(); endforeach; $this->loopBack(); ?>',
+                        '/repeat'  => '<?php $this->loopEnd(); endfor; $this->loopBack(); ?>',
+                        '/while'   => '<?php endwhile; ?>'];
 
 
 
@@ -31,6 +33,9 @@ class Template
     {
         $this->tplContent = $tplContent;
 
+
+        $this->replaceEndTags();
+
         $this->replaceBasicTag()        // {% /if %}, {% else %}
              ->replaceIf()              // {% if %}
              ->replaceElseIf()          // {% elseif %}
@@ -48,8 +53,43 @@ class Template
              ->replaceYield()           // {% yield %}
              ->replaceNope();           // {% nope %}
 
+
         return $this->tplContent;
     }
+
+
+    function replaceEndTags()
+    {
+        $this->tplContent = preg_replace_callback('/{% (\/.*) %}/', function($matched)
+        {
+            foreach($this->endTags as $endTag => $replacment)
+                if($matched[1] == $endTag)
+                    return $replacment;
+
+        }, $this->tplContent);
+    }
+
+
+
+
+    function replaveVariableTags()
+    {
+
+    }
+
+    function replaceHelperTags()
+    {
+
+    }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -129,7 +169,7 @@ class Template
             $matched[2] = $this->analyzeVariable($matched[2]);
             $matched[3] = $this->analyzeVariable($matched[3]);
 
-            return "<?= $matched[1] ? $matched[2] : $matched[3] ?>";
+            return '<?= ' . $matched[1] . ' ? ' . $matched[2] . ' : ' . $matched[3] . ' ?>';
 
         }, $this->tplContent);
 
@@ -426,7 +466,7 @@ class Template
 
     function analyzeVariable($matched)
     {
-        $grouped = \Avane\Lexer::run([$matched]);
+        $grouped = \Avane\Lexer::run($matched);
 
         return $this->lexerToPHP($matched, $grouped);
     }
