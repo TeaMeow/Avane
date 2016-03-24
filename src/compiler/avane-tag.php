@@ -134,14 +134,16 @@ class AvaneTag extends \Avane\Avane
     function outputJs()
     {
         $prefix = $this->avaneTagJsPrefix;
-        $js     = $prefix . '(document).ready(function(){';
+        $js     = 'window.' . $prefix . '_ = {};';
+        $js    .= 'function callAv(avName){ return ' . $prefix . '(avName) };';
+        $js    .= $prefix . '(document).ready(function(){';
 
         foreach($this->avaneNames as $group => $nameList)
         {
             foreach($nameList as $name)
             {
-                $js .= "window.{$prefix}_{$group}_$name = $prefix('[av-group=\"$group\"] *:not([av-group]) [av-name=\"$name\"], [av-group=\"$group\"] > [av-name=\"$name\"]'); \n";
                 $js .= "window.{$group}_$name = \"[av-group='$group'] *:not([av-group]) [av-name='$name'], [av-group='$group'] > [av-name='$name']\"; \n";
+                $js .= "window.{$prefix}_.{$group}_$name = callAv({$group}_$name); \n";
             }
         }
 

@@ -66,6 +66,8 @@ class Template
                 if($matched[1] == $endTag)
                     return $replacment;
 
+            return $matched[0];
+
         }, $this->tplContent);
     }
 
@@ -386,7 +388,7 @@ class Template
 
     function replaceBlock()
     {
-        $this->tplContent = preg_replace_callback('/{% block (.*?) %}(.*?){% \/block %}/s', function($matched)
+        $this->tplContent = preg_replace_callback('/{% block (.*?) %}([\s\S]*?.*?[\s\S]*?){% \/block %}/s', function($matched)
         {
             $block        = explode(' ', $matched[1]);
             $blockName    = $block[0];
