@@ -187,7 +187,8 @@ class Avane
         else
         {
             $this->categoriesPath = $thisOne;
-            $this->isPJAX         = array_key_exists($this->pjaxHeader, $_SERVER) ? $_SERVER[$this->pjaxHeader] : false;
+            $this->isPJAX         = array_key_exists(strtolower($this->pjaxHeader), getallheaders()) ? getallheaders()[strtolower($this->pjaxHeader)]
+                                                                                                     : false;
             $this->setCategory();
         }
     }
