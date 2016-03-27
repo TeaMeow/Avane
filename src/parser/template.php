@@ -213,13 +213,12 @@ class Template
 
     function replaceDirectiveVar()
     {
-        $this->tplContent = preg_replace_callback('/{(.*?)\|(.*?)}/', function($matched)
+        $this->tplContent = preg_replace_callback('/{ (.*?) \| (.*?) }/', function($matched)
         {
-            $matched[1] = $this->analyzeVariable($matched[1]);
-            $matched[2] = str_replace(' ', '', $matched[2]);
-            $matched[2] = '_' . $matched[2];
+            $matched[1] = '_' . $matched[1];
+            $matched[2] = $this->analyzeVariable($matched[2]);
 
-            return '<?= $this->directive' . "($matched[1], '$matched[2]'); ?>";
+            return '<?= $this->directive(\'' . $matched[1] . '\', [' . $matched[2] . ']); ?>';
 
         }, $this->tplContent);
 

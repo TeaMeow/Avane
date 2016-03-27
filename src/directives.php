@@ -4,6 +4,36 @@ namespace Avane;
 class Directives
 {
     //nl2br, escape, upper, lower, whitespace
+    static $functions = [];
+
+
+    static function constructor()
+    {
+        self::$functions = ['_nl2br'      => self::_nl2br,
+                            '_escape'     => self::_escape,
+                            '_upper'      => self::_upper,
+                            '_lower'      => self::_lower,
+                            '_whitespace' => self::_whitespace];
+    }
+
+
+    public static function __callStatic($name, $args)
+    {
+
+        if(strpos($name, '_') !== false)
+        {
+            $function = self::$functions[$name];
+
+            return call_user_func_array($function, $args[0]);
+        }
+    }
+
+
+    static function customDirective($name, $function)
+    {
+        self::$functions[$name] = $function;
+    }
+
 
 
     /**

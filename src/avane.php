@@ -250,7 +250,7 @@ class Avane
         $this->set($variables);
 
         /** Load the configs of the category */
-        @include($this->configPath);
+        include($this->configPath);
 
         if($fullyLoad)
         {
@@ -351,7 +351,7 @@ class Avane
         $this->set('title', $title);
 
         /** Load the configs of the category */
-        @include($this->configPath);
+        include($this->configPath);
 
         /** Set variables **/
         $this->set($variables);
@@ -432,6 +432,20 @@ class Avane
         return $this->templateFolderPath . $templateName . $this->templateExtension;
     }
 
+
+
+
+    /**
+     * Custom Directive
+     */
+
+    function customDirective($name, $function)
+    {
+        Directives::customDirective('_' . $name, $function);
+
+
+        return $this;
+    }
 
 
 
@@ -931,12 +945,12 @@ class Avane
      * @return string
      */
 
-    function directive($value, $directive)
+    function directive($name, $args)
     {
         //$directive = str_replace(' ', '', $directive);
         //$directive = '_' . $directive;
-
-        return AvaneDirectives::$directive($value);
+        
+        return Directives::$name($args);
     }
 
 
