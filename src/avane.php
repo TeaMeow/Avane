@@ -187,8 +187,8 @@ class Avane
         else
         {
             $this->categoriesPath = $thisOne;
-            $this->isPJAX         = array_key_exists(strtolower($this->pjaxHeader), getallheaders()) ? getallheaders()[strtolower($this->pjaxHeader)]
-                                                                                                     : false;
+            $this->isPJAX         = array_key_exists(strtolower($this->pjaxHeader), \getallheaders()) ? \getallheaders()[strtolower($this->pjaxHeader)]
+                                                                                                      : false;
             $this->setCategory();
         }
     }
@@ -949,7 +949,7 @@ class Avane
     {
         //$directive = str_replace(' ', '', $directive);
         //$directive = '_' . $directive;
-        
+
         return Directives::$name($args);
     }
 
