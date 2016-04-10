@@ -1250,7 +1250,7 @@ class Avane
             switch($type)
             {
                 case 'js':
-                    echo "<script src=\"$path\"></script>\n";
+                    echo "<script defer src=\"$path\"></script>\n";
                     break;
 
                 case 'css':

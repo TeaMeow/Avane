@@ -62,6 +62,8 @@ class Directives
 
     static function _escape($content)
     {
+        $content = is_array($content) ? $content[0] : $content;
+
         return htmlspecialchars($content);
     }
 
