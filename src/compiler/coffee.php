@@ -14,181 +14,79 @@ class Coffee extends \Avane\Avane
 
 
 
-    /**
-     * Compile
-     *
-     * Compile the coffeescript to javascript.
-     *
-     * @return Coffee
-     */
-
     function compile()
     {
-        if(!$this->checkTime() || $this->hasNew())
+        foreach($this->coffee as $destination => $path)
         {
-            foreach($this->coffee as $name => $path)
-            {
-                $coffeePath  = $this->coffeePath . $path;
-                $scriptPath  = $this->scriptsPath . $name . '.js';
+            $coffees = '';
 
-                $this->coffee("coffee -b -p $coffeePath", $scriptPath);
+            if(is_array($path))
+            {
+                /** Collect all the coffee files */
+                foreach($path as $single)
+                    $coffees .= "\n\n" . file_get_contents($this->coffeePath . $single);
+
+                /** Put all the coffee scripts into a single file */
+                file_put_contents($this->compiledPath . md5($coffees) . '.coffee', $coffees);
+
+                $targetFile     = $this->scriptsPath  . $destination  . '.js';
+                $combinedCoffee = $this->compiledPath . md5($coffees) . '.coffee';
+
+                /** Execute the coffee command with proc_open to catch the STDERR */
+                exec("coffee -b -p $combinedCoffee > $targetFile 2>&1", $result, $status);
+
+                /** Output the error message to the css file if needed */
+                if($status === 1)
+                    file_put_contents($targetFile, $this->prepareError(file_get_contents($targetFile), $combinedCoffee));
             }
         }
-
-        return $this;
     }
 
 
 
 
-    /**
-     * Coffee
-     *
-     * Compile a coffeescript by the coffee.
-     *
-     * @param string $command      The command to execute.
-     * @param string $outputPath   The path of the script.
-     *
-     * @return Coffee
-     */
 
-    function coffee($command, $outputPath)
+    function check()
     {
-        /** Execute the coffee command with proc_open to catch the STDERR */
-        $proc   = proc_open($command, [1 => ['pipe','w'], 2 => ['pipe','w']], $pipes);
-        $stdout = stream_get_contents($pipes[1]);
-        $stderr = stream_get_contents($pipes[2]);
 
-        /** Close the pipes and the proc */
-        fclose($pipes[2]);
-        proc_close($proc);
-
-        /** Output the error message to the css file if needed */
-        if($stderr != '')
-            file_put_contents($outputPath, $stderr);
-        else
-            file_put_contents($outputPath, $stdout);
-
-        return $this;
     }
 
 
 
 
-    /**
-     * Has New
-     *
-     * Returns true when there's a coffeescript file hasn't compiled.
-     *
-     * @return bool
-     */
-
-    function hasNew()
+    function prepareError($stdErr, $combinedCoffee)
     {
-        foreach($this->coffee as $name => $path)
-        {
-            if(!file_exists($this->scriptsPath . $name . '.js'))
-                return true;
-        }
+        preg_match('/.*?:(.*?):(.*?):/', $stdErr, $matches);
 
-        return false;
-    }
+        $lines = file($combinedCoffee);
 
+        /** Get the error code */
+        $errorBlock = implode("", array_slice($lines, $matches[1] - 5, 10));
 
+        $errorLog = <<<EOF
+/*
+------------ COMPILE ERROR ------------
 
+$errorBlock
 
-    /**
-     * Check Time
-     *
-     * Returns true when the MD5 list file is same as now.
-     *
-     * @return bool
-     */
+------------ COMPILE ERROR ------------
 
-    function checkTime()
-    {
-        $scannedResult = md5($this->scan());
+$stdErr
+*/
 
-        /** Creates a MD5 list file when there's no MD5 list file exists */
-        if(!file_exists($this->fileTrackingPath))
-        {
-            file_put_contents($this->fileTrackingPath, $scannedResult);
-            return false;
-        }
-        /** Returns true when the MD5 list file is same as now */
-        if(file_get_contents($this->fileTrackingPath) == $scannedResult)
-        {
-            return true;
-        }
-        /** Otherwise just updated the MD5 list */
-        else
-        {
-            file_put_contents($this->fileTrackingPath, $scannedResult);
+console.error('%c☕ COFFEE COMPILE ERROR\\n' +
+              '%c\\n' + `$errorBlock`        +
+              '\\n%c' + `$stdErr`,
+              'background: red; color: #FFF; font-size: 1.5em; padding: 10px; box-sizing: border-box; line-height: 40px; border-radius: 1000em; overflow: hidden;'
+            , 'color: #9E0000; font-size: 12px; box-sizing: border-box; line-height: 14px'
+            , 'color: #9E0000; font-size: 12px; box-sizing: border-box; line-height: 14px; font-weight: bold');
+EOF;
 
-            return false;
-        }
-    }
-
-
-
-
-    /**
-     * Scan
-     *
-     * Scan all the coffeescript folders.
-     *
-     * @return string
-     */
-
-    function scan()
-    {
-        $list = '';
-
-        $list .= $this->listResult($this->coffeePath);
-
-        if($this->sassTracker)
-            foreach($this->coffeeTracker as $path)
-                $list .= $this->listResult($path);
-
-        return $list;
-    }
-
-
-
-
-    /**
-     * List Result
-     *
-     * Collect all the coffee files and convert them into a MD5 string.
-     *
-     * @param string $folder   The path of the folder to scan with.
-     *
-     * @return string
-     */
-
-    function listResult($folder)
-    {
-        $list      = '';
-        $directory = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($folder));
-
-        foreach ($directory as $info)
-        {
-            $filename = $info->getFilename();
-
-            if($filename == '.' || $filename == '..')
-                continue;
-
-            $realpath = $info->getRealPath();
-
-            if(!$realpath)
-                continue;
-
-            $fileMD5  = md5_file($realpath);
-
-            $list    .= $fileMD5;
-        }
-
-        return $list;
+        return $errorLog;
     }
 }
+
+
+
+
 ?>

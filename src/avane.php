@@ -270,10 +270,10 @@ class Avane
         $this->set($variables);
 
         /** Load the configs of the category */
-        include($this->configPath);
-
         if($fullyLoad)
         {
+            include($this->configPath);
+
             if(!$this->ignoreSass)
                 $this->startCompile('sass');
 
@@ -329,8 +329,11 @@ class Avane
 
     function fetch($templateName, $variables = null)
     {
+       // include($this->configPath);
+
         $this->capture(true);
         $this->load($templateName, $variables);
+
         return $this->endCapture();
     }
 
