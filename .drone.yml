@@ -1,0 +1,4 @@
+build:
+    image: phpunit/phpunit
+      commands:
+        - phpunit Test test/travis/test.php
