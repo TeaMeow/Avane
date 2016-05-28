@@ -52,13 +52,36 @@ class Test extends PHPUnit_Framework_TestCase
 
 
     /**
-     * Test full load with basic tags.
+     * Test full load with if tags.
      */
 
-    function testBasicTags()
+    function testIfTags()
     {
         $this->avane->header()
                     ->load('if-tags', ['I_AM_FALSE' => false, 'I_AM_TRUE' => true])
+                    ->footer();
+    }
+
+
+
+
+    /**
+     * Test full load with if tags.
+     */
+
+    function testForeachTags()
+    {
+        $datas      = ['A', 'B', 'C', 'D', 'E', 'F'];
+        $datas2     = ['A' => ['AA', 'AB', 'AC', 'AD', 'AE', 'AF'],
+                       'B' => ['BA', 'BB', 'BC', 'BD', 'BE', 'BF'],
+                       'C' => ['CA', 'CB', 'CC', 'CD', 'CE', 'CF']];
+        $mixedDatas = ['A', 2, 5, 'B', '1', 7, 'C'];
+
+
+        $this->avane->header()
+                    ->load('foreach-tags', ['datas'      => $datas,
+                                            'datas2'     => $datas2,
+                                            'mixedDatas' => $mixedDatas])
                     ->footer();
     }
 }
