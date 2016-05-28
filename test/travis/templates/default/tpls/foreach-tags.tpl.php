@@ -6,7 +6,7 @@
 
 
 <!-- Test -->
-{% foreach datas2 as key => data %}
-{ key } - { data }
+{% foreach datas2 as data %}
+{ loop.index0 } - { data }
 {% /foreach %}
 <!-- / Test -->
