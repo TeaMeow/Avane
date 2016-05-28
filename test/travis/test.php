@@ -3,7 +3,7 @@ error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED);
 
 include 'src/autoload.php';
 
-class Test extends PHPUnit_Framework_TestCase
+class PHPUnit_Util_Test extends PHPUnit_Framework_TestCase
 {
     function __construct()
     {
