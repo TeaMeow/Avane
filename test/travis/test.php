@@ -120,7 +120,7 @@ class Test extends PHPUnit_Framework_TestCase
      * Test full load with import tags.
      */
 
-    function testBlockTags()
+    function testImportTags()
     {
         $this->avane->header()
                     ->load('import-tags')
