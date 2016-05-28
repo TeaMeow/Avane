@@ -6,15 +6,6 @@
 
 
 <!-- Test -->
-{% extends hello %}
-
-{% block hello %}
-    Ello.
-{% /block %}
-<!-- / Test -->
-
-
-<!-- Test -->
 {% extends blockA %}
 
 {% block header prepend %} Test {% /block %}
