@@ -7,23 +7,58 @@ class Test extends PHPUnit_Framework_TestCase
 {
     function __construct()
     {
-        $this->avane = new \Avane\Avane(__DIR__ . '/templates', ['forceCompile' => true, 'avaneTags' => true]);
+        $this->avane = new \Avane\Avane(__DIR__ . '/templates', ['forceCompile' => true]);
     }
+
+
+
+
+    /**
+     * Test fetch().
+     */
 
     function testFetch()
     {
-        $this->avane->fetch('test');
+        $this->avane->fetch('basic');
     }
+
+
+
+
+    /**
+     * Test load().
+     */
 
     function testLoad()
     {
-        $this->avane->load('test');
+        $this->avane->load('basic');
     }
+
+
+
+
+    /**
+     * Test full load.
+     */
 
     function testFull()
     {
         $this->avane->header()
-                    ->load('test')
+                    ->load('basic')
+                    ->footer();
+    }
+
+
+
+
+    /**
+     * Test full load with basic tags.
+     */
+
+    function testBasicTags()
+    {
+        $this->avane->header()
+                    ->load('tags')
                     ->footer();
     }
 }
