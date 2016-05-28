@@ -25,5 +25,5 @@
 <!-- Test -->
 {% repeat 10 %}
   { loop.index0 }
-{% /repeat % }
+{% /repeat %}
 <!-- / Test -->
