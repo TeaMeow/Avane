@@ -15,18 +15,14 @@
 
 
 <!-- Test -->
-{% block header %}Header - {% /block %}
-
-{% extends header %}
+{% extends blockA %}
 
 {% block header prepend %} Test {% /block %}
 <!-- / Test -->
 
 
 <!-- Test -->
-{% block header2 %}Header2 - {% /block %}
-
-{% extends header2 %}
+{% extends blockB %}
 
 {% block header2 append %} Test2 {% /block %}
 <!-- / Test -->

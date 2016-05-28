@@ -6,5 +6,7 @@ $this->import('test', 'test.css', true)
 $this->sassSet('music', 'music.sass')
      ->sassSet('musics', 'music.sass');
 
-$this->includeSet('a', 'include-tests/a')
+$this->includeSet('a', 'include-tests/a');
+$this->includeSet('blockA', 'block-tests/a');
+$this->includeSet('blockB', 'block-tests/b');
 ?>
