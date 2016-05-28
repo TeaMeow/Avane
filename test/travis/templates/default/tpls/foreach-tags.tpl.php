@@ -13,3 +13,10 @@
     {% /foreach %}
 {% /foreach %}
 <!-- / Test -->
+
+
+<!-- Test -->
+{% foreach mixedData as data %}
+    { loop.index0 } - { data } \n
+{% /foreach %}
+<!-- / Test -->
