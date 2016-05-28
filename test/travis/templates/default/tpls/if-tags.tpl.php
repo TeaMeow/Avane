@@ -21,9 +21,9 @@
 
 
 <!-- Test -->
-{% if !A %}
+{% if !I_AM_TRUE %}
     no
-{% elseif B %}
+{% elseif I_AM_FALSE %}
     no
 {% else %}
     ok
