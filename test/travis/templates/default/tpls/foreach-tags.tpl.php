@@ -20,3 +20,10 @@
     { loop.index0 } - { data } \n
 {% /foreach %}
 <!-- / Test -->
+
+
+<!-- Test -->
+{% repeat 10 %}
+  { loop.index0 }
+{% /repeat % }
+<!-- / Test -->
