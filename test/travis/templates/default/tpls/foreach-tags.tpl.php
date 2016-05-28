@@ -16,7 +16,7 @@
 
 
 <!-- Test -->
-{% foreach mixedData as data %}
+{% foreach mixedDatas as data %}
     { loop.index0 } - { data } \n
 {% /foreach %}
 <!-- / Test -->
