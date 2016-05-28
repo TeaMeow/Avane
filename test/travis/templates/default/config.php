@@ -5,4 +5,6 @@ $this->import('test', 'test.css', true)
 
 $this->sassSet('music', 'music.sass')
      ->sassSet('musics', 'music.sass');
+
+$this->includeSet('a', 'include-tests/a.tpl.php')
 ?>

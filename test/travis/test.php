@@ -58,7 +58,7 @@ class Test extends PHPUnit_Framework_TestCase
     function testIfTags()
     {
         $this->avane->header()
-                    ->load('if-tags', ['I_AM_FALSE' => false, 'I_AM_TRUE' => true])
+                    ->fetch('if-tags', ['I_AM_FALSE' => false, 'I_AM_TRUE' => true])
                     ->footer();
     }
 
@@ -79,9 +79,23 @@ class Test extends PHPUnit_Framework_TestCase
 
 
         $this->avane->header()
-                    ->load('foreach-tags', ['datas'      => $datas,
-                                            'datas2'     => $datas2,
-                                            'mixedDatas' => $mixedDatas])
+                    ->fetch('foreach-tags', ['datas'      => $datas,
+                                             'datas2'     => $datas2,
+                                             'mixedDatas' => $mixedDatas])
+                    ->footer();
+    }
+
+
+
+
+    /**
+     * Test full load with include tags.
+     */
+
+    function testIncludeTags()
+    {
+        $this->avane->header()
+                    ->fetch('include-tags')
                     ->footer();
     }
 }
