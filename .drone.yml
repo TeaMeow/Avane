@@ -1,5 +1,5 @@
 build:
-  image: phpunit/phpunit
+  image: phpunit/phpunit:$$PHPUNIT_VERSION
   commands:
     - apt-get update
     - apt-get -y install sudo
@@ -12,3 +12,8 @@ build:
     - sudo ln ./bin/sassc /usr/bin/sassc
     - cd /drone/src/github.com/TeaMeow/Avane
     - phpunit Test test/travis/test.php
+
+matrix:
+  PHPUNIT_VERSION:
+    - 4.8.5
+    - latest
