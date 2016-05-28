@@ -5,11 +5,6 @@ include $path . 'lexer.php';
 include $path . 'avane.php';
 include $path . 'compiler/sass.php';
 include $path . 'compiler/coffee.php';
-//include $path . 'library/FluentDOM/FluentDOM.php';
-//include $path . 'library/FluentDOM/_require.php';
-include $path . 'library/phpQuery-onefile.php';
-
-include $path . 'compiler/avane-tag.php';
 include $path . 'compiler/template.php';
 include $path . 'parser/template.php';
 include $path . 'directives.php';

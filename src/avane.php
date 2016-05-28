@@ -183,9 +183,7 @@ class Avane
 
     protected $forceCompile = false;
 
-    protected $avaneTagsSwitch = false;
     protected $forceRubySass = false;
-    protected $avaneTagJsPrefix = '$';
 
 
     /**
@@ -573,16 +571,8 @@ class Avane
                     $this->ignoreCoffee = $value;
                     break;
 
-                case 'avaneTags':
-                    $this->avaneTagsSwitch = $value;
-                    break;
-
                 case 'forceRubySass':
                     $this->forceRubySass = $value;
-
-                case 'avaneTagJsPrefix':
-                    $this->avaneTagJsPrefix = $value;
-                    break;
             }
         }
 

@@ -39,16 +39,6 @@ class Template extends \Avane\Avane
         /** Then throw it into the parser */
         $compiledContent = $this->parser->parse($templateContent);
 
-        //if($this->avaneTagsSwitch)
-        //{
-        //    /** New the avane tag compiler when hasn't "new" it yet */
-        //    if(!isset($this->avaneTagCompiler))
-        //        $this->avaneTagCompiler = new AvaneTag($this);
-
-        //    /** And parse the avane tags */
-        //    $this->avaneTagCompiler->compile($compiledContent);
-        //}
-
         /** Save the compiled template */
         file_put_contents($this->templateCachedPath, $compiledContent);
 
