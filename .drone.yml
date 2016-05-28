@@ -10,4 +10,4 @@ build:
     - cd ./sassc
     - make
     - sudo ln ./bin/sassc /usr/bin/sassc
-    - phpunit Test test/travis/test.php
+    - phpunit test/travis/test.php
