@@ -147,7 +147,7 @@ class Template
         {
             $matched[1] = $this->analyzeVariable($matched[1]);
 
-            return "<?php if($matched[1]): ?>";
+            return "<?php elseif($matched[1]): ?>";
 
         }, $this->tplContent);
 
