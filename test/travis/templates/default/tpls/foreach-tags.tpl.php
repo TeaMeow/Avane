@@ -1,12 +1,15 @@
 <!-- Test -->
 {% foreach datas as data %}
-{ loop.index0 } - { data }
+{ loop.index0 } - { data } \n
 {% /foreach %}
 <!-- / Test -->
 
 
 <!-- Test -->
-{% foreach datas2 as data %}
-{ loop.index0 } - { data }
+{% foreach datas2 as datas %}
+    { loop.index0 } |
+    {% foreach datas as data %}
+        { loop.index0 } - { data } \n
+    {% /foreach %}
 {% /foreach %}
 <!-- / Test -->
