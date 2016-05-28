@@ -1,6 +1,8 @@
 build:
   image: phpunit/phpunit
   commands:
+    - apt-get update
+    - apt-get -y install sudo
     - cd /
     - git clone https://github.com/sass/libsass.git
     - export SASS_LIBSASS_PATH=/libsass/
