@@ -103,10 +103,10 @@ class Test extends PHPUnit_Framework_TestCase
 
 
     /**
-     * Test full load with include tags.
+     * Test full load with block tags.
      */
 
-    function testIncludeTags()
+    function testBlockTags()
     {
         $this->avane->header()
                     ->load('block-tags')
