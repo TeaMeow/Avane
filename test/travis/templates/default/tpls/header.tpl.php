@@ -1,4 +1,5 @@
+<html>
 <head>
-{% import css %}
-{% import js %}
+{% import test %}
 </head>
+<body>
