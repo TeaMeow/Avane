@@ -1,4 +1,11 @@
 build:
   image: phpunit/phpunit
   commands:
+    - cd /
+    - git clone https://github.com/sass/libsass.git
+    - export SASS_LIBSASS_PATH=/libsass/
+    - git clone https://github.com/sass/sassc.git
+    - cd ./sassc
+    - make
+    - sudo ln ./bin/sassc /usr/bin/sassc
     - phpunit Test test/travis/test.php

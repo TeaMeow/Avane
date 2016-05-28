@@ -113,6 +113,20 @@ class Test extends PHPUnit_Framework_TestCase
                     ->footer();
     }
 
+
+
+
+    /**
+     * Test full load with import tags.
+     */
+
+    function testBlockTags()
+    {
+        $this->avane->header()
+                    ->load('import-tags')
+                    ->footer();
+    }
+
 }
 
 ?>
