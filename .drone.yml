@@ -1,7 +1,6 @@
 build:
   image: phpunit/phpunit
   commands:
-    - pwd
     - apt-get update
     - apt-get -y install sudo
     - cd /
@@ -11,4 +10,5 @@ build:
     - cd ./sassc
     - make
     - sudo ln ./bin/sassc /usr/bin/sassc
-    - phpunit test/travis/test.php
+    - cd /drone/src/github.com/TeaMeow/Avane
+    - phpunit Test test/travis/test.php
