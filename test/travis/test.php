@@ -58,7 +58,7 @@ class Test extends PHPUnit_Framework_TestCase
     function testBasicTags()
     {
         $this->avane->header()
-                    ->load('tags')
+                    ->load('if-tags', ['A' => false, 'B' => true])
                     ->footer();
     }
 }
