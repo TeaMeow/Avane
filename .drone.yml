@@ -23,4 +23,4 @@ matrix:
 
 compose:
   coffee:
-    image: zyeeda/coffee
+    image: zyeeda/coffee:1.8
