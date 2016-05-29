@@ -6,14 +6,15 @@ php:
   - '7.0'
   - hhvm
   - nightly
-install:
-  - composer require satooshi/php-coveralls:~0.6@stable
-
-before_script:
-  - mkdir -p build/logs
-
 script:
-  - phpunit --coverage-clover build/logs/clover.xml
-
-after_success:
-  - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then php vendor/bin/coveralls -v; fi;'
+  - apt-get update
+  - apt-get -y install sudo
+  - cd /
+  - git clone https://github.com/sass/libsass.git
+  - export SASS_LIBSASS_PATH=/libsass/
+  - git clone https://github.com/sass/sassc.git
+  - cd ./sassc
+  - make
+  - sudo ln ./bin/sassc /usr/bin/sassc
+  - cd /drone/src/github.com/TeaMeow/Avane
+  - phpunit Test test/travis/test.php

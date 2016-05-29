@@ -15,5 +15,7 @@ build:
 
 matrix:
   PHPUNIT_VERSION:
+    - 4.7.7
+    - 4.6.10
     - 4.8.5
     - latest
