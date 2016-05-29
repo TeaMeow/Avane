@@ -1,10 +1,10 @@
 <?php
 use mageekguy\atoum\reports;
 $runner
-	->addTestsFromDirectory(__DIR__ . '/test')
+	->addTestsFromDirectory(__DIR__ . '/test/travis')
 	->disallowUsageOfUndefinedMethodInMock()
 ;
-$runner->getScore()->getCoverage()->excludeDirectory(__DIR__ . '/test');
+$runner->getScore()->getCoverage()->excludeDirectory(__DIR__ . '/test/travis/templates');
 $travis = getenv('TRAVIS');
 if ($travis)
 {
