@@ -6,20 +6,29 @@ use mageekguy\atoum\reports;
 
 $coveralls = new reports\asynchronous\coveralls('src', getenv('COVERALLS_REPO_TOKEN'));
 $defaultFinder = $coveralls->getBranchFinder();
-$coveralls
-        ->setBranchFinder(function() use ($defaultFinder) {
-                if (($branch = getenv('TRAVIS_BRANCH')) === false)
-                {
-                        $branch = $defaultFinder();
-                }
-
-                return $branch;
-        })
-        ->setServiceName(getenv('TRAVIS') ? 'travis-ci' : null)
-        ->setServiceJobId(getenv('TRAVIS_JOB_ID') ?: null)
-        ->addWriter()
-;
-$runner->addReport($coveralls);
-
-$script->addDefaultReport();
+$travis = getenv('TRAVIS');
+if ($travis)
+{
+	$script->addDefaultReport();
+	$coverallsToken = getenv('COVERALLS_REPO_TOKEN');
+	if ($coverallsToken)
+	{
+		$coverallsReport = new reports\asynchronous\coveralls('classes', $coverallsToken);
+		$defaultFinder = $coverallsReport->getBranchFinder();
+		$coverallsReport
+			->setBranchFinder(function() use ($defaultFinder) {
+					if (($branch = getenv('TRAVIS_BRANCH')) === false)
+					{
+						$branch = $defaultFinder();
+					}
+					return $branch;
+				}
+			)
+			->setServiceName('travis-ci')
+			->setServiceJobId(getenv('TRAVIS_JOB_ID'))
+			->addDefaultWriter()
+		;
+		$runner->addReport($coverallsReport);
+	}
+}
 ;?>
