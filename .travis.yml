@@ -8,5 +8,5 @@ php:
   - nightly
 script:
   - git clone git://github.com/atoum/atoum.git
-  - phpunit Test test/travis/test.php
+  # - phpunit Test test/travis/test.php
   - atoum/bin/atoum -f test/travis/test.php
