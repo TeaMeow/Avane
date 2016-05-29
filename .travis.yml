@@ -6,13 +6,19 @@ php:
   - '7.0'
   - hhvm
   - nightly
-install:
-  - composer require satooshi/php-coveralls:~0.6@stable
- 
+
+#install:
+#  - composer require satooshi/php-coveralls:~0.6@stable
+
 before_script:
-  - mkdir -p build/logs
- 
+  - wget http://getcomposer.org/composer.phar
+  - php composer.phar install --dev --no-interaction
+
 script:
+  - mkdir -p build/logs
   - phpunit --coverage-clover build/logs/clover.xml
+
+after_script:
+ - php vendor/bin/coveralls -v
 #script:
 #  - phpunit Test test/travis/test.php
