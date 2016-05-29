@@ -4,7 +4,7 @@ error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED);
 include 'src/autoload.php';
 
 
-class Test extends PHPUnit_Framework_TestCase
+class Test extends atoum
 {
     function __construct()
     {
