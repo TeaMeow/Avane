@@ -15,7 +15,7 @@ before_script:
 
 script:
   - mkdir -p build/logs
-  - phpunit --coverage-clover build/logs/clover.xml Test test/travis/test.php
+  - phpunit --coverage-clover build/logs/clover.xml -c test/travis Test test/travis/test.php 
 
 after_script:
  - php vendor/bin/coveralls -v
