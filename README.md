@@ -6,8 +6,9 @@
 </p>
 
 &nbsp;
+ 
+# Avane [![GitHub release](https://img.shields.io/github/release/TeaMeow/Avane.svg?maxAge=2592000)]() 
 
-# Avane [![Build Status](https://travis-ci.org/TeaMeow/Avane.svg?branch=master)](https://travis-ci.org/TeaMeow/Avane)
 亞凡芽是基於 PHP 的一套模板引擎，其功能支援隨機 CSS 樣式名稱，
 
 同時整合 JS 檔案。
@@ -31,6 +32,16 @@
 7. 效能比原生 `require()` 更快。
 
 8. 支援自訂主題，替換指定 CSS 檔案。
+
+&nbsp;
+
+# 建置狀況
+
+| 服務          | 標籤         |
+| ------------- |:-------------|
+| Travis CI     | [![Build Status](https://travis-ci.org/TeaMeow/Avane.svg?branch=master)](https://travis-ci.org/TeaMeow/Avane) |
+| Caris Events  | [![Build Status](http://drone.caris.events/api/badges/TeaMeow/Avane/status.svg)](http://drone.caris.events/TeaMeow/Avane)      |
+| Coverage      | [![Coverage Status](https://coveralls.io/repos/github/TeaMeow/Avane/badge.svg?branch=master)](https://coveralls.io/github/TeaMeow/Avane?branch=master) |
 
 &nbsp;
 
