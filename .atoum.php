@@ -1,33 +1,25 @@
 <?php
+//.atoum.php
+
+use mageekguy\atoum;
 use mageekguy\atoum\reports;
-$runner
-	->addTestsFromDirectory(__DIR__ . '/test/travis')
-	->disallowUsageOfUndefinedMethodInMock()
+
+$coveralls = new reports\asynchronous\coveralls('src', getenv('COVERALLS_REPO_TOKEN'));
+$defaultFinder = $coveralls->getBranchFinder();
+$coveralls
+        ->setBranchFinder(function() use ($defaultFinder) {
+                if (($branch = getenv('TRAVIS_BRANCH')) === false)
+                {
+                        $branch = $defaultFinder();
+                }
+
+                return $branch;
+        })
+        ->setServiceName(getenv('TRAVIS') ? 'travis-ci' : null)
+        ->setServiceJobId(getenv('TRAVIS_JOB_ID') ?: null)
+        ->addWriter()
 ;
-$runner->getScore()->getCoverage()->excludeDirectory(__DIR__ . '/test/travis/templates');
-$travis = getenv('TRAVIS');
-if ($travis)
-{
-	$script->addDefaultReport();
-	$coverallsToken = getenv('COVERALLS_REPO_TOKEN');
-	if ($coverallsToken)
-	{
-		$coverallsReport = new reports\asynchronous\coveralls('classes', $coverallsToken);
-		$defaultFinder = $coverallsReport->getBranchFinder();
-		$coverallsReport
-			->setBranchFinder(function() use ($defaultFinder) {
-					if (($branch = getenv('TRAVIS_BRANCH')) === false)
-					{
-						$branch = $defaultFinder();
-					}
-					return $branch;
-				}
-			)
-			->setServiceName('travis-ci')
-			->setServiceJobId(getenv('TRAVIS_JOB_ID'))
-			->addDefaultWriter()
-		;
-		$runner->addReport($coverallsReport);
-	}
-}
-?>
+$runner->addReport($coveralls);
+
+$script->addDefaultReport();
+;?>
