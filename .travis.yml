@@ -6,4 +6,4 @@ php:
   - '7.0'
   - hhvm
   - nightly
-script: phpunit Test test/travis/test.php
+script: phpunit Test test/unit/test.php
