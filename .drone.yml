@@ -1,7 +1,7 @@
 build:
   image: phpunit/phpunit:$$PHPUNIT_VERSION
   commands:
-    - phpunit Test test/travis/test.php
+    - phpunit Test test/unit/test.php
 
 matrix:
   PHPUNIT_VERSION:
