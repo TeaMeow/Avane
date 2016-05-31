@@ -2,7 +2,7 @@
   <img src="http://imgur.com/ANJiiSB.png"/>
 </p>
 <p align="center">
-  <i>x.</i>
+  <i>It will be different if you stand behind.</i>
 </p>
 
 &nbsp;
@@ -41,7 +41,6 @@
 | ------------- |:-------------|
 | Travis CI     | [![Build Status](https://travis-ci.org/TeaMeow/Avane.svg?branch=master)](https://travis-ci.org/TeaMeow/Avane) |
 | Caris Events  | [![Build Status](http://drone.caris.events/api/badges/TeaMeow/Avane/status.svg)](http://drone.caris.events/TeaMeow/Avane)      |
-| Coverage      | [![Coverage Status](https://coveralls.io/repos/github/TeaMeow/Avane/badge.svg?branch=master)](https://coveralls.io/github/TeaMeow/Avane?branch=master) |
 
 &nbsp;
 
