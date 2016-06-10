@@ -24,7 +24,7 @@ class Coffee extends \Avane\Avane
             {
                 /** Collect all the coffee files */
                 foreach($path as $single)
-                    $coffees .= "\n\n" . file_get_contents($this->coffeePath . $single);
+                    $coffees .= "\n\n" . file_get_contents($this->coffeePath . $single . '.coffee');
 
                 /** Put all the coffee scripts into a single file */
                 file_put_contents($this->compiledPath . md5($coffees) . '.coffee', $coffees);
