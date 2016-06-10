@@ -46,6 +46,9 @@ class Directives
 
     static function _nl2br($content)
     {
+        if(is_array($content))
+            $content = $content[0];
+
         return nl2br($content);
     }
 
