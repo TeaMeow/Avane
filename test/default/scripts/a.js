@@ -1,3 +1,3 @@
 alert('A');
 
-alert('ssBff');
+alert('B');

@@ -10,6 +10,20 @@ class Coffee
     private $compiledPath    = '';
     
     
+    
+    
+    /**
+     * Initialize the configs, and start the compilation.
+     * 
+     * @param array  $coffees           The coffees to compile.
+     * @param string $coffeePath        The coffee path.
+     * @param string $scriptPath        The script path.
+     * @param string $coffeeExtension   The extension of the coffee files.
+     * @param string $compiledPath      The compiled path.
+     * 
+     * @return Coffee
+     */
+     
     public function initialize($coffees, $coffeePath, $scriptPath, $coffeeExtension, $compiledPath)
     {
         $this->coffees         = $coffees;
@@ -17,18 +31,34 @@ class Coffee
         $this->scriptPath      = $scriptPath;
         $this->coffeeExtension = $coffeeExtension;
         $this->compiledPath    = $compiledPath;
+        $this->trackerPath     = $compiledPath . 'coffee_tracker.txt';
         
-
+        /** Return if the cache is available */
+        if($this->validateCache())
+            return $this;
+        
+        /** Compile the coffees */
         foreach($coffees as $destination => $raws)
-            if(!$this->validateCache($raws))
-                $this->compile($destination, $raws);
+            $this->compile($destination, $raws);
         
+        /** Create a cache mark file after the compilation */
         $this->buildCache();
         
         return $this;
     }
     
     
+    
+    
+    /**
+     * Compile the coffees.
+     * 
+     * @param string $destination   The name of the final compiled js.
+     * @param array  $raws          The coffees to compile.
+     * 
+     * @return Coffee
+     */
+     
     public function compile($destination, $raws)
     {
         $cookedName = $destination;
@@ -56,14 +86,17 @@ class Coffee
     
     private function validateCache()
     {
-        $this->cacheMark = $this->getCurrentMD5() . '_coffee_cache';
+        if(!file_exists($this->trackerPath))
+            return false;
+            
+        $this->currentMD5 = $this->getCurrentMD5();
         
-        return file_exists($this->cacheMark);
+        return $this->currentMD5 === file_get_contents($this->trackerPath);
     }
     
     private function buildCache()
     {
-        file_put_contents($this->cacheMark, '');
+        file_put_contents($this->trackerPath, $this->currentMD5);
         
         return $this;
     }
