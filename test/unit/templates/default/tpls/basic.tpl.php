@@ -1,1 +1,0 @@
-<div>Moon, dalan!</div>
