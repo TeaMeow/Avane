@@ -9,6 +9,7 @@ class Coffee
     private $coffeeExtension = '.coffee';
     private $compiledPath    = '';
     
+    
     public function initialize($coffees, $coffeePath, $scriptPath, $coffeeExtension, $compiledPath)
     {
         $this->coffees         = $coffees;
@@ -19,7 +20,10 @@ class Coffee
         
 
         foreach($coffees as $destination => $raws)
-            $this->compile($destination, $raws);
+            if(!$this->validateCache($raws))
+                $this->compile($destination, $raws);
+        
+        $this->buildCache();
         
         return $this;
     }
@@ -49,6 +53,56 @@ class Coffee
         if($status === 1)
             file_put_contents($destination, $this->prepareError(file_get_contents($destination), $rawPath));
     }
+    
+    private function validateCache()
+    {
+        $this->cacheMark = $this->getCurrentMD5() . '_coffee_cache';
+        
+        return file_exists($this->cacheMark);
+    }
+    
+    private function buildCache()
+    {
+        file_put_contents($this->cacheMark, '');
+        
+        return $this;
+    }
+    
+    
+    
+    private function getCurrentMD5()
+    {
+        $currentMD5 = '';
+        $directory = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->coffeePath));
+        
+        foreach ($directory as $info)
+        {
+            $filename = $info->getFilename();
+            
+            if($filename == '.' || $filename == '..')
+                continue;
+                
+            $realpath = $info->getRealPath();
+            
+            if(!$realpath)
+                continue;
+                
+            $currentMD5 .= md5_file($realpath);
+        }
+        
+        return md5($currentMD5);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     private function prepareError($stdErr, $rawPath)
