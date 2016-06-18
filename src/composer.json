@@ -1,0 +1,5 @@
+{
+    "require": {
+        "talesoft/tale-jade": "*"
+    }
+}

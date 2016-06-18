@@ -1,0 +1,15 @@
+paths:
+  script: 'dddd'
+  style : ''
+  coffee: ''
+  sass  : ''
+  tpl   : ''
+
+coffees:
+  - mvc:
+      - main.m
+      - main.v
+      - main.c
+
+shortnames:
+  test: "test.jade"
