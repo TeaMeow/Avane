@@ -1,4 +1,5 @@
 html
     body
         select.ts.medium.dropdown(data-setting-name='language')
-            option 1:00
+            each $item in $items
+                option #{$item}

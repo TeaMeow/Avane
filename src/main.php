@@ -7,37 +7,64 @@ class Main
     {
         $this->templateEngine = new \Tale\Jade\Renderer();
         
-        $this->setPath($path)
-             ->initialize();
+        $path           = rtrim($path, '/') . '/';
+        $this->mainPath = $path;
+        
+        $this->initialize();
     }
     
-    
-    
-    
-    function setPath($path)
+    function setSetting($name, $value)
     {   
-        $p                  = rtrim($path, '/') . '/';
-        $this->mainPath     = $p;
-        $this->configPath   = $p . 'config.yml';
-        $this->compiledPath = $p . 'compiled/';
-        $this->scriptPath   = $p . 'scripts/';
-        $this->stylePath    = $p . 'styles/';
-        $this->coffeePath   = $p . 'coffees/';
-        $this->sassPath     = $p . 'sass/';
-        $this->tplPath      = $p . 'tpls/';
-        $this->tplExtension = '.jade';
+        switch($name)
+        {
+            case 'compiled'    : $this->compiledPath = $value; break;
+            case 'script'      : $this->scriptPath   = $value; break;
+            case 'style'       : $this->stylePath    = $value; break;
+            case 'coffee'      : $this->coffeePath   = $value; break;
+            case 'sass'        : $this->sassPath     = $value; break;
+            case 'tpl'         : $this->tplPath      = $value; break;
+            case 'extension'   : $this->tplExtension = $value; break;
+            case 'config'      : $this->configPath   = $value; break;
+            case 'enableCoffee': $this->enableCoffee = $value; break;
+            case 'enableSass'  : $this->enableSass   = $value; break;
+            case 'enableSassc' : $this->enableSassc  = $value; break;
+        }
 
         return $this;
     }
     
+    
+    
     function initialize()
     {
+        
+        $this->setSetting('compiled' , $this->mainPath . 'compiled/')
+             ->setSetting('script'   , $this->mainPath . 'scripts/')
+             ->setSetting('style'    , $this->mainPath . 'styles/')
+             ->setSetting('coffee'   , $this->mainPath . 'coffees/')
+             ->setSetting('sass'     , $this->mainPath . 'sass/')
+             ->setSetting('tpl'      , $this->mainPath . 'tpls/')
+             ->setSetting('config'   , $this->mainPath . 'config.yml')
+             ->setSetting('extension', '.jade');
+        
+        $this->config = yaml_parse(file_get_contents($this->configPath));
+        
+        if(isset($this->config['paths']))
+            foreach($this->config['paths'] as $name => $path)
+                $this->setSetting($name, $path);
+        
+        if(isset($this->config['configs']))
+            foreach($this->config['configs'] as $name => $value)
+                $this->setSetting($name, $value);
+   
         if(!is_dir($this->compiledPath))
             mkdir($this->compiledPath, 0755, true);
         if(!is_dir($this->scriptPath))
             mkdir($this->scriptPath, 0755, true);
         if(!is_dir($this->stylePath))
             mkdir($this->stylePath, 0755, true);
+        if(!is_dir($this->coffeePath))
+            mkdir($this->coffeePath, 0755, true);
         if(!is_dir($this->sassPath))
             mkdir($this->sassPath, 0755, true);
         if(!is_dir($this->tplPath))
@@ -50,7 +77,18 @@ class Main
     
     public function render($templateFile, $variables = null)
     {
-        echo $this->templateEngine->render($this->tplPath . $templateFile, $variables);
+        echo $this->fetch($templateFile, $variables);
+    }
+    
+    public function fetch($templateFile, $variables = null)
+    {
+        return $this->templateEngine->render($this->tplPath . $this->getShortnames($templateFile) . $this->tplExtension, $variables);
+    }
+    
+    public function getShortnames($templateFile)
+    {
+        return isset($this->config['shortnames'][$templateFile]) ? $this->config['shortnames'][$templateFile]
+                                                                 : $templateFile;
     }
 }
 ?>

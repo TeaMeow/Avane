@@ -1,15 +1,13 @@
-paths:
-  script: 'dddd'
-  style : ''
-  coffee: ''
-  sass  : ''
-  tpl   : ''
+configs:
+  enableCoffee: true
+  enableSass  : false
 
 coffees:
   - mvc:
       - main.m
       - main.v
       - main.c
+    
 
 shortnames:
-  test: "test.jade"
+  "Ello": "test"
