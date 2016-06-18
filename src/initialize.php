@@ -1,7 +1,8 @@
 <?php
-namespace Avane
+namespace Avane;
 
 class Initialize
 {
     
 }
+?>

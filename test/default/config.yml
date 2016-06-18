@@ -3,11 +3,22 @@ configs:
   enableSass  : false
 
 coffees:
-  - mvc:
-      - main.m
-      - main.v
-      - main.c
-    
+  a:
+    - a
+    - b
+  c:
+    - c
+  
+sass:
+  mvc:
+    - ddd/dddd
+    - ddd/ddd
+  mvc2:
+    - ddd/dddd
+    - ddd/ddd
+
+sassTracker:
+  - ffff
 
 shortnames:
   "Ello": "test"

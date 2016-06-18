@@ -10,24 +10,28 @@ class Main
         $path           = rtrim($path, '/') . '/';
         $this->mainPath = $path;
         
-        $this->initialize();
+        $this->initialize()
+             ->compileSass()
+             ->compileCoffee();
     }
     
     function setSetting($name, $value)
     {   
         switch($name)
         {
-            case 'compiled'    : $this->compiledPath = $value; break;
-            case 'script'      : $this->scriptPath   = $value; break;
-            case 'style'       : $this->stylePath    = $value; break;
-            case 'coffee'      : $this->coffeePath   = $value; break;
-            case 'sass'        : $this->sassPath     = $value; break;
-            case 'tpl'         : $this->tplPath      = $value; break;
-            case 'extension'   : $this->tplExtension = $value; break;
-            case 'config'      : $this->configPath   = $value; break;
-            case 'enableCoffee': $this->enableCoffee = $value; break;
-            case 'enableSass'  : $this->enableSass   = $value; break;
-            case 'enableSassc' : $this->enableSassc  = $value; break;
+            case 'compiled'       : $this->compiledPath    = $value; break;
+            case 'script'         : $this->scriptPath      = $value; break;
+            case 'style'          : $this->stylePath       = $value; break;
+            case 'coffee'         : $this->coffeePath      = $value; break;
+            case 'sass'           : $this->sassPath        = $value; break;
+            case 'tpl'            : $this->tplPath         = $value; break;
+            case 'extension'      : $this->tplExtension    = $value; break;
+            case 'config'         : $this->configPath      = $value; break;
+            case 'enableCoffee'   : $this->enableCoffee    = $value; break;
+            case 'enableSass'     : $this->enableSass      = $value; break;
+            case 'enableSassc'    : $this->enableSassc     = $value; break;
+            case 'coffeeExtension': $this->coffeeExtension = $value; break;
+            case 'sassExtension'  : $this->sassExtension   = $value; break;
         }
 
         return $this;
@@ -38,14 +42,16 @@ class Main
     function initialize()
     {
         
-        $this->setSetting('compiled' , $this->mainPath . 'compiled/')
-             ->setSetting('script'   , $this->mainPath . 'scripts/')
-             ->setSetting('style'    , $this->mainPath . 'styles/')
-             ->setSetting('coffee'   , $this->mainPath . 'coffees/')
-             ->setSetting('sass'     , $this->mainPath . 'sass/')
-             ->setSetting('tpl'      , $this->mainPath . 'tpls/')
-             ->setSetting('config'   , $this->mainPath . 'config.yml')
-             ->setSetting('extension', '.jade');
+        $this->setSetting('compiled'       , $this->mainPath . 'compiled/')
+             ->setSetting('script'         , $this->mainPath . 'scripts/')
+             ->setSetting('style'          , $this->mainPath . 'styles/')
+             ->setSetting('coffee'         , $this->mainPath . 'coffees/')
+             ->setSetting('sass'           , $this->mainPath . 'sass/')
+             ->setSetting('tpl'            , $this->mainPath . 'tpls/')
+             ->setSetting('config'         , $this->mainPath . 'config.yml')
+             ->setSetting('coffeeExtension', '.coffee')
+             ->setSetting('sassExtension'  , '.sass')
+             ->setSetting('extension'      , '.jade');
         
         $this->config = yaml_parse(file_get_contents($this->configPath));
         
@@ -69,6 +75,39 @@ class Main
             mkdir($this->sassPath, 0755, true);
         if(!is_dir($this->tplPath))
             mkdir($this->tplPath, 0755, true);
+        
+        return $this;
+    }
+    
+    
+    public function compileCoffee()
+    {
+        if(!$this->enableCoffee)
+            return $this;
+        
+        $coffees = isset($this->config['coffees']) ? $this->config['coffees'] 
+                                                   : null;
+        
+        if(!$coffees)
+            return $this;
+        
+        $Coffee = new Compiler\Coffee();
+        $Coffee->initialize($coffees, 
+                            $this->coffeePath, 
+                            $this->scriptPath,
+                            $this->coffeeExtension,
+                            $this->compiledPath);
+        
+        return $this;
+    }
+    
+    public function compileSass()
+    {
+        if(!$this->enableSass && !$this->enableSassc)
+            return $this;
+        
+        $Sass = new Compiler\Sass();
+        $Sass->initialize($this->enableSassc);
         
         return $this;
     }
