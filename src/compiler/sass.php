@@ -3,9 +3,88 @@ namespace Avane\Compiler;
 
 class Sass
 {
+    /**
+     * The array which stores the path of the sass files.
+     * 
+     * @var array
+     */
+     
+    private $sass          = [];
+    
+    /**
+     * The array which stores the path of the extra sass folders.
+     * 
+     * @var array
+     */
+     
+    private $sassTracker   = [];
+    
+    /**
+     * Set true to use sassc instead of ruby sass.
+     * 
+     * @var bool
+     */
+     
+    private $isSassc       = false;
+    
+    /**
+     * The path of the sass folder.
+     * 
+     * @var string
+     */
+     
+    private $sassPath      = '';
+    
+    /**
+     * The path of the style folder.
+     * 
+     * @var string
+     */
+     
+    private $stylePath     = '';
+    
+    /**
+     * The extension of the sass file.
+     * 
+     * @var string
+     */
+     
     private $sassExtension = '.sass';
+    
+    /**
+     * The path to the sassc.
+     * 
+     * @var string
+     */
+     
     private $sasscPath     = 'sassc';
     
+    /**
+     * The path of the compiled folder.
+     * 
+     * @var string
+     */
+     
+    private $compiledPath  = '';
+    
+    
+    
+    
+    /**
+     * Initialize the configs, and start the compilation.
+     * 
+     * @param array  $sass            The path of sass to compile.
+     * @param array  $sassTracker     The extra track paths.
+     * @param bool   $isSassc         Set true to use sassc instead of ruby sass.
+     * @param string $sassPath        The path of the sass files.
+     * @param string $stylePath       The path of the styles.
+     * @param string $sassExtension   The extension of the sass.
+     * @param string $sasscPath       The path to the sassc.
+     * @param string $compiledPath    The compiled path.
+     * 
+     * @return Sass
+     */
+     
     public function initialize($sass, $sassTracker, $isSassc, $sassPath, $stylePath, $sassExtension, $sasscPath, $compiledPath)
     {
         $this->sass          = $sass;
@@ -33,6 +112,17 @@ class Sass
     }
     
     
+    
+    
+    /**
+     * Compile the sass.
+     * 
+     * @param  string $destination   The name of the final compiled css.
+     * @param  array  $raws          The sass to compile.
+     * 
+     * @return Sass
+     */
+     
     private function compile($destination, $raws)
     {
         $cookedName = $destination;
@@ -61,6 +151,16 @@ class Sass
     
     
     
+    
+    /**
+     * Compile a sass using ruby sass.
+     *
+     * @param string $command      The command to execute.
+     * @param string $outputPath   The path of the css.
+     *
+     * @return Sass
+     */
+     
     private function rubySass($command, $outputPath)
     {
         exec($command, $output, $code);
@@ -73,6 +173,17 @@ class Sass
         return $this;
     }
     
+    
+    
+    
+    /**
+     * Compile a sass using sassC.
+     *
+     * @param string $command      The command to execute.
+     * @param string $outputPath   The path of the css.
+     *
+     * @return Sass
+     */
     
     private function sassc($command, $outputPath)
     {
@@ -90,6 +201,7 @@ class Sass
             
         return $this;
     }
+    
     
     
     

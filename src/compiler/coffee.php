@@ -3,10 +3,44 @@ namespace Avane\Compiler;
 
 class Coffee
 {
+    /**
+     * The array which stores the coffee paths.
+     * 
+     * @var array
+     */
+     
     private $coffees         = [];
+    
+    /**
+     * The path of the coffee folder.
+     * 
+     * @var string
+     */
+     
     private $coffeePath      = '';
+    
+    /**
+     * The path of the script folder.
+     * 
+     * @var string
+     */
+     
     private $scriptPath      = '';
+    
+    /**
+     * The extension of the coffee file.
+     * 
+     * @var string
+     */
+     
     private $coffeeExtension = '.coffee';
+    
+    /**
+     * The path of the compiled folder.
+     * 
+     * @var string
+     */
+     
     private $compiledPath    = '';
     
     

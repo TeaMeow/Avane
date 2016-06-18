@@ -15,6 +15,18 @@ class Main
              ->compileCoffee();
     }
     
+    
+    
+    
+    /**
+     * Set the settings.
+     * 
+     * @param string $name    The name of the setting.
+     * @param mixed  $value   The value of the setting.
+     * 
+     * @return Main
+     */
+     
     function setSetting($name, $value)
     {   
         switch($name)
@@ -40,9 +52,15 @@ class Main
     
     
     
+    
+    /**
+     * Initialize Avane.
+     * 
+     * @return Main
+     */
+    
     function initialize()
     {
-        
         $this->setSetting('compiled'       , $this->mainPath . 'compiled/')
              ->setSetting('script'         , $this->mainPath . 'scripts/')
              ->setSetting('style'          , $this->mainPath . 'styles/')
@@ -54,16 +72,20 @@ class Main
              ->setSetting('sassExtension'  , '.sass')
              ->setSetting('extension'      , '.jade');
         
+        /** Load the configures and store to the variable */
         $this->config = yaml_parse(file_get_contents($this->configPath));
         
+        /** Apply the path settings */
         if(isset($this->config['paths']))
             foreach($this->config['paths'] as $name => $path)
                 $this->setSetting($name, $path);
         
+        /** Apply the common configures */
         if(isset($this->config['configs']))
             foreach($this->config['configs'] as $name => $value)
                 $this->setSetting($name, $value);
    
+        /** Create the folders if do not exist */
         if(!is_dir($this->compiledPath))
             mkdir($this->compiledPath, 0755, true);
         if(!is_dir($this->scriptPath))
@@ -80,6 +102,14 @@ class Main
         return $this;
     }
     
+    
+    
+    
+    /**
+     * Compile the coffees.
+     * 
+     * @return Main
+     */
     
     public function compileCoffee()
     {
@@ -102,6 +132,15 @@ class Main
         return $this;
     }
     
+    
+    
+    
+    /**
+     * Compile the sass.
+     * 
+     * @return Main
+     */
+     
     public function compileSass()
     {
         if(!$this->enableSass && !$this->enableSassc)
@@ -129,18 +168,54 @@ class Main
         return $this;
     }
     
-   
+    
+    
+    
+    /**
+     * Render the template files and output.
+     * 
+     * @param string $templateFile   The path to the template file, can be a shortname when setted a shortname.
+     * @param array  $variables      The variables.
+     * 
+     * @return Main
+     */
     
     public function render($templateFile, $variables = null)
     {
         echo $this->fetch($templateFile, $variables);
+        
+        return $this;
     }
     
+    
+    
+    
+    /**
+     * Return the rendered content instead of output it.
+     * 
+     * @param  string $templateFile   The path to the template file, can be a shortname when setted a shortname.
+     * @param  array  $variables      The variables.
+     * 
+     * @return string                 The rendered content
+     */
+     
     public function fetch($templateFile, $variables = null)
     {
         return $this->templateEngine->render($this->tplPath . $this->getShortnames($templateFile) . $this->tplExtension, $variables);
     }
     
+    
+    
+    
+    /**
+     * Get the path of the shortname,
+     * returns the original path if there's no shortname for the path.
+     * 
+     * @param  string $templateFile   Colud be the shortname or the full path of the template file.
+     * 
+     * @return string                 Returns the full path.
+     */
+     
     public function getShortnames($templateFile)
     {
         return isset($this->config['shortnames'][$templateFile]) ? $this->config['shortnames'][$templateFile]
