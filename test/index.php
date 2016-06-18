@@ -2,5 +2,7 @@
 include '../src/autoload.php';
 
 $Avane = new Avane\Main(__DIR__ . '/default');
-$Avane->render('Ello', ['items' => [1, 2, 3, 4, 5, 6]]);
+$Avane->header('Ello', ['title' => 'dsfsdfsdfsd'])
+      ->render('Ello', ['items' => range(0, 1000)])
+      ->footer('Ello');
 ?>

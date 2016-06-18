@@ -3,8 +3,11 @@ namespace Avane;
 
 class Main
 {
+    private $outputBuffer = [];
+    
     function __construct($path)
     {
+        $this->startTime = microtime(true);
         $this->templateEngine = new \Tale\Jade\Renderer();
         
         $path           = rtrim($path, '/') . '/';
@@ -13,6 +16,12 @@ class Main
         $this->initialize()
              ->compileSass()
              ->compileCoffee();
+        
+        if(is_array(getallheaders()))
+                $this->isPJAX = array_key_exists(strtolower($this->pjaxHeader), getallheaders()) ? getallheaders()[strtolower($this->pjaxHeader)]
+                                                                                                 : false;
+            else
+                $this->isPJAX = false;
     }
     
     
@@ -27,7 +36,7 @@ class Main
      * @return Main
      */
      
-    function setSetting($name, $value)
+    public function setSetting($name, $value)
     {   
         switch($name)
         {
@@ -45,6 +54,8 @@ class Main
             case 'sasscPath'      : $this->sasscPath       = $value; break;
             case 'coffeeExtension': $this->coffeeExtension = $value; break;
             case 'sassExtension'  : $this->sassExtension   = $value; break;
+            case 'pjaxHeader'     : $this->pjaxHeader      = $value; break;
+            case 'titleVariable'  : $this->titleVariable   = $value; break;
         }
 
         return $this;
@@ -59,7 +70,7 @@ class Main
      * @return Main
      */
     
-    function initialize()
+    private function initialize()
     {
         $this->setSetting('compiled'       , $this->mainPath . 'compiled/')
              ->setSetting('script'         , $this->mainPath . 'scripts/')
@@ -70,7 +81,9 @@ class Main
              ->setSetting('config'         , $this->mainPath . 'config.yml')
              ->setSetting('coffeeExtension', '.coffee')
              ->setSetting('sassExtension'  , '.sass')
-             ->setSetting('extension'      , '.jade');
+             ->setSetting('extension'      , '.jade')
+             ->setSetting('titleVariable'  , 'title')
+             ->setSetting('pjaxHeader'     , 'HTTP_X_PJAX');
         
         /** Load the configures and store to the variable */
         $this->config = yaml_parse(file_get_contents($this->configPath));
@@ -105,6 +118,12 @@ class Main
     
     
     
+    //***********************************************
+    //***********************************************
+    //*************** C O M P I L E R ***************
+    //***********************************************
+    //***********************************************
+    
     /**
      * Compile the coffees.
      * 
@@ -128,7 +147,6 @@ class Main
                             $this->scriptPath,
                             $this->coffeeExtension,
                             $this->compiledPath);
-        
         return $this;
     }
     
@@ -164,12 +182,180 @@ class Main
                           $this->sassExtension,
                           $this->sasscPath,
                           $this->compiledPath);
+        return $this;
+    }
+    
+    
+    
+    
+    //***********************************************
+    //***********************************************
+    //**************** C A P T U R E ****************
+    //***********************************************
+    //***********************************************
+
+    /**
+     * Capture the rendered content after this function.
+     *
+     * @param bool $force   Force capture.
+     *
+     * @return Main
+     */
+     
+    public function capture($force = false)
+    {
+        if(!$this->isPJAX && !$force)
+            return $this;
+            
+        ob_start();
         
         return $this;
     }
     
     
     
+    
+    /**
+     * Stop capturing, and store the captured content to the specified array.
+     * 
+     * @param  string $position   The place to store the captured content.
+     * 
+     * @return Main
+     */
+     
+    public function endCapture($position = null)
+    {
+        if(!$this->isPJAX && $position)
+            return $this;
+            
+        switch($position)
+        {
+            case 'header':
+                $this->outputBuffer['header']  = ob_get_clean();
+                break;
+            case 'content':
+                $this->outputBuffer['content'] = ob_get_clean();
+                break;
+            case 'footer':
+                $this->outputBuffer['footer']  = ob_get_clean();
+                break;
+            case null:
+                return ob_get_clean();
+                break;
+        }
+        
+        return $this;
+    }
+    
+    
+  
+  
+    //***********************************************
+    //***********************************************
+    //****************** P J A X ********************
+    //***********************************************
+    //***********************************************
+    
+    /**
+     * 
+     */
+     
+    public function header($templateFile, $variables = null)
+    {
+        /** Set the json header if it's a PJAX request */
+        if($this->isPJAX)
+            header('Content-Type: application/json; charset=utf-8');
+
+        /** Set the title */
+        $this->title = isset($variables[$this->titleVariable]) ? $variables[$this->titleVariable]
+                                                               : null;
+        
+        /** Capture the rendered content from now on */
+        $this->capture()
+             /** Load the header and require it */
+             ->render($templateFile, $variables)
+             /** Stop capturing, and store the captured content to the output buffer array */
+             ->endCapture('header')
+             /** Start another capture action for the content part */
+             ->capture();
+             
+        return $this;
+    }
+    
+    /**
+     * 
+     * 
+     */
+     
+    public function footer($templateFile, $variables = null)
+    {
+        /** Stop capturing, what we got here is a content-only part, store it either */
+        $this->endCapture('content')
+             /** Now capture the footer part */
+             ->capture()
+             /** Require the footer template */
+             ->render($templateFile, $variables)
+             /** And stop capturing, you know what's next right? */
+             ->endCapture('footer');
+             
+        $this->endTime   = microtime(true);
+        $this->totalTime = $this->endTime - $this->startTime;
+        
+        /** Return the rendered content if it's a PJAX request */
+        if($this->isPJAX)
+            echo json_encode($this->returnPJAX());
+
+        return $this;
+    }
+    
+    
+    
+    
+    /**
+     * Combine the different informations based on the PJAX header content.
+     *
+     * @return array   The datas.
+     */
+     
+    function returnPJAX()
+    {
+        if(!$this->isPJAX)
+            return false;
+            
+        $types = explode(', ', $this->isPJAX);
+        $data  = [];
+        
+        if(strpos($this->isPJAX, 'title') !== false)
+            $data['title'] = $this->title;
+            
+        if(strpos($this->isPJAX, 'html') !== false)
+            $data['html'] = $this->outputBuffer['header']  .
+                            $this->outputBuffer['content'] .
+                            $this->outputBuffer['footer'];
+                            
+        if(strpos($this->isPJAX, 'header') !== false)
+            $data['header'] = $this->outputBuffer['header'];
+            
+        if(strpos($this->isPJAX, 'content') !== false)
+            $data['content'] = $this->outputBuffer['content'];
+
+        if(strpos($this->isPJAX, 'footer') !== false)
+            $data['footer'] = $this->outputBuffer['footer'];
+            
+        if(strpos($this->isPJAX, 'wasted') !== false)
+            $data['wasted'] = $this->totalTime;
+            
+        return $data;
+    }
+    
+    
+    
+    
+    //***********************************************
+    //***********************************************
+    //****************** B A S I C ******************
+    //***********************************************
+    //***********************************************
     
     /**
      * Render the template files and output.
@@ -206,6 +392,12 @@ class Main
     
     
     
+    
+    //***********************************************
+    //***********************************************
+    //**************** H E L P E R S ****************
+    //***********************************************
+    //***********************************************
     
     /**
      * Get the path of the shortname,

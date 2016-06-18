@@ -1,15 +1,11 @@
-html
-    body
-        .ts.test
-            | ddddd
-            | dddddd
-            
-        //- ddddd
-        select.ts.medium.dropdown(data-setting-name='language')
-            each $item in $items
-                option #{$item}
-                
-        //- ddddd
-        select.ts.medium.dropdown(data-setting-name='language')
-            each $item in $items
-                option #{$item}
+mixin item(link, icon, label)
+    a.item(href=$link)
+        span.icon(class=$icon)
+        $label
+
++item('photo', 'icon--picture', 'A')
++item('photo', 'icon--circles', 'B')
++item('photo', 'icon--music'  , 'C')
++item('photo', 'icon--draw'   , 'D')
++item('photo', 'icon--dna'    , 'E')
++item('photo', 'icon--gamepad', 'F')
