@@ -15,11 +15,11 @@ class Coffee
     /**
      * Initialize the configs, and start the compilation.
      * 
-     * @param array  $coffees           The coffees to compile.
-     * @param string $coffeePath        The coffee path.
-     * @param string $scriptPath        The script path.
-     * @param string $coffeeExtension   The extension of the coffee files.
-     * @param string $compiledPath      The compiled path.
+     * @param  array  $coffees           The coffees to compile.
+     * @param  string $coffeePath        The coffee path.
+     * @param  string $scriptPath        The script path.
+     * @param  string $coffeeExtension   The extension of the coffee files.
+     * @param  string $compiledPath      The compiled path.
      * 
      * @return Coffee
      */
@@ -53,13 +53,13 @@ class Coffee
     /**
      * Compile the coffees.
      * 
-     * @param string $destination   The name of the final compiled js.
-     * @param array  $raws          The coffees to compile.
+     * @param  string $destination   The name of the final compiled js.
+     * @param  array  $raws          The coffees to compile.
      * 
      * @return Coffee
      */
      
-    public function compile($destination, $raws)
+    private function compile($destination, $raws)
     {
         $cookedName = $destination;
         $raw        = '';
@@ -82,8 +82,19 @@ class Coffee
         /** Output the error message to the css file if needed */
         if($status === 1)
             file_put_contents($destination, $this->prepareError(file_get_contents($destination), $rawPath));
+        
+        return $this;
     }
     
+    
+    
+    
+    /**
+     * Validate the cache.
+     * 
+     * @return bool   Returns true when the cache is available.
+     */
+     
     private function validateCache()
     {
         if(!file_exists($this->trackerPath))
@@ -94,6 +105,15 @@ class Coffee
         return $this->currentMD5 === file_get_contents($this->trackerPath);
     }
     
+    
+    
+    
+    /**
+     * Build the cache.
+     * 
+     * @return Coffee
+     */
+     
     private function buildCache()
     {
         file_put_contents($this->trackerPath, $this->currentMD5);
@@ -103,6 +123,13 @@ class Coffee
     
     
     
+    
+    /**
+     * Get the MD5 of the coffees.
+     * 
+     * @return string   The MD5.
+     */
+     
     private function getCurrentMD5()
     {
         $currentMD5 = '';
@@ -129,14 +156,14 @@ class Coffee
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
+    /**
+     * Prepare the error message.
+     * 
+     * @param  string $stdErr    The content of the error.
+     * @param  string $rawPath   The path of the raw combined coffee.
+     * 
+     * @return string            The error message.
+     */
     
     private function prepareError($stdErr, $rawPath)
     {

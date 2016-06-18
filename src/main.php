@@ -30,6 +30,7 @@ class Main
             case 'enableCoffee'   : $this->enableCoffee    = $value; break;
             case 'enableSass'     : $this->enableSass      = $value; break;
             case 'enableSassc'    : $this->enableSassc     = $value; break;
+            case 'sasscPath'      : $this->sasscPath       = $value; break;
             case 'coffeeExtension': $this->coffeeExtension = $value; break;
             case 'sassExtension'  : $this->sassExtension   = $value; break;
         }
@@ -106,8 +107,24 @@ class Main
         if(!$this->enableSass && !$this->enableSassc)
             return $this;
         
+        $sass = isset($this->config['sass']) ? $this->config['sass'] 
+                                             : null;
+        
+        if(!$sass)
+            return $this;
+        
+        $sassTracker = isset($this->config['sassTracker']) ? $this->config['sassTracker'] 
+                                                           : [];
+        
         $Sass = new Compiler\Sass();
-        $Sass->initialize($this->enableSassc);
+        $Sass->initialize($sass,
+                          $sassTracker,
+                          $this->enableSassc,
+                          $this->sassPath,
+                          $this->stylePath,
+                          $this->sassExtension,
+                          $this->sasscPath,
+                          $this->compiledPath);
         
         return $this;
     }

@@ -1,6 +1,8 @@
 configs:
   enableCoffee: true
-  enableSass  : false
+  enableSass  : true
+  enableSassc : false
+  
 
 coffees:
   a:
@@ -10,15 +12,12 @@ coffees:
     - c
   
 sass:
-  mvc:
-    - ddd/dddd
-    - ddd/ddd
-  mvc2:
-    - ddd/dddd
-    - ddd/ddd
+  a:
+    - a
+    - b
+  c:
+    - c
 
-sassTracker:
-  - ffff
 
 shortnames:
   "Ello": "test"
