@@ -1,11 +1,16 @@
-mixin item(link, icon, label)
-    a.item(href=$link)
-        span.icon(class=$icon)
-        $label
 
-+item('photo', 'icon--picture', 'A')
-+item('photo', 'icon--circles', 'B')
-+item('photo', 'icon--music'  , 'C')
-+item('photo', 'icon--draw'   , 'D')
-+item('photo', 'icon--dna'    , 'E')
-+item('photo', 'icon--gamepad', 'F')
+
+$maybeHtml= '這是一串文字而且 <a href="#">這是 <b>HTML</b></a>'
+
+p= $maybeHtml
+p!= $maybeHtml
+
+
+a(title=$maybeHtml)
+a(title!=$maybeHtml)
+
+
+p
+| 這會是被轉義的字串： #{$maybeHtml}
+p
+| 這會是 HTML： !{$maybeHtml}

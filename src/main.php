@@ -51,7 +51,7 @@ class Main
             case 'enableCoffee'   : $this->enableCoffee    = $value; break;
             case 'enableSass'     : $this->enableSass      = $value; break;
             case 'enableSassc'    : $this->enableSassc     = $value; break;
-            case 'sasscPath'      : $this->sasscPath       = $value; break;
+            case 'sassc'          : $this->sasscPath       = $value; break;
             case 'coffeeExtension': $this->coffeeExtension = $value; break;
             case 'sassExtension'  : $this->sassExtension   = $value; break;
             case 'pjaxHeader'     : $this->pjaxHeader      = $value; break;
