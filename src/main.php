@@ -1,6 +1,7 @@
 <?php
 namespace Avane;
 
+
 class Main
 {
     private $outputBuffer = [];
@@ -86,7 +87,8 @@ class Main
              ->setSetting('pjaxHeader'     , 'HTTP_X_PJAX');
         
         /** Load the configures and store to the variable */
-        $this->config = yaml_parse(file_get_contents($this->configPath));
+        $this->config = spyc_load_file($this->configPath);
+        //$this->config = yaml_parse(file_get_contents($this->configPath));
         
         /** Apply the path settings */
         if(isset($this->config['paths']))
