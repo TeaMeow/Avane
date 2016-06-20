@@ -1,16 +1,17 @@
+<?php $i = 15; ?>
 
+p 吻仔魚，吻仔魚。
 
-$maybeHtml= '這是一串文字而且 <a href="#">這是 <b>HTML</b></a>'
+- $i = 100
 
-p= $maybeHtml
-p!= $maybeHtml
+p 更多的吻仔魚。
 
+-
+    $i = [
+        'a',
+        'b',
+        'c'
+    ]
 
-a(title=$maybeHtml)
-a(title!=$maybeHtml)
-
-
-p
-| 這會是被轉義的字串： #{$maybeHtml}
-p
-| 這會是 HTML： !{$maybeHtml}
+each $a in $i
+    p= $a
