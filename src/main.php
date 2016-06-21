@@ -5,11 +5,10 @@ namespace Avane;
 class Main
 {
     private $outputBuffer = [];
-    
+    private $purinCache = [];
     function __construct($path)
     {
         $this->startTime = microtime(true);
-        $this->templateEngine = new \Tale\Jade\Renderer();
         
         $path           = rtrim($path, '/') . '/';
         $this->mainPath = $path;
@@ -17,6 +16,9 @@ class Main
         $this->initialize()
              ->compileSass()
              ->compileCoffee();
+             
+        $this->templateEngine = new \Tale\Jade\Renderer(['cache_path' => $this->compiledPath,
+                                                         'paths'      => $this->mainPath]);
         
         if(is_array(getallheaders()))
                 $this->isPJAX = array_key_exists(strtolower($this->pjaxHeader), getallheaders()) ? getallheaders()[strtolower($this->pjaxHeader)]
