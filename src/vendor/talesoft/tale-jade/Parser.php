@@ -1022,7 +1022,9 @@ class Parser
             }
 
             //Append to current parent
-            $this->currentParent->append($this->current);
+            if (isset($this->currentParent))
+                $this->currentParent->append($this->current);
+
             $this->last = $this->current;
             $this->current = null;
         }
