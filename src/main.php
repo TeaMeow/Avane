@@ -85,6 +85,7 @@ class Main
              ->setSetting('enableCoffee'   , false)
              ->setSetting('enableSass'     , false)
              ->setSetting('enableSassc'    , false)
+             ->setSetting('sassc'          , 'sassc')
              ->setSetting('coffeeExtension', '.coffee')
              ->setSetting('sassExtension'  , '.sass')
              ->setSetting('extension'      , '.jade')
@@ -104,6 +105,10 @@ class Main
         if(isset($this->config['configs']))
             foreach($this->config['configs'] as $name => $value)
                 $this->setSetting($name, $value);
+
+        /** Load the functions file */
+        if(file_exists($this->mainPath . 'functions.php'))
+            require $this->mainPath . 'functions.php';
 
         /** Create the folders if do not exist */
         if(!is_dir($this->compiledPath))
