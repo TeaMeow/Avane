@@ -184,6 +184,10 @@ class Main
 
         $sassTracker = isset($this->config['sassTracker']) ? $this->config['sassTracker']
                                                            : [];
+        $newSassTracker = [];
+
+        foreach($sassTracker as $track)
+            array_push($newSassTracker, $track[0] === '/' ? $track : $this->mainPath . $track );
 
         $Sass = new Compiler\Sass();
         $Sass->initialize($sass,

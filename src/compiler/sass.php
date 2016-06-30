@@ -144,21 +144,6 @@ class Sass
                 $this->rubySass('sass ' . $rawPath . ' --load-path ' . $this->sassPath . ' 2>&1', $destination);
         }
 
-        //$raw .= "\n\n" . file_get_contents($this->sassPath . $sass . $this->sassExtension);
-
-        /** Prepare the paths */
-        //$destination = $this->stylePath . $cookedName . '.css';
-        //$rawPath     = $this->compiledPath . md5($raw) . $this->sassExtension;
-
-        /** Store the raw file */
-        //file_put_contents($rawPath, $raw);
-
-        /** Execute the coffee command */
-        //if($this->isSassc)
-        //    $this->sassc($this->sasscPath . ' -t "compressed" ' . $rawPath . ' > ' . $destination, $destination);
-        //else
-        //    $this->rubySass('sass ' . $rawPath . ' --load-path ' . $this->sassPath . ' 2>&1', $destination);
-
         return $this;
     }
 
