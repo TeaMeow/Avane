@@ -189,9 +189,11 @@ class Main
         foreach($sassTracker as $track)
             array_push($newSassTracker, $track[0] === '/' ? $track : $this->mainPath . $track );
 
+        unset($sassTracker);
+
         $Sass = new Compiler\Sass();
         $Sass->initialize($sass,
-                          $sassTracker,
+                          $newSassTracker,
                           $this->enableSassc,
                           $this->sassPath,
                           $this->stylePath,
