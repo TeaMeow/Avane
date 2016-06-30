@@ -109,7 +109,7 @@ class Main
         /** Load the functions file */
         if(file_exists($this->mainPath . 'functions.php'))
             require $this->mainPath . 'functions.php';
-
+        exit(var_dump($this->compiledPath));
         /** Create the folders if do not exist */
         if(!is_dir($this->compiledPath))
             mkdir($this->compiledPath, 0755, true);
