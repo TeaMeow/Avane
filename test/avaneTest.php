@@ -10,9 +10,9 @@ class AvaneTest extends \PHPUnit_Framework_TestCase
 
     function testPjax()
     {
-        $Avane = new Avane\Main(__DIR__ . '/template');
-
         $_SERVER['HTTP_X_PJAX'] = 'title, html, content, footer, wasted';
+
+        $Avane = new Avane\Main(__DIR__ . '/template');
 
         $Avane->header('header')
               ->render('test')
