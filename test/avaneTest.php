@@ -19,18 +19,30 @@ class AvaneTest extends \PHPUnit_Framework_TestCase
 
     function testCoffee()
     {
+        $Avane = new Avane\Main(__DIR__ . '/template_coffee');
+
+        $Avane->render('test');
     }
 
     function testRubySass()
     {
+        $Avane = new Avane\Main(__DIR__ . '/template_sass');
+
+        $Avane->render('test');
     }
 
     function testSassC()
     {
+        $Avane = new Avane\Main(__DIR__ . '/template_sassc');
+
+        $Avane->render('test');
     }
 
     function testSassTracker()
     {
+        $Avane = new Avane\Main(__DIR__ . '/template_sassTracker');
+
+        $Avane->render('test');
     }
 }
 ?>
