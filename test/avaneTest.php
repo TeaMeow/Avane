@@ -16,5 +16,21 @@ class AvaneTest extends \PHPUnit_Framework_TestCase
               ->render('test')
               ->footer('footer');
     }
+
+    function testCoffee()
+    {
+    }
+
+    function testRubySass()
+    {
+    }
+
+    function testSassC()
+    {
+    }
+
+    function testSassTracker()
+    {
+    }
 }
 ?>

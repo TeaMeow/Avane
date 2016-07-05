@@ -11,6 +11,15 @@ build:
     - apt-get -y install unzip
     - apt-get -y install wget
 
+    # coffee
+    - printf "%s\n------------------------------\n--------  C O F F E E --------\n------------------------------%s\n%s\n"
+    - curl http://npmjs.org/install.sh | sh
+    - npm install -g coffee-script
+
+    # sass
+    - printf "%s\n------------------------------\n----------  S A S S ----------\n------------------------------%s\n%s\n"
+    - gem install sass
+
     # php7
     - printf "%s\n------------------------------\n-----------  P H P -----------\n------------------------------%s\n%s\n"
     - apt-get -y install curl php7.0-cli php7.0-dev git
