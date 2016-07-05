@@ -6,6 +6,7 @@ class Main
 {
     private $outputBuffer = [];
     private $purinCache = [];
+
     function __construct($path)
     {
         $this->startTime = microtime(true);
