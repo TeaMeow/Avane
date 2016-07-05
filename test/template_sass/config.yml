@@ -1,7 +1,7 @@
 configs:
-  enableCoffee: true
+  enableSass: true
 
-coffees:
+sass:
   a:
     - a
     - b

@@ -6,7 +6,8 @@ build:
     - printf "%s\n------------------------------\n----  I N I T I A L I Z E ----\n------------------------------%s\n%s\n"
     - export TERM=xterm
     - apt-get update
-    - dpkg-reconfigure -p critical dash
+    - rm /bin/sh
+    - ln -s /bin/bash /bin/sh
     - apt-get -y install dialog
     - apt-get -y install zip
     - apt-get -y install unzip
@@ -17,7 +18,7 @@ build:
     - curl -O https://rvm.io/mpapis.asc
     - gpg --import mpapis.asc
     - curl -sSL https://get.rvm.io | bash -s stable
-    - . /etc/profile.d/rvm.sh
+    - source /etc/profile.d/rvm.sh
     - rvm requirements
     - rvm install ruby
 

@@ -1,0 +1,10 @@
+configs:
+  enableSass: true
+  enableSassc: true
+
+sass:
+  a:
+    - a
+    - b
+  c:
+    - c
