@@ -13,6 +13,7 @@ build:
     - apt-get -y install curl
     - apt-get -y install nodejs
     - apt-get -y install npm
+    - apt-get -y install rubygems ruby-dev
 
     # ruby
     - printf "%s\n------------------------------\n----------  R U B Y ----------\n------------------------------%s\n%s\n"

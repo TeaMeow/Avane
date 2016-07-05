@@ -60,7 +60,7 @@ class Main
             case 'coffeeExtension': $this->coffeeExtension = $value; break;
             case 'sassExtension'  : $this->sassExtension   = $value; break;
             case 'pjaxHeader'     : $this->pjaxHeader      = $value; break;
-            case 'titleVariable'  : $this->titleVariable   = $value; break;
+            case 'titleVariable'  : $this->titleVariable   = $value;
         }
 
         return $this;
@@ -96,12 +96,6 @@ class Main
 
         /** Load the configures and store to the variable */
         $this->config = spyc_load_file($this->configPath);
-        //$this->config = yaml_parse(file_get_contents($this->configPath));
-
-        /** Apply the path settings */
-        if(isset($this->config['paths']))
-            foreach($this->config['paths'] as $name => $path)
-                $this->setSetting($name, $path);
 
         /** Apply the common configures */
         if(isset($this->config['configs']))
@@ -258,9 +252,6 @@ class Main
                 break;
             case 'footer':
                 $this->outputBuffer['footer']  = ob_get_clean();
-                break;
-            case null:
-                return ob_get_clean();
                 break;
         }
 
