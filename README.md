@@ -7,7 +7,7 @@
 
 &nbsp;
  
-# Avane [![GitHub release](https://img.shields.io/github/release/TeaMeow/Avane.svg?maxAge=2592000)]() 
+# Avane [![GitHub release](https://img.shields.io/github/release/TeaMeow/Avane.svg?maxAge=2592000)](https://github.com/TeaMeow/Avane/releases) [![Coverage Status](https://coveralls.io/repos/github/TeaMeow/Avane/badge.svg?branch=master)](https://coveralls.io/github/TeaMeow/Avane?branch=master)
 
 亞凡芽是基於 PHP 的一套模板引擎，其功能支援隨機 CSS 樣式名稱，
 
