@@ -22,11 +22,8 @@ class Main
         $this->templateEngine = new \Tale\Jade\Renderer(['cache_path' => $this->compiledPath]);
 
 
-        if(is_array(getallheaders()))
-                $this->isPJAX = array_key_exists(strtolower($this->pjaxHeader), getallheaders()) ? getallheaders()[strtolower($this->pjaxHeader)]
-                                                                                                 : false;
-            else
-                $this->isPJAX = false;
+        if(is_array(getallheaders()) && array_key_exists(strtolower($this->pjaxHeader), getallheaders()))
+            $this->isPJAX = getallheaders()[strtolower($this->pjaxHeader)];
     }
 
 
