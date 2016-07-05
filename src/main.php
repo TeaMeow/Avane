@@ -5,7 +5,8 @@ namespace Avane;
 class Main
 {
     private $outputBuffer = [];
-    private $purinCache = [];
+    private $purinCache   = [];
+    public  $isPJAX       = false;
 
     function __construct($path)
     {
