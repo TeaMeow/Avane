@@ -43,8 +43,8 @@ class AvaneTest extends \PHPUnit_Framework_TestCase
         $Avane = new Avane\Main(__DIR__ . '/template_coffee');
 
         $this->assertEquals($Avane->fetch('test'), '<div>Hello, World!</div>');
-        $this->assertEquals(file_get_contents(__DIR__ . '/template_coffee/scripts/a.js'), file_get_contents(__DIR__ . '/compiled_coffee/scripts/a.js'));
-        $this->assertEquals(file_get_contents(__DIR__ . '/template_coffee/scripts/c.js'), file_get_contents(__DIR__ . '/compiled_coffee/scripts/c.js'));
+        $this->assertEquals(file_get_contents(__DIR__ . '/template_coffee/scripts/a.js'), file_get_contents(__DIR__ . '/compiled_coffee/a.js'));
+        $this->assertEquals(file_get_contents(__DIR__ . '/template_coffee/scripts/c.js'), file_get_contents(__DIR__ . '/compiled_coffee/c.js'));
     }
 
     function testCoffeeCache()
