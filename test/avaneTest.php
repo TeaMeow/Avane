@@ -43,9 +43,20 @@ class AvaneTest extends \PHPUnit_Framework_TestCase
         $Avane = new Avane\Main(__DIR__ . '/template_coffee');
 
         $this->assertEquals($Avane->fetch('test'), '<div>Hello, World!</div>');
+        $this->assertEquals(file_get_contents(__DIR__ . '/template_coffee/scripts/a.js'), file_get_contents(__DIR__ . '/compiled_coffee/scripts/a.js'));
+        $this->assertEquals(file_get_contents(__DIR__ . '/template_coffee/scripts/c.js'), file_get_contents(__DIR__ . '/compiled_coffee/scripts/c.js'));
+    }
 
-        echo file_get_contents(__DIR__ . '/template_coffee/scripts/a.js');
-        echo file_get_contents(__DIR__ . '/template_coffee/scripts/c.js');
+    function testCoffeeCache()
+    {
+        $Avane = new Avane\Main(__DIR__ . '/template_coffee');
+
+        $Avane->fetch('test');
+        $Avane->fetch('test');
+
+        $this->assertEquals($Avane->fetch('test'), '<div>Hello, World!</div>');
+        $this->assertEquals(file_get_contents(__DIR__ . '/template_coffee/scripts/a.js'), file_get_contents(__DIR__ . '/compiled_coffee/scripts/a.js'));
+        $this->assertEquals(file_get_contents(__DIR__ . '/template_coffee/scripts/c.js'), file_get_contents(__DIR__ . '/compiled_coffee/scripts/c.js'));
     }
 
     function testCoffeeError()
@@ -58,6 +69,16 @@ class AvaneTest extends \PHPUnit_Framework_TestCase
     function testRubySass()
     {
         $Avane = new Avane\Main(__DIR__ . '/template_sass');
+
+        $this->assertEquals($Avane->fetch('test'), '<div>Hello, World!</div>');
+    }
+
+    function testRubySassCache()
+    {
+        $Avane = new Avane\Main(__DIR__ . '/template_sass');
+
+        $Avane->fetch('test');
+        $Avane->fetch('test');
 
         $this->assertEquals($Avane->fetch('test'), '<div>Hello, World!</div>');
     }
