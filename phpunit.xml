@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="true" bootstrap="src/autoload.php">
+    <testsuites>
+        <testsuite name="Avane">
+            <directory>test</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <includePath>src</includePath>
+    </php>
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+    </logging>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src/compiler</directory>
+            <file>src/getallheaders.php</file>
+            <file>src/main.php</file>
+        </whitelist>
+    </filter>
+</phpunit>
+
+

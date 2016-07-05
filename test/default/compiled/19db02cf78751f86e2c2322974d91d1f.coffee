@@ -1,5 +1,0 @@
-
-
-alert 'A'
-
-alert 'B'

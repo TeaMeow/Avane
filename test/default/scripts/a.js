@@ -1,3 +1,0 @@
-alert('A');
-
-alert('B');
