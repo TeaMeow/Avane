@@ -6,10 +6,10 @@ build:
     - printf "%s\n------------------------------\n----  I N I T I A L I Z E ----\n------------------------------%s\n%s\n"
     - export TERM=xterm
     - apt-get update
+    - apt-get -y install dialog
     - apt-get -y install zip
     - apt-get -y install unzip
     - apt-get -y install wget
-    - apt-get -y install dialog
 
     # php7
     - printf "%s\n------------------------------\n-----------  P H P -----------\n------------------------------%s\n%s\n"
