@@ -1,0 +1,9 @@
+configs:
+  enableCoffee: true
+
+coffees:
+  a:
+    - a
+    - b
+  c:
+    - c
