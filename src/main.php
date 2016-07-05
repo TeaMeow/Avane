@@ -31,17 +31,6 @@ class Main
 
 
 
-    public function __call($name, $args)
-    {
-        $basicFunctions = ['header'];
-
-        if(in_array($name, $basicFunctions))
-            return call_user_func_array(array($this, '_' . $name), $args);
-
-        return $this;
-    }
-
-
 
     /**
      * Set the settings.
@@ -291,7 +280,7 @@ class Main
      *
      */
 
-    public function _header($templateFile, $variables = null)
+    public function header($templateFile, $variables = null)
     {
         /** Set the json header if it's a PJAX request */
         if($this->isPJAX)

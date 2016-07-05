@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit colors="true" bootstrap="src/autoload.php">
+<phpunit colors="true" bootstrap="src/autoload.php" stderr="true">
     <testsuites>
         <testsuite name="Avane">
             <directory>test</directory>
