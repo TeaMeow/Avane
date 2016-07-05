@@ -7,6 +7,7 @@ php:
   - nightly
 
 script:
+  - npm install coffee-script
   - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.0/coveralls.phar
   - chmod +x coveralls.phar
   - phpunit -c phpunit.xml
