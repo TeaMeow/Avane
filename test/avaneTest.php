@@ -13,7 +13,7 @@ class AvaneTest extends \PHPUnit_Framework_TestCase
         $Avane = new Avane\Main(__DIR__ . '/template');
 
         /** Simulate the PJAX header content */
-        $Avane->isPJAX = ''title, html, content, footer, wasted';
+        $Avane->isPJAX = 'title, html, content, footer, wasted';
 
         $Avane->header('header')
               ->render('test')
