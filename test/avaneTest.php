@@ -12,6 +12,8 @@ class AvaneTest extends \PHPUnit_Framework_TestCase
     {
         $Avane = new Avane\Main(__DIR__ . '/template');
 
+        $_SERVER['HTTP_X_PJAX'] = 'title, html, content, footer, wasted';
+
         $Avane->header('header')
               ->render('test')
               ->footer('footer');
