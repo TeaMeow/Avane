@@ -38,6 +38,17 @@ class AvaneTest extends \PHPUnit_Framework_TestCase
               ->footer('footer');
     }
 
+    function testSetVariables()
+    {
+        $Avane = new Avane\Main(__DIR__ . '/template');
+
+        $Avane->setVariables('test', ['foo' => 'bar']);
+
+        $Avane->render('test2');
+
+        $this->assertEquals($Avane->fetch('test2'), '<div>bar</div>');
+    }
+
     function testCoffee()
     {
         $Avane = new Avane\Main(__DIR__ . '/template_coffee');

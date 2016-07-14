@@ -7,6 +7,7 @@ class Main
     private $outputBuffer = [];
     private $purinCache   = [];
     public  $isPJAX       = false;
+    private $variables    = [];
 
     function __construct($path)
     {
@@ -374,7 +375,7 @@ class Main
      * @return Main
      */
 
-    public function render($templateFile, $variables = null)
+    public function render($templateFile, $variables = [])
     {
         echo $this->fetch($templateFile, $variables);
 
@@ -395,7 +396,10 @@ class Main
 
     public function fetch($templateFile, $variables = null)
     {
-        return $this->templateEngine->render($this->tplPath . $this->getShortnames($templateFile) . $this->tplExtension, $variables);
+        $templateVariables = isset($this->variables[$templateFile]) ? $this->variables[$templateFile] : [];
+        $variables         = $variables ?: [];
+
+        return $this->templateEngine->render($this->tplPath . $this->getShortnames($templateFile) . $this->tplExtension, array_merge($templateVariables, $variables));
     }
 
 
@@ -420,6 +424,25 @@ class Main
     {
         return isset($this->config['shortnames'][$templateFile]) ? $this->config['shortnames'][$templateFile]
                                                                  : $templateFile;
+    }
+
+
+
+
+    /**
+     * Stores the variables for the template.
+     *
+     * @param string|array $templateFile   The name of the template file which we want these variables for.
+     *
+     * @return Main
+     */
+
+    public function setVariables($templateFile, $variables)
+    {
+        foreach((array)$templateFile as $single)
+            $this->variables[$single] = $variables;
+
+        return $this;
     }
 }
 ?>
