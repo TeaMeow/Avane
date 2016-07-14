@@ -42,7 +42,7 @@ class AvaneTest extends \PHPUnit_Framework_TestCase
     {
         $Avane = new Avane\Main(__DIR__ . '/template');
 
-        $Avane->setVariables('test', ['foo' => 'bar']);
+        $Avane->setVariables('test2', ['foo' => 'bar']);
 
         $Avane->render('test2');
 
